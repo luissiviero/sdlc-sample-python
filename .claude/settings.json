@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "sdlc-framework": {
+      "source": {
+        "source": "github",
+        "repo": "luissiviero/sdlc-framework"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "sdlc@sdlc-framework": true
+  }
+}
