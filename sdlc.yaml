@@ -14,6 +14,7 @@ commands:
   build: "python -m compileall -q ."
   test: "python -m pytest"
   lint: "python -m ruff check ."
+  setup: "python -m pip install -e . pytest ruff"
 
 # --- phase adapters (OPERATING_MODEL section 9; decision 19) ---------------------------------
 deploy:
