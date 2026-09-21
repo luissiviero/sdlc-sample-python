@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "change_id": "0001",
+  "slug": "add-percent-helper-to-sample-pkg",
+  "phase": "b",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "park",
+  "label": "sdlc:needs-human",
+  "head": "0a3163a3972924e047ff21afa5aa64144a2588b7",
+  "at": "2026-09-21T23:42:21Z",
+  "dry_run": false,
+  "reason": "open_concerns: 1 flagged concern(s) still open in spec.md; risk_list: risk-list hit: 'auth' in spec.md: text; 'data migrations' in spec.md: text; 'money movement' in spec.md: text; 'production config' in spec.md: text; adversarial_review: adversarial reviewer says escalate: spec.md 'Flagged concerns' has one item ('the inherited ZeroDivisionError message names divide's parameter b, not percent's whole') that is left open ('Open \u2014 the owner decides...') rather than closed with `[x]`/`closed`/`resolved`/`decided` as the spec-template and definition-of-done skills require ('flagged concerns each closed with a decision'); running the actual deterministic check confirms this: `python framework/plugin/skills/definition-of-done/check.py --root . --id 0001 --phase b` reports `[ ] open_concerns: 1 flagged concern(s) still open in spec.md` and verdict `park`.; The same dry-run also reports `[ ] risk_list: risk-list hit: 'auth' ... 'data migrations' ... 'money movement' ... 'production config' in spec.md: text` \u2014 the deterministic risk_list check does a plain text scan of spec.md and fires on the sentence that lists those words to say none of them apply; it has no `risk_accepted` entry in status.yaml, so this check also parks the change as written. This is a real, literal tool result (not my inference) and would block phase (b) from passing the confidence gate regardless of the adversarial verdict.; Neither issue is a bug in the design content itself (the open concern is a legitimate owner decision per spec-template's own rules, and the risk_list hit is a false positive from a naive keyword scan of explanatory text) \u2014 but both are exactly the conditions the framework defines as 'park, never page' (OPERATING_MODEL section 6), so the honest verdict here is escalate, not continue.",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 0,
+        "cap": 2,
+        "classification": "non-routine",
+        "elapsed_minutes": 6.3,
+        "spend_usd": null,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "design_scope",
+      "ok": true,
+      "reason": "the committed diff stays inside changes/0001-add-percent-helper-to-sample-pkg/",
+      "need": "",
+      "details": {
+        "dirty": [
+          ".env",
+          "changes/0001-add-percent-helper-to-sample-pkg/evidence/adversarial-review-b.json"
+        ]
+      }
+    },
+    {
+      "name": "open_concerns",
+      "ok": false,
+      "reason": "1 flagged concern(s) still open in spec.md",
+      "need": "Close each open item under '## Flagged concerns' with a decision (article p.14 step 4), or leave a review comment for /sdlc-fix.",
+      "details": {
+        "open": [
+          "- Reusing `divide` means the zero-`whole` `ZeroDivisionError` carries `divide`'s own message,"
+        ]
+      }
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "reason": "build, test and lint exit 0",
+      "need": "",
+      "details": {
+        "runs": {
+          "build": {
+            "command": "python -m compileall -q .",
+            "exit_code": 0,
+            "output": ""
+          },
+          "test": {
+            "command": "python -m pytest",
+            "exit_code": 0,
+            "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0\nrootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\ncollected 3 items\n\ntests/test_calc.py ..                                                    [ 66%]\ntests/test_flag.py .                                                     [100%]\n\n============================== 3 passed in 0.01s ===============================\n"
+          },
+          "lint": {
+            "command": "python -m ruff check .",
+            "exit_code": 0,
+            "output": "All checks passed!\n"
+          }
+        }
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": false,
+      "reason": "risk-list hit: 'auth' in spec.md: text; 'data migrations' in spec.md: text; 'money movement' in spec.md: text; 'production config' in spec.md: text",
+      "need": "Review the change with the risk in mind. To let it continue, accept the item for this change: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/state/cli.py\" accept-risk --root . --id 0001 --item \"<item>\"` (recorded in status.yaml).",
+      "details": {
+        "hits": {
+          "auth": [
+            "spec.md: text"
+          ],
+          "data migrations": [
+            "spec.md: text"
+          ],
+          "money movement": [
+            "spec.md: text"
+          ],
+          "production config": [
+            "spec.md: text"
+          ]
+        },
+        "accepted": []
+      }
+    },
+    {
+      "name": "owner_actions",
+      "ok": true,
+      "reason": "risk acceptances and iteration resets, if any, were committed by the owner",
+      "need": "",
+      "details": {
+        "risk_accepted": []
+      }
+    },
+    {
+      "name": "adversarial_review",
+      "ok": false,
+      "reason": "adversarial reviewer says escalate: spec.md 'Flagged concerns' has one item ('the inherited ZeroDivisionError message names divide's parameter b, not percent's whole') that is left open ('Open \u2014 the owner decides...') rather than closed with `[x]`/`closed`/`resolved`/`decided` as the spec-template and definition-of-done skills require ('flagged concerns each closed with a decision'); running the actual deterministic check confirms this: `python framework/plugin/skills/definition-of-done/check.py --root . --id 0001 --phase b` reports `[ ] open_concerns: 1 flagged concern(s) still open in spec.md` and verdict `park`.; The same dry-run also reports `[ ] risk_list: risk-list hit: 'auth' ... 'data migrations' ... 'money movement' ... 'production config' in spec.md: text` \u2014 the deterministic risk_list check does a plain text scan of spec.md and fires on the sentence that lists those words to say none of them apply; it has no `risk_accepted` entry in status.yaml, so this check also parks the change as written. This is a real, literal tool result (not my inference) and would block phase (b) from passing the confidence gate regardless of the adversarial verdict.; Neither issue is a bug in the design content itself (the open concern is a legitimate owner decision per spec-template's own rules, and the risk_list hit is a false positive from a naive keyword scan of explanatory text) \u2014 but both are exactly the conditions the framework defines as 'park, never page' (OPERATING_MODEL section 6), so the honest verdict here is escalate, not continue.",
+      "need": "Read the reviewer's reasons and decide: fix and re-run, or accept in review.",
+      "details": {
+        "reasons": [
+          "spec.md 'Flagged concerns' has one item ('the inherited ZeroDivisionError message names divide's parameter b, not percent's whole') that is left open ('Open \u2014 the owner decides...') rather than closed with `[x]`/`closed`/`resolved`/`decided` as the spec-template and definition-of-done skills require ('flagged concerns each closed with a decision'); running the actual deterministic check confirms this: `python framework/plugin/skills/definition-of-done/check.py --root . --id 0001 --phase b` reports `[ ] open_concerns: 1 flagged concern(s) still open in spec.md` and verdict `park`.",
+          "The same dry-run also reports `[ ] risk_list: risk-list hit: 'auth' ... 'data migrations' ... 'money movement' ... 'production config' in spec.md: text` \u2014 the deterministic risk_list check does a plain text scan of spec.md and fires on the sentence that lists those words to say none of them apply; it has no `risk_accepted` entry in status.yaml, so this check also parks the change as written. This is a real, literal tool result (not my inference) and would block phase (b) from passing the confidence gate regardless of the adversarial verdict.",
+          "Neither issue is a bug in the design content itself (the open concern is a legitimate owner decision per spec-template's own rules, and the risk_list hit is a false positive from a naive keyword scan of explanatory text) \u2014 but both are exactly the conditions the framework defines as 'park, never page' (OPERATING_MODEL section 6), so the honest verdict here is escalate, not continue."
+        ],
+        "classification": "non-routine"
+      }
+    }
+  ],
+  "what_i_need": "## What I need from you\nGate (b) parked change 0001 (add-percent-helper-to-sample-pkg) on 2026-09-21T23:42:21Z.\n- **open_concerns**: 1 flagged concern(s) still open in spec.md\n  - what I need: Close each open item under '## Flagged concerns' with a decision (article p.14 step 4), or leave a review comment for /sdlc-fix.\n- **risk_list**: risk-list hit: 'auth' in spec.md: text; 'data migrations' in spec.md: text; 'money movement' in spec.md: text; 'production config' in spec.md: text\n  - what I need: Review the change with the risk in mind. To let it continue, accept the item for this change: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/state/cli.py\" accept-risk --root . --id 0001 --item \"<item>\"` (recorded in status.yaml).\n- **adversarial_review**: adversarial reviewer says escalate: spec.md 'Flagged concerns' has one item ('the inherited ZeroDivisionError message names divide's parameter b, not percent's whole') that is left open ('Open \u2014 the owner decides...') rather than closed with `[x]`/`closed`/`resolved`/`decided` as the spec-template and definition-of-done skills require ('flagged concerns each closed with a decision'); running the actual deterministic check confirms this: `python framework/plugin/skills/definition-of-done/check.py --root . --id 0001 --phase b` reports `[ ] open_concerns: 1 flagged concern(s) still open in spec.md` and verdict `park`.; The same dry-run also reports `[ ] risk_list: risk-list hit: 'auth' ... 'data migrations' ... 'money movement' ... 'production config' in spec.md: text` \u2014 the deterministic risk_list check does a plain text scan of spec.md and fires on the sentence that lists those words to say none of them apply; it has no `risk_accepted` entry in status.yaml, so this check also parks the change as written. This is a real, literal tool result (not my inference) and would block phase (b) from passing the confidence gate regardless of the adversarial verdict.; Neither issue is a bug in the design content itself (the open concern is a legitimate owner decision per spec-template's own rules, and the risk_list hit is a false positive from a naive keyword scan of explanatory text) \u2014 but both are exactly the conditions the framework defines as 'park, never page' (OPERATING_MODEL section 6), so the honest verdict here is escalate, not continue.\n  - what I need: Read the reviewer's reasons and decide: fix and re-run, or accept in review.\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0001 --phase b` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
+}
