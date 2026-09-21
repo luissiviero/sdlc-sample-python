@@ -6,10 +6,12 @@ sdlc-sample-python has no shared process for taking a change from idea to produc
 with the agent doing the work and the owner judging at gates.
 
 ## Proposed outcome
-The SDLC framework plugin `sdlc@sdlc-framework` v0.1.0 is installed:
+The SDLC framework plugin `sdlc@sdlc-framework` v0.2.0 is installed:
 profile `standard`, one-command targets build=`python -m compileall -q .`,
 test=`python -m pytest`, lint=`python -m ruff check .`, guardrail hooks and permissions
-in place, `changes/` as the home of every change.
+in place, `changes/` as the home of every change. The phase workflows and the daily
+digest under `.github/workflows/`, `bands.yaml` and the empty `evals/` suite ride the
+same change; re-running `/sdlc-init` upgrades the pin from v0.1.0 to v0.2.0.
 
 ## Affected users and systems
 The owner; this repository's CLAUDE.md, REVIEW.md, sdlc.yaml and .claude/settings.json.
