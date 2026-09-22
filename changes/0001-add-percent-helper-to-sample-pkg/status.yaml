@@ -11,10 +11,10 @@ gate:
   reason: "plan_sync: 1 changed file(s) not listed in plan.md; 2 commit(s) changed source without plan.md"
   at: "2026-09-22T04:59:30Z"
 parked_reason: "plan_sync: 1 changed file(s) not listed in plan.md; 2 commit(s) changed source without plan.md"
-iterations: 2
+iterations: 0
 external_ref: null
 risk_accepted: []
 tests_locked: false
 created_at: "2026-09-20T16:24:41Z"
-updated_at: "2026-09-22T04:59:30Z"
+updated_at: "2026-09-22T13:26:48Z"
 schema_version: 1
