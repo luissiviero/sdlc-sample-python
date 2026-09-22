@@ -60,11 +60,13 @@ Change id: 0001. Status: proposed. Produced by: sdlc plugin 0.2.4, /sdlc-design 
   `divide(part, whole) * 100`, no rounding.
 
 ## Flagged concerns
-- Reusing `divide` means the zero-`whole` `ZeroDivisionError` carries `divide`'s own message,
-  "b must not be zero", which names `divide`'s parameter (`b`) rather than `percent`'s
-  (`whole`). The intent requires only the same exception type, not specific message text, so
-  this is a guess made because the intent is silent on message wording. Open — the owner
-  decides whether the inherited message is acceptable or `percent` should raise its own.
+- [x] Reusing `divide` means the zero-`whole` `ZeroDivisionError` carries `divide`'s own
+  message, "b must not be zero", which names `divide`'s parameter (`b`) rather than
+  `percent`'s (`whole`). This was a guess made because the intent is silent on message
+  wording. Decided by the owner (2026-09-22): keep the reuse of `divide` and accept the
+  inherited message. The intent requires the same exception type only, not specific message
+  text, and `divide` stays the single zero-check in the package; `percent` does not raise its
+  own error.
 
 ## Acceptance
 - `tests/test_calc.py` passes two new cases: a normal case equivalent to `percent(1, 4) ==
