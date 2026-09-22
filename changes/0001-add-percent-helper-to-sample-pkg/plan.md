@@ -1,4 +1,4 @@
-# Plan: add a percent helper to sample_pkg (from intent.md 2026-09-20, spec.md 2026-09-21)
+# Plan: add a percent helper to sample_pkg (from intent.md 2026-09-20, spec.md 2026-09-22)
 
 ## Files that change
 - `sample_pkg/calc.py` — add `percent(part: float, whole: float) -> float`, defined after
@@ -49,17 +49,16 @@ Each step is one commit-sized change; step 1 and step 2 land together in one com
 - No new dependency, no data migration, no auth, money-movement or production-config surface —
   none of `sdlc.yaml`'s `risk_list` items apply, so this change does not park on that check.
 - The message text of the `ZeroDivisionError` ("b must not be zero") is `divide`'s, not
-  `percent`'s — spec.md's Flagged concerns leaves this open for the owner; if the owner closes
-  it by asking for a `percent`-specific message, step 1 changes to a local zero-check
-  (`if whole == 0: raise ZeroDivisionError(...)`) instead of delegating to `divide`, and Options
-  not taken below becomes the plan.
+  `percent`'s. spec.md's Flagged concerns records the owner's decision (2026-09-22): keep the
+  delegation to `divide` and accept the inherited message. Step 1 therefore stays as written;
+  `percent` does not raise its own error, and no test asserts the message text.
 
 ## Options not taken
 - A local zero-check inside `percent` instead of delegating to `divide` (interrogation Q3):
   considered, not chosen, because it would duplicate the zero-check logic that already exists
   in `divide`, and spec.md's Design section decided to keep the zero-check in one place
-  (coding-standards rule 2: match the surrounding code). Left open as a Flagged concern in
-  spec.md in case the owner prefers `percent`'s own message.
+  (coding-standards rule 2: match the surrounding code). The owner confirmed this choice by
+  closing the Flagged concern in spec.md (2026-09-22): the inherited message is accepted.
 - Rounding the result (e.g. `round(value, 2)`): considered, not chosen, because intent.md's
   Constraints rule it out ("no rounding options or formatting features").
 - A docstring on `percent`: considered, not chosen, because neither `add` nor `divide` has one
