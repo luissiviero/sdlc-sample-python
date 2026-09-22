@@ -5,12 +5,12 @@
   "phase": "b",
   "profile": "standard",
   "human_gate": true,
-  "result": "park",
-  "label": "sdlc:needs-human",
-  "head": "87d0476925059e26984c7e52caf44fd5e2598e89",
-  "at": "2026-09-22T02:19:51Z",
+  "result": "wait",
+  "label": "sdlc:b-ready",
+  "head": "23f9e5d4bd45bb9d7a2700f4c2655e5dbe1e591d",
+  "at": "2026-09-22T02:40:57Z",
   "dry_run": false,
-  "reason": "risk_list: risk-list hit: 'auth' in spec.md: text; 'data migrations' in spec.md: text; 'money movement' in spec.md: text; 'production config' in spec.md: text; adversarial_review: adversarial reviewer says escalate: Design formula defect: spec.md Design and plan.md step 1 pin `return divide(part, whole) * 100`. Verified at HEAD against the real `divide`: percent(7, 100) = 7.000000000000001, percent(29, 100) = 28.999999999999996, percent(57, 100) = 56.99999999999999 - the canonical 'x out of 100 is x percent' inputs come back wrong because the quotient is rounded before the multiply. `return divide(part * 100, whole)` gives 7.0, 29.0, 57.0 (and still 25.0 for 1/4) while keeping every recorded decision: delegation to divide, one zero-check, same ZeroDivisionError and message, raw float, no rounding. The intent's 'raw float, no rounding' settles not rounding to two decimals; it does not settle returning a wrong value where the exact one is representable.; The planned tests pass with the defect present: the only normal-case assertion is percent(1, 4) == 25.0, where 0.25 is exactly representable, so both formulas satisfy spec.md Acceptance and plan.md Proof; the build phase would ship the defect green unless Acceptance/Proof add an exact-percentage case such as percent(7, 100) == 7.0.; Decision for the owner, one reading: (a) change the formula in spec.md Design and plan.md step 1 to `return divide(part * 100, whole)` and add an exact-percentage assertion to spec.md Acceptance and plan.md Proof, or (b) record in spec.md that ULP noise on exact-percentage inputs is accepted. Everything else checked out: concern closed, diff inside the change folder, no guardrail or risk-list touch, build/test/lint green, no state-file manipulation this round (parked_reason and gate.result left intact until the gate re-runs).",
+  "reason": "",
   "config_note": "",
   "checks": [
     {
@@ -19,10 +19,10 @@
       "reason": "within the run limits",
       "need": "",
       "details": {
-        "iterations": 1,
+        "iterations": 2,
         "cap": 2,
         "classification": "non-routine",
-        "elapsed_minutes": 4.6,
+        "elapsed_minutes": 4.3,
         "spend_usd": null,
         "max_budget_usd": null
       }
@@ -82,24 +82,10 @@
     },
     {
       "name": "risk_list",
-      "ok": false,
-      "reason": "risk-list hit: 'auth' in spec.md: text; 'data migrations' in spec.md: text; 'money movement' in spec.md: text; 'production config' in spec.md: text",
-      "need": "Review the change with the risk in mind. To let it continue, accept the item for this change: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/state/cli.py\" accept-risk --root . --id 0001 --item \"<item>\"` (recorded in status.yaml).",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
       "details": {
-        "hits": {
-          "auth": [
-            "spec.md: text"
-          ],
-          "data migrations": [
-            "spec.md: text"
-          ],
-          "money movement": [
-            "spec.md: text"
-          ],
-          "production config": [
-            "spec.md: text"
-          ]
-        },
         "accepted": []
       }
     },
@@ -114,18 +100,14 @@
     },
     {
       "name": "adversarial_review",
-      "ok": false,
-      "reason": "adversarial reviewer says escalate: Design formula defect: spec.md Design and plan.md step 1 pin `return divide(part, whole) * 100`. Verified at HEAD against the real `divide`: percent(7, 100) = 7.000000000000001, percent(29, 100) = 28.999999999999996, percent(57, 100) = 56.99999999999999 - the canonical 'x out of 100 is x percent' inputs come back wrong because the quotient is rounded before the multiply. `return divide(part * 100, whole)` gives 7.0, 29.0, 57.0 (and still 25.0 for 1/4) while keeping every recorded decision: delegation to divide, one zero-check, same ZeroDivisionError and message, raw float, no rounding. The intent's 'raw float, no rounding' settles not rounding to two decimals; it does not settle returning a wrong value where the exact one is representable.; The planned tests pass with the defect present: the only normal-case assertion is percent(1, 4) == 25.0, where 0.25 is exactly representable, so both formulas satisfy spec.md Acceptance and plan.md Proof; the build phase would ship the defect green unless Acceptance/Proof add an exact-percentage case such as percent(7, 100) == 7.0.; Decision for the owner, one reading: (a) change the formula in spec.md Design and plan.md step 1 to `return divide(part * 100, whole)` and add an exact-percentage assertion to spec.md Acceptance and plan.md Proof, or (b) record in spec.md that ULP noise on exact-percentage inputs is accepted. Everything else checked out: concern closed, diff inside the change folder, no guardrail or risk-list touch, build/test/lint green, no state-file manipulation this round (parked_reason and gate.result left intact until the gate re-runs).",
-      "need": "Read the reviewer's reasons and decide: fix and re-run, or accept in review.",
+      "ok": true,
+      "reason": "adversarial reviewer says continue",
+      "need": "",
       "details": {
-        "reasons": [
-          "Design formula defect: spec.md Design and plan.md step 1 pin `return divide(part, whole) * 100`. Verified at HEAD against the real `divide`: percent(7, 100) = 7.000000000000001, percent(29, 100) = 28.999999999999996, percent(57, 100) = 56.99999999999999 - the canonical 'x out of 100 is x percent' inputs come back wrong because the quotient is rounded before the multiply. `return divide(part * 100, whole)` gives 7.0, 29.0, 57.0 (and still 25.0 for 1/4) while keeping every recorded decision: delegation to divide, one zero-check, same ZeroDivisionError and message, raw float, no rounding. The intent's 'raw float, no rounding' settles not rounding to two decimals; it does not settle returning a wrong value where the exact one is representable.",
-          "The planned tests pass with the defect present: the only normal-case assertion is percent(1, 4) == 25.0, where 0.25 is exactly representable, so both formulas satisfy spec.md Acceptance and plan.md Proof; the build phase would ship the defect green unless Acceptance/Proof add an exact-percentage case such as percent(7, 100) == 7.0.",
-          "Decision for the owner, one reading: (a) change the formula in spec.md Design and plan.md step 1 to `return divide(part * 100, whole)` and add an exact-percentage assertion to spec.md Acceptance and plan.md Proof, or (b) record in spec.md that ULP noise on exact-percentage inputs is accepted. Everything else checked out: concern closed, diff inside the change folder, no guardrail or risk-list touch, build/test/lint green, no state-file manipulation this round (parked_reason and gate.result left intact until the gate re-runs)."
-        ],
-        "classification": "non-routine"
+        "classification": "non-routine",
+        "reasons": []
       }
     }
   ],
-  "what_i_need": "## What I need from you\nGate (b) parked change 0001 (add-percent-helper-to-sample-pkg) on 2026-09-22T02:19:51Z.\n- **risk_list**: risk-list hit: 'auth' in spec.md: text; 'data migrations' in spec.md: text; 'money movement' in spec.md: text; 'production config' in spec.md: text\n  - what I need: Review the change with the risk in mind. To let it continue, accept the item for this change: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/state/cli.py\" accept-risk --root . --id 0001 --item \"<item>\"` (recorded in status.yaml).\n- **adversarial_review**: adversarial reviewer says escalate: Design formula defect: spec.md Design and plan.md step 1 pin `return divide(part, whole) * 100`. Verified at HEAD against the real `divide`: percent(7, 100) = 7.000000000000001, percent(29, 100) = 28.999999999999996, percent(57, 100) = 56.99999999999999 - the canonical 'x out of 100 is x percent' inputs come back wrong because the quotient is rounded before the multiply. `return divide(part * 100, whole)` gives 7.0, 29.0, 57.0 (and still 25.0 for 1/4) while keeping every recorded decision: delegation to divide, one zero-check, same ZeroDivisionError and message, raw float, no rounding. The intent's 'raw float, no rounding' settles not rounding to two decimals; it does not settle returning a wrong value where the exact one is representable.; The planned tests pass with the defect present: the only normal-case assertion is percent(1, 4) == 25.0, where 0.25 is exactly representable, so both formulas satisfy spec.md Acceptance and plan.md Proof; the build phase would ship the defect green unless Acceptance/Proof add an exact-percentage case such as percent(7, 100) == 7.0.; Decision for the owner, one reading: (a) change the formula in spec.md Design and plan.md step 1 to `return divide(part * 100, whole)` and add an exact-percentage assertion to spec.md Acceptance and plan.md Proof, or (b) record in spec.md that ULP noise on exact-percentage inputs is accepted. Everything else checked out: concern closed, diff inside the change folder, no guardrail or risk-list touch, build/test/lint green, no state-file manipulation this round (parked_reason and gate.result left intact until the gate re-runs).\n  - what I need: Read the reviewer's reasons and decide: fix and re-run, or accept in review.\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0001 --phase b` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
+  "what_i_need": ""
 }
