@@ -6,15 +6,15 @@ entry_route: idea
 change_type: feature
 profile_override: null
 gate:
-  phase: d
-  result: passed
-  reason: null
-  at: "2026-09-23T09:06:22Z"
-parked_reason: null
+  phase: e
+  result: parked
+  reason: "limits: iteration cap reached: 3 fix iterations, cap 2 (non-routine)"
+  at: "2026-09-23T09:18:42Z"
+parked_reason: "limits: iteration cap reached: 3 fix iterations, cap 2 (non-routine)"
 iterations: 3
 external_ref: null
 risk_accepted: []
 tests_locked: false
 created_at: "2026-09-20T16:24:41Z"
-updated_at: "2026-09-23T09:18:03Z"
+updated_at: "2026-09-23T09:18:42Z"
 schema_version: 1
