@@ -1,0 +1,30 @@
+{
+  "at": "2026-09-23T09:09:11Z",
+  "findings": [
+    {
+      "file": "CLAUDE.md",
+      "line": 22,
+      "pass": "compliance",
+      "rule": "REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated'; spec.md Design ('the one-line addition describing percent is proposed as a suggestion in the build-phase PR body')",
+      "severity": "important",
+      "signature": "f608c482d17f4e00",
+      "summary": "CLAUDE.md's Layout line for sample_pkg/calc.py still says it exposes only 'add' and 'divide', now stale since percent() ships; intent.md's Affected users and systems and spec.md's Design both said the one-line addition would be proposed in the build-phase PR body for the owner, but PR #7's body contains no such proposed text, so there is no path left for the owner to close the gap."
+    },
+    {
+      "file": "sample_pkg/calc.py",
+      "line": 12,
+      "pass": "bugs",
+      "rule": "",
+      "severity": "nit",
+      "signature": "f06a27d48494b2e0",
+      "summary": "percent(part, whole) scales part by 100 before dividing, so it overflows to inf for |part| above roughly 1.8e306 where the previous divide-then-scale order would not; unrealistic magnitude for a percent helper and already surfaced and accepted as not-Important in a prior adversarial review, restated here for completeness."
+    }
+  ],
+  "head": "80e0d87ec0e03964d3acae69d75469d45af36ce7",
+  "schema_version": 1,
+  "tally": {
+    "important": 1,
+    "nit": 1,
+    "nits_omitted": 0
+  }
+}
