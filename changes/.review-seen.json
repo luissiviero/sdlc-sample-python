@@ -1,11 +1,19 @@
 {
+  "182179ac0f8bd565": {
+    "count": 1,
+    "file": "CLAUDE.md",
+    "first_change": "0001",
+    "last_change": "0001",
+    "last_seen": "2026-09-23T09:18:08Z",
+    "summary": "CLAUDE.md's Layout line for sample_pkg/calc.py still says only 'add' and 'divide', and the commit that tries to close this by hand-writing changes/0001-add-percent-helper-to-sample-pkg/evidence/claude-md-proposals.md does not durably fix it: that exact evidence filename is owned by review/cli.py's own validate step (framework/plugin/review/findings.py PROPOSALS_FILE, cmd_validate in framework/plugin/review/cli.py lines 185-197), which framework/plugin/ci/run_phase.py runs automatically immediately after every review pass (line 937, unconditionally for phase == 'review') and which deletes the file whenever fmod.claude_md_lines(repeated) is empty; repeated is empty here because changes/.review-seen.json shows both signatures' first_change == last_change == '0001' (no earlier change shares them), so this review's own validate run will unlink the file again and the '## Proposed CLAUDE.md lines' section will disappear from the PR body right after this review completes, leaving the guardrail file outdated with no live path to a fix."
+  },
   "f06a27d48494b2e0": {
-    "count": 2,
+    "count": 3,
     "file": "sample_pkg/calc.py",
     "first_change": "0001",
     "last_change": "0001",
-    "last_seen": "2026-09-23T09:09:53Z",
-    "summary": "percent(part, whole) scales part by 100 before dividing, so it overflows to inf for |part| above roughly 1.8e306 where the previous divide-then-scale order would not; unrealistic magnitude for a percent helper and already surfaced and accepted as not-Important in a prior adversarial review, restated here for completeness."
+    "last_seen": "2026-09-23T09:18:08Z",
+    "summary": "percent(part, whole) scales part by 100 before dividing, so it overflows to inf for |part| above roughly 1.8e306 where the previous divide-then-scale order would not; unrealistic magnitude for a percent helper and already surfaced and accepted as not-Important in prior adversarial and review rounds, restated here for completeness."
   },
   "f608c482d17f4e00": {
     "count": 2,
