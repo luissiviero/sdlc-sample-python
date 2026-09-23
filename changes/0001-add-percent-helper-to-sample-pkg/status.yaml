@@ -7,14 +7,14 @@ change_type: feature
 profile_override: null
 gate:
   phase: c
-  result: parked
-  reason: "plan_sync: 1 changed file(s) not listed in plan.md; 2 commit(s) changed source without plan.md"
-  at: "2026-09-22T04:59:30Z"
-parked_reason: "plan_sync: 1 changed file(s) not listed in plan.md; 2 commit(s) changed source without plan.md"
-iterations: 0
+  result: passed
+  reason: null
+  at: "2026-09-23T08:28:18Z"
+parked_reason: null
+iterations: 1
 external_ref: null
 risk_accepted: []
 tests_locked: false
 created_at: "2026-09-20T16:24:41Z"
-updated_at: "2026-09-22T13:26:48Z"
+updated_at: "2026-09-23T08:28:18Z"
 schema_version: 1
