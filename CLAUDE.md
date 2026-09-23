@@ -19,8 +19,8 @@ demonstrates this on purpose via `tests/test_flag.py`; never set that variable i
 
 ## Layout
 
-- `sample_pkg/calc.py`: `add` and `divide`. `divide` raises `ZeroDivisionError` on a zero divisor.
-- `sample_pkg/__init__.py`: re-exports `add` and `divide` (the public API).
+- `sample_pkg/calc.py`: `add`, `divide` and `percent`. `divide` raises `ZeroDivisionError` on a zero divisor; `percent(part, whole)` is `part * 100 / whole` through `divide`, so it raises the same on a zero `whole`.
+- `sample_pkg/__init__.py`: re-exports `add`, `divide` and `percent` (the public API).
 - `tests/test_calc.py`: behaviour tests for the package.
 - `tests/test_flag.py`: the intentional flag-gated failure. Leave it in place.
 - `pyproject.toml`: project metadata, pytest `testpaths = ["tests"]`, ruff `line-length = 100`.
