@@ -6,3 +6,7 @@ def divide(a: float, b: float) -> float:
     if b == 0:
         raise ZeroDivisionError("b must not be zero")
     return a / b
+
+
+def percent(part: float, whole: float) -> float:
+    return divide(part * 100, whole)

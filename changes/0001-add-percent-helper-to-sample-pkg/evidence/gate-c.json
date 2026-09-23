@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "change_id": "0001",
+  "slug": "add-percent-helper-to-sample-pkg",
+  "phase": "c",
+  "profile": "standard",
+  "human_gate": false,
+  "result": "continue",
+  "label": null,
+  "head": "c2fd97570eae04c317b6b0a029f80aa33d946681",
+  "at": "2026-09-23T08:28:18Z",
+  "dry_run": false,
+  "reason": "",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 1,
+        "cap": 2,
+        "classification": "non-routine",
+        "elapsed_minutes": 0.9,
+        "spend_usd": null,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "clean_tree",
+      "ok": true,
+      "reason": "no uncommitted change outside the change folder",
+      "need": "",
+      "details": {
+        "ignored": []
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "open_concerns",
+      "ok": true,
+      "reason": "no open flagged concern",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "reason": "build, test and lint exit 0",
+      "need": "",
+      "details": {
+        "runs": {
+          "build": {
+            "command": "python -m compileall -q .",
+            "exit_code": 0,
+            "output": ""
+          },
+          "test": {
+            "command": "python -m pytest",
+            "exit_code": 0,
+            "output": "============================= test session starts =============================\nplatform win32 -- Python 3.14.7, pytest-9.1.1, pluggy-1.6.0\nrootdir: C:\\sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\ncollected 5 items\n\ntests\\test_calc.py ....                                                  [ 80%]\ntests\\test_flag.py .                                                     [100%]\n\n============================== 5 passed in 0.06s ==============================\n"
+          },
+          "lint": {
+            "command": "python -m ruff check .",
+            "exit_code": 0,
+            "output": "All checks passed!\n"
+          }
+        }
+      }
+    },
+    {
+      "name": "evidence",
+      "ok": true,
+      "reason": "evidence present: verifier.md",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "findings",
+      "ok": true,
+      "reason": "no review findings yet (the review pass runs in phase e)",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "plan_sync",
+      "ok": true,
+      "reason": "every committed source file is in plan.md",
+      "need": "",
+      "details": {
+        "planned_but_unchanged": []
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "owner_actions",
+      "ok": true,
+      "reason": "risk acceptances and iteration resets, if any, were committed by the owner",
+      "need": "",
+      "details": {
+        "risk_accepted": []
+      }
+    },
+    {
+      "name": "adversarial_review",
+      "ok": true,
+      "reason": "adversarial reviewer says continue",
+      "need": "",
+      "details": {
+        "classification": "non-routine",
+        "reasons": []
+      }
+    }
+  ],
+  "what_i_need": ""
+}

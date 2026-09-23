@@ -1,5 +1,5 @@
 """Tiny package used by the fixture tests."""
 
-from .calc import add, divide
+from .calc import add, divide, percent
 
-__all__ = ["add", "divide"]
+__all__ = ["add", "divide", "percent"]

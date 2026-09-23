@@ -1,0 +1,30 @@
+{
+  "at": "2026-09-23T09:17:15Z",
+  "findings": [
+    {
+      "file": "CLAUDE.md",
+      "line": 22,
+      "pass": "compliance",
+      "rule": "REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated'; spec.md Design ('the one-line addition describing percent is proposed as a suggestion in the build-phase PR body for the owner to apply')",
+      "severity": "important",
+      "signature": "182179ac0f8bd565",
+      "summary": "CLAUDE.md's Layout line for sample_pkg/calc.py still says only 'add' and 'divide', and the commit that tries to close this by hand-writing changes/0001-add-percent-helper-to-sample-pkg/evidence/claude-md-proposals.md does not durably fix it: that exact evidence filename is owned by review/cli.py's own validate step (framework/plugin/review/findings.py PROPOSALS_FILE, cmd_validate in framework/plugin/review/cli.py lines 185-197), which framework/plugin/ci/run_phase.py runs automatically immediately after every review pass (line 937, unconditionally for phase == 'review') and which deletes the file whenever fmod.claude_md_lines(repeated) is empty; repeated is empty here because changes/.review-seen.json shows both signatures' first_change == last_change == '0001' (no earlier change shares them), so this review's own validate run will unlink the file again and the '## Proposed CLAUDE.md lines' section will disappear from the PR body right after this review completes, leaving the guardrail file outdated with no live path to a fix."
+    },
+    {
+      "file": "sample_pkg/calc.py",
+      "line": 12,
+      "pass": "bugs",
+      "rule": "",
+      "severity": "nit",
+      "signature": "f06a27d48494b2e0",
+      "summary": "percent(part, whole) scales part by 100 before dividing, so it overflows to inf for |part| above roughly 1.8e306 where the previous divide-then-scale order would not; unrealistic magnitude for a percent helper and already surfaced and accepted as not-Important in prior adversarial and review rounds, restated here for completeness."
+    }
+  ],
+  "head": "0163602754119c909066e947fc749b13c48f41e5",
+  "schema_version": 1,
+  "tally": {
+    "important": 1,
+    "nit": 1,
+    "nits_omitted": 0
+  }
+}

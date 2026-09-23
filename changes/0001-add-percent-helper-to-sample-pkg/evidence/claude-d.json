@@ -1,0 +1,103 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 257800,
+  "duration_ms": 20596,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 1361,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 99364,
+      "cacheReadInputTokens": 1500885,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 0.8198645000000002,
+      "inputTokens": 92,
+      "maxOutputTokens": 64000,
+      "outputTokens": 21462,
+      "provider": "firstParty",
+      "thinkingTokens": 4834,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 4,
+  "origin": {
+    "kind": "task-notification"
+  },
+  "permission_denials": [],
+  "queued_turn_count": 0,
+  "result": "Gate (d) passed and the PR (#7) plus check run are updated.\n\n**Phase (d) complete for change 0001.** Build, test, and lint are all green; the fresh-context verifier and adversarial reviewer both confirmed the `percent` implementation matches spec.md and plan.md, with no escalation.\n\n- PR: https://github.com/luissiviero/sdlc-sample-python/pull/7\n- Gate (d): `continue` (profile: standard)\n\ngate (d) passed \u2192 `/sdlc-deploy 0001`",
+  "result_index": 2,
+  "session_id": "0fb0ba03-df48-4258-8d51-03de17616eeb",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {
+      "sdlc:adversarial-reviewer": 1,
+      "sdlc:verifier": 1
+    },
+    "completed": 2,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 1,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 2
+    },
+    "spawned": 2,
+    "spawned_by_subagents": 0,
+    "started_in_background": 2
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 19,
+  "total_cost_usd": 0.8198645000000002,
+  "ttft_ms": 3104,
+  "ttft_stream_ms": 1361,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 4153,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 4153,
+    "cache_read_input_tokens": 224641,
+    "inference_geo": "not_available",
+    "input_tokens": 8,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 593,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 593,
+        "cache_read_input_tokens": 57680,
+        "input_tokens": 2,
+        "output_tokens": 502,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 1216,
+    "output_tokens_details": {
+      "thinking_tokens": 435
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "773940bd-23a9-40c3-8265-c728bff9756b"
+}
