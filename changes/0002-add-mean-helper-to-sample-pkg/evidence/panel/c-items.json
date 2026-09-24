@@ -1,15 +1,7 @@
 {
-  "decided": 0,
+  "decided": 1,
   "gate": "park",
-  "items": [
-    {
-      "decided": false,
-      "item": "adversarial reviewer says escalate: Phase c's only committed proof artifact is evidence/verifier.md, a hand-written narrative \u2014 not literal toolchain output. This project's own established convention for a build phase (change 0001, evidence/test.log, build.log, lint.log, each headed '# <command> \u2014 exit <code> \u2014 ...') is entirely absent here: no test.log, build.log or lint.log was committed for phase c of this change. verifier.md itself is a paraphrase (e.g. 'Last lines:' for the pytest run instead of full captured stdout) and explicitly states that two of the verifier's own verification commands were denied by the session's permission system, forcing it to re-run smaller ad hoc commands and write up the results from memory/observation rather than redirecting real command output to a file. A person cannot independently audit an exit code or a full test run here; they can only read the verifier's account of what it says it did.",
-      "key": "escalate:2b4a38d4c3e64c4e",
-      "kind": "escalate",
-      "n": 1
-    }
-  ],
+  "items": [],
   "iterations": {
     "cap": 2,
     "left": 1,
@@ -18,8 +10,8 @@
   "mode": "deferred",
   "panel_calls": {
     "cap": 4,
-    "left": 4,
-    "used": 0
+    "left": 3,
+    "used": 1
   },
   "parks": [
     {
@@ -27,8 +19,6 @@
       "reason": "spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val"
     }
   ],
-  "pending": [
-    1
-  ],
+  "pending": [],
   "phase": "c"
 }

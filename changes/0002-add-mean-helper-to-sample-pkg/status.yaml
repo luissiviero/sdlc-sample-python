@@ -7,11 +7,11 @@ change_type: feature
 profile_override: null
 review_override: deferred
 gate:
-  phase: b
-  result: passed
-  reason: waiting for the owner at gate (b)
-  at: "2026-09-24T17:30:52Z"
-parked_reason: null
+  phase: c
+  result: parked
+  reason: "panel: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val"
+  at: "2026-09-24T18:00:19Z"
+parked_reason: "panel: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val"
 iterations: 1
 panel_calls: 1
 external_ref: null
@@ -23,5 +23,5 @@ iterations_reset_at: "2026-09-24T17:25:40Z"
 tests_unlocked_by: null
 abandoned_reason: null
 created_at: "2026-09-24T13:32:13Z"
-updated_at: "2026-09-24T17:56:42Z"
+updated_at: "2026-09-24T18:00:19Z"
 schema_version: 1

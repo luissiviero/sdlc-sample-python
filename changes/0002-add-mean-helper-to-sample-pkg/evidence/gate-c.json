@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "change_id": "0002",
+  "slug": "add-mean-helper-to-sample-pkg",
+  "phase": "c",
+  "profile": "standard",
+  "human_gate": false,
+  "result": "park",
+  "label": "sdlc:needs-human",
+  "head": "b23dc6d31942c9b748e997fbe3ee223b03d38f3d",
+  "at": "2026-09-24T18:00:19Z",
+  "dry_run": false,
+  "reason": "panel: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 1,
+        "cap": 2,
+        "classification": "non-routine",
+        "panel_calls": 1,
+        "panel_cap": 4,
+        "elapsed_minutes": 14.8,
+        "spend_usd": null,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "clean_tree",
+      "ok": true,
+      "reason": "no uncommitted change outside the change folder",
+      "need": "",
+      "details": {
+        "ignored": [
+          ".env"
+        ]
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "open_concerns",
+      "ok": true,
+      "reason": "no open flagged concern",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "panel",
+      "ok": false,
+      "reason": "spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val",
+      "need": "Every panel decision is one ledger line in evidence/decisions-<phase>.json (panel/cli.py record writes it); a never-to-panel item parks for the owner.",
+      "details": {
+        "problems": [
+          "spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val"
+        ]
+      }
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "reason": "build, test and lint exit 0",
+      "need": "",
+      "details": {
+        "runs": {
+          "build": {
+            "command": "python -m compileall -q .",
+            "exit_code": 0,
+            "output": ""
+          },
+          "test": {
+            "command": "python -m pytest",
+            "exit_code": 0,
+            "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0\nrootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\ncollected 9 items\n\ntests/test_calc.py ........                                              [ 88%]\ntests/test_flag.py .                                                     [100%]\n\n============================== 9 passed in 0.01s ===============================\n"
+          },
+          "lint": {
+            "command": "python -m ruff check .",
+            "exit_code": 0,
+            "output": "All checks passed!\n"
+          }
+        }
+      }
+    },
+    {
+      "name": "evidence",
+      "ok": true,
+      "reason": "evidence present: verifier.md",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "findings",
+      "ok": true,
+      "reason": "no review findings yet (the review pass runs in phase e)",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "plan_sync",
+      "ok": true,
+      "reason": "every committed source file is in plan.md",
+      "need": "",
+      "details": {
+        "planned_but_unchanged": []
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "owner_actions",
+      "ok": true,
+      "reason": "risk acceptances and iteration resets, if any, were committed by the owner or applied by the owner's label",
+      "need": "",
+      "details": {
+        "risk_accepted": [],
+        "label_actors": {
+          "iterations_reset": "luissiviero"
+        }
+      }
+    },
+    {
+      "name": "adversarial_review",
+      "ok": true,
+      "reason": "adversarial reviewer says continue",
+      "need": "",
+      "details": {
+        "classification": "non-routine",
+        "reasons": []
+      }
+    }
+  ],
+  "what_i_need": "## What I need from you\nGate (c) parked change 0002 (add-mean-helper-to-sample-pkg) on 2026-09-24T18:00:19Z.\n- **panel**: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val\n  - what I need: Every panel decision is one ledger line in evidence/decisions-<phase>.json (panel/cli.py record writes it); a never-to-panel item parks for the owner.\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0002 --phase c` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
+}
