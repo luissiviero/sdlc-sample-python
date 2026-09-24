@@ -1,47 +1,45 @@
-# Fix response — phase (b), round 7
+# Fix response — phase (c), round 2
 
-Change request this round: the gate parked again (`73ae0db`, same `owner_actions` reason as
-round 6) after the owner re-applied `sdlc:reset-iterations` on PR #13 at
-2026-09-24T17:25:40Z (GitHub label history); CI's `apply-labels` step performed it before
-this session started, committing `status.yaml: iterations` 1 → 0 as `7cef4e0` (automation
-identity), this time also recording `iterations_reset_at`. Read here as round 6's own
-diagnosis said: "reconsider the park, on the reset count" (decision 24).
+Change request this round: the only unresolved item was the gate's own park (no PR review
+comments, no new owner labels — `state/cli.py apply-labels` returned `"performed": []`).
+Gate (c) had parked (`aad3551` → `evidence/gate-c.json`) with:
+`panel: spec.md closes a concern by the panel with no ledger line: decided (by panel):
+mean([]) raises ValueError('mean() requires at least one val...`
 
-1. **Nothing to change in spec.md / plan.md / code**: no new review comment content arrived
-   this round — the owner's one substantive comment (overturn Flagged concern 2 to
-   `Collection[float]`) was already applied in an earlier round and stays unchanged.
-   `python -m compileall -q .`, `python -m pytest` (5 passed) and `python -m ruff check .`
-   all still green.
-2. Registered the round: `gate/cli.py start-run` + `bump-iteration` (iterations 0 → 1, cap 2,
-   non-routine — not cap-reached), committed as `e5088eb`.
-3. Re-ran the verdict: delegated to `sdlc:adversarial-reviewer` against head `e5088eb`
-   (`evidence/diff-b.patch` vs `origin/main`) — **continue**, non-routine, no reasons to
-   escalate (`evidence/adversarial-review-b.json`). The reviewer noted a non-blocking prose
-   nit in `spec.md`'s Flagged concerns wording (the "decided ..." prefix sits awkwardly next
-   to the original undecided framing it was prepended to) — not Important by `REVIEW.md`'s
-   bar (nothing built or tested is affected; `plan.md` states each decision once,
-   unambiguously), so left as-is rather than treated as a change request.
-4. Panel: `panel/cli.py items` — `pending: []`, no items to decide this round; went straight
-   to the gate.
+1. **Diagnosis: tooling false positive, nothing to change in spec.md / plan.md / code.**
+   Flagged concern 1 in `spec.md` ("decided (by panel): mean([]) raises `ValueError`...")
+   is a real, already-recorded phase-(b) panel decision:
+   `evidence/decisions-b.json` item `n: 1` (`kind: concern`, not overturned) carries the
+   identical decision text. The gate's `panel` check that ran at `aad3551` read only
+   `evidence/decisions-c.json` (phase c's own ledger, which has no such entry — its one
+   entry is the phase-c `escalate` item) and so reported the closing as unrecorded. The
+   installed framework's `panel/ledger.py` (`phases_up_to`, `load_ledgers`) and
+   `gate/checks.py::check_panel` already carry the fix for exactly this case (a concern
+   closed by the panel at (b) stays closed through (c)/(d)/(e); the check now reads every
+   ledger up to and including the current phase) — the fix predates this run and needed no
+   edit here, only a re-run with it in effect. `python -m compileall -q .`,
+   `python -m pytest` (9 passed) and `python -m ruff check .` all still green, unchanged from
+   the parked run.
+2. Registered the round: `gate/cli.py start-run` + `bump-iteration` (iterations 1 → 2, cap 2,
+   non-routine — not cap-reached), committed as `ec2b208`.
+3. Re-ran the verdict: HEAD moved from `b23dc6d` (what the standing verdict judged) to
+   `ec2b208` with the round's registration commit, so `panel/cli.py items` reported the old
+   verdict stale (`"verdict is for commit b23dc6d..., HEAD is aad3551..."`). Regenerated
+   `evidence/diff-c.patch` against `origin/main...HEAD` and delegated to
+   `sdlc:adversarial-reviewer` for `ec2b208` — **continue**, non-routine, no reasons to
+   escalate (`evidence/adversarial-review-c.json`). The reviewer independently re-derived
+   from framework source that both the earlier phase-c `escalate` (missing test.log/build.log
+   /lint.log — phase (d)-only artifacts) and this round's ledger-check fix are genuine, not
+   assumed.
+4. Panel: `panel/cli.py items` — `pending: []`, no items to decide this round (the one
+   phase-c item, the `escalate`, was already decided `continue` in the prior round); went
+   straight to the gate.
 
-## Gate (b) result: wait — the `owner_actions` park is cleared
-Round 6's fix-response diagnosed a structural gap: the check only credited an
-automation-authored iteration drop when *that same commit* also changed
-`iterations_reset_by`'s recorded value, so a second reset by the same owner
-(`luissiviero`) wrote the same string the field already held and the check couldn't tell it
-apart from an uncredited drop. `50d438e` (merging main) pulled in the framework version the
-project pins today (0.2.17), which fixes exactly this: `check_owner_actions`
-(`framework/plugin/gate/checks.py`) now also credits a drop when `iterations_reset_at`
-changes, not just `iterations_reset_by` — "a second reset by the same person changes the
-stamp only." `7cef4e0` (the label-apply commit) set `iterations_reset_at` for the first time
-on this change, so this round's `gate/cli.py check` reads that as a fresh, correctly
-attributed owner action and the `owner_actions` check now passes:
-`"label_actors": {"iterations_reset": "luissiviero"}`.
+## Gate (c) result: continue
+All twelve gate checks pass (`limits`, `clean_tree`, `artifacts`, `open_concerns`, `panel`,
+`commands`, `evidence`, `findings`, `plan_sync`, `guardrails`, `risk_list`, `owner_actions`,
+`adversarial_review`). Gate result: `continue`.
 
-All nine gate checks pass (`limits`, `artifacts`, `design_scope`, `open_concerns`, `panel`,
-`commands`, `guardrails`, `risk_list`, `owner_actions`, `adversarial_review`). Gate result:
-`wait` (label `sdlc:b-ready`) — phase (b) is a human gate; the change now waits on the
-owner's review of the PR itself, not on any further automated round.
-
-Iterations used: 1 of 2 (this cycle's registration).
+Iterations used: 2 of 2 (cap reached — the next fix round, if any, is the owner's).
+Panel calls used: 1 of 4.
 Requests left open: none.

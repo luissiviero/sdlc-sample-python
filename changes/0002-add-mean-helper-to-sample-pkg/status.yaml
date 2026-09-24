@@ -1,19 +1,19 @@
 id: "0002"
 slug: add-mean-helper-to-sample-pkg
 title: Add mean helper to sample_pkg
-phase: b
+phase: e
 entry_route: idea
 change_type: feature
 profile_override: null
 review_override: deferred
 gate:
-  phase: b
+  phase: d
   result: passed
-  reason: waiting for the owner at gate (b)
-  at: "2026-09-24T17:30:52Z"
+  reason: null
+  at: "2026-09-24T18:37:17Z"
 parked_reason: null
-iterations: 1
-panel_calls: 0
+iterations: 2
+panel_calls: 1
 external_ref: null
 risk_accepted: []
 tests_locked: false
@@ -23,5 +23,5 @@ iterations_reset_at: "2026-09-24T17:25:40Z"
 tests_unlocked_by: null
 abandoned_reason: null
 created_at: "2026-09-24T13:32:13Z"
-updated_at: "2026-09-24T17:30:52Z"
+updated_at: "2026-09-24T18:40:35Z"
 schema_version: 1

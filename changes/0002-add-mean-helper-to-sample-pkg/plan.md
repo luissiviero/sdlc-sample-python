@@ -27,10 +27,11 @@
    panel): `Collection[float]`, not `Sequence[float]` (spec.md Flagged concern 2) — `sum`
    and `len` are all the body needs, so `Collection[float]` is the honest contract at no
    extra code, while still rejecting a generator (no `__len__`), which keeps "no
-   materialising". Import `Collection` from `typing` (project targets Python 3.10+;
-   `collections.abc.Collection` is also valid at runtime for the hint but `typing.Collection`
-   matches how a reader expects a typing-only import here — either is acceptable, `typing`
-   is used for consistency with common Python 3.10 style).
+   materialising". Import `Collection` — this plan named `typing.Collection` for consistency
+   with common Python 3.10 style, but the project's format-on-edit hook (ruff) rewrote it to
+   `collections.abc.Collection` on commit; both are equally valid at runtime for the hint and
+   the plan already called either acceptable, so the implementation keeps the hook's choice
+   rather than fighting the formatter.
 2. Add `mean` to `sample_pkg/__init__.py`'s import line and `__all__`, in the same position
    relative to `add`, `divide`, `percent` as they already appear.
 3. Add four tests to `tests/test_calc.py`:

@@ -1,0 +1,1277 @@
+ .../evidence/adversarial-review-c.json             |  22 +
+ .../evidence/claude-c.json                         | 119 +++++
+ .../evidence/claude-c.stderr.txt                   |   1 +
+ .../evidence/decisions-c.json                      |  27 +
+ .../evidence/decisions-c.md                        |   7 +
+ .../evidence/diff-c.patch                          | 579 +++++++++++++++++++++
+ .../evidence/gate-c.json                           | 156 ++++++
+ .../evidence/panel/c-1-advocate.md                 |  33 ++
+ .../evidence/panel/c-1-conciliator.json            |  12 +
+ .../evidence/panel/c-1-reviewer.md                 |  23 +
+ .../evidence/panel/c-items.json                    |  24 +
+ .../evidence/run-c.json                            |   5 +
+ .../evidence/verifier.md                           |  43 ++
+ changes/0002-add-mean-helper-to-sample-pkg/plan.md |   9 +-
+ .../0002-add-mean-helper-to-sample-pkg/status.yaml |  18 +-
+ sample_pkg/__init__.py                             |   4 +-
+ sample_pkg/calc.py                                 |  10 +
+ tests/test_calc.py                                 |  19 +-
+ 18 files changed, 1095 insertions(+), 16 deletions(-)
+
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/adversarial-review-c.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/adversarial-review-c.json
+new file mode 100644
+index 0000000..857760f
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/adversarial-review-c.json
+@@ -0,0 +1,22 @@
++{
++  "schema_version": 1,
++  "phase": "c",
++  "head": "b23dc6d31942c9b748e997fbe3ee223b03d38f3d",
++  "verdict": "continue",
++  "reasons": [],
++  "classification": "non-routine",
++  "classification_reasons": [
++    "Spec tightness: tight - both of spec.md's flagged concerns (empty-input raises ValueError, parameter type is Collection[float]) are closed with a recorded decision (evidence/decisions-b.json items 1 and 2, item 2 explicitly marked overturned by the owner) and Acceptance is fully measurable (mean([1,2,3,4])==2.5, mean([5])==5.0, mean([]) raises ValueError, mean({1.0,2.0,3.0})==2.0, 9 passed, ruff clean, silent compileall).",
++    "Blast radius: small - the source diff touches exactly the files plan.md lists (sample_pkg/calc.py, sample_pkg/__init__.py, tests/test_calc.py) plus the change folder and status.yaml/plan.md bookkeeping; no guardrail file (.claude/**, CLAUDE.md, REVIEW.md, sdlc.yaml), no sdlc.yaml risk_list item, no schema or config change; mean has no existing caller so add/divide/percent are unaffected.",
++    "Test coverage: mean is brand-new code with no pre-existing test covering it before this change - the build supplies its own four tests - so the third routine criterion (code the existing tests already cover) fails and the plan stays non-routine."
++  ],
++  "attempted": [
++    "Intent: the diff adds mean(values) returning the arithmetic mean as a float, resolves the two open questions intent.md left (empty input -> ValueError, parameter type -> Collection[float]), exports it from __init__.py/__all__, and covers normal, single-element, empty and non-Sequence-Collection cases in tests/test_calc.py. This is exactly intent's Proposed outcome, nothing extra, nothing missing. The one intent item not in this diff - a proposed one-line CLAUDE.md Layout update - is explicitly scoped by intent/plan to the build PR description, not the repo, so its absence from the diff is expected, not a gap.",
++    "Spec and plan: verified calc.py's mean body (guard clause raising ValueError, then divide(sum(values), len(values)), collections.abc.Collection import) against plan.md step 1 verbatim, including the reconciled note that ruff's format-on-edit hook rewrote typing.Collection to collections.abc.Collection (plan.md was updated in this same phase-c diff to say so, so plan and diff agree at HEAD); __init__.py's import line and __all__ match step 2 exactly, alphabetically placed between divide and percent; the four tests in tests/test_calc.py match step 3's names and assertions exactly, including the set-based test pinning Collection[float]. No file changed outside plan.md's Files-that-change list.",
++    "Proof: compared verifier.md against the diff's four new tests. verifier.md names all four new tests individually (via 'pytest -k mean -v'), reports 9 passed consistent with the diff's added test count, and exercises exactly the behaviours spec.md/plan.md pin: empty raises ValueError (not ZeroDivisionError), a set (non-Sequence Collection) works, add/divide/percent are unaffected, and a generator is still rejected (via TypeError at len(), transparently noted as a detail the plan didn't spell out but not contradicted by it). A prior review of the previous HEAD (a94e11b) escalated because no test.log/build.log/lint.log were committed at phase c; I checked this independently against change 0001's own gate-c.json/gate-d.json (committed in this repo): gate (c) for 0001 recorded 'evidence present: verifier.md' as sufficient, and only gate (d) required 'evidence present: test.log, build.log, lint.log, verifier.md'. REVIEW.md's 'Do not report ... anything under changes/*/evidence/' also covers verifier.md's format directly. This independently confirms the panel's phase-c/phase-d scoping was correct, so I do not re-raise it.",
++    "Blast radius: mean is additive and uncalled elsewhere; divide is called, not modified; __all__ gains one name in the correct alphabetical slot. No guardrail file, no sdlc.yaml risk_list item (auth, data migrations, money movement, production config), no schema or config file appears in the diff. status.yaml's diff is only the phase/timestamp/panel_calls bump expected at this point in the workflow.",
++    "Policies: coding-standards' export-pattern and type-hint rules are met (Collection[float] hint, alphabetical import/__all__ placement matching add/divide/percent, no docstring inconsistency beyond the one plan.md itself flags and justifies); no new dependency, statistics.mean is not wrapped; security-baseline, ux-conventions and data-conventions are correctly inapplicable to a pure in-process arithmetic helper with no I/O, UI or stored data.",
++    "Tests: test_mean, test_mean_single_element, test_mean_empty and test_mean_accepts_non_sequence_collection each pin a distinct behaviour (correct averaging, single-element division, the explicit ValueError guard rather than a fallthrough ZeroDivisionError from divide, and the widened Collection[float]-not-Sequence contract via a set); manually traced each assertion against the guard-clause-plus-divide implementation and found no case where the bug (e.g. wrong exception type, Sequence-only implementation, off-by-one in the guard) would still pass. No pre-existing test (test_add, test_divide_by_zero_raises, test_percent, test_percent_zero_whole_raises, tests/test_flag.py) is touched or weakened by this feature-type change."
++  ],
++  "at": "2026-09-24T18:20:00Z"
++}
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/claude-c.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/claude-c.json
+new file mode 100644
+index 0000000..6226728
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/claude-c.json
+@@ -0,0 +1,119 @@
++{
++  "api_error_status": null,
++  "duration_api_ms": 1009849,
++  "duration_ms": 49880,
++  "fast_mode_disabled_reason": "sdk_opt_in_required",
++  "fast_mode_state": "off",
++  "first_content_frame_ms": 1579,
++  "is_error": false,
++  "modelUsage": {
++    "claude-opus-5": {
++      "cacheCreationInputTokens": 43322,
++      "cacheReadInputTokens": 289279,
++      "canonicalModel": "claude-opus-5",
++      "contextWindow": 1000000,
++      "costBasis": "list",
++      "costUSD": 0.573187,
++      "inputTokens": 22,
++      "maxOutputTokens": 64000,
++      "outputTokens": 6307,
++      "provider": "firstParty",
++      "thinkingTokens": 2957,
++      "webSearchRequests": 0
++    },
++    "claude-sonnet-5": {
++      "cacheCreationInputTokens": 293143,
++      "cacheReadInputTokens": 6362287,
++      "canonicalModel": "claude-sonnet-5",
++      "contextWindow": 1000000,
++      "costBasis": "list",
++      "costUSD": 2.9027929,
++      "inputTokens": 256,
++      "maxOutputTokens": 64000,
++      "outputTokens": 77507,
++      "provider": "firstParty",
++      "thinkingTokens": 37975,
++      "webSearchRequests": 0
++    }
++  },
++  "num_turns": 6,
++  "origin": {
++    "kind": "task-notification"
++  },
++  "permission_denials": [],
++  "queued_turn_count": 0,
++  "result": "PR #17 is open with the `sdlc:needs-human` label. Now reporting per step 9's \"park\" instruction.\n\nGate (c) for change 0002 (add-mean-helper-to-sample-pkg) parked. Summary of the run:\n\n- Implemented `mean(values: Collection[float]) -> float` in `sample_pkg/calc.py`, exported it from `sample_pkg/__init__.py`, and added 4 tests to `tests/test_calc.py`, exactly per `plan.md`.\n- `python -m compileall -q .`, `python -m pytest` (9 passed), `python -m ruff check .` (All checks passed!) all green.\n- code-simplifier found nothing to simplify; reconciled one minor plan/implementation mismatch (ruff's format-on-edit hook rewrote the `Collection` import from `typing` to `collections.abc` \u2014 the plan already called both acceptable, so `plan.md` was updated to say so).\n- Verifier (fresh context) confirmed behavior matches plan/spec exactly, including neighboring `divide`/`percent` flows.\n- Adversarial reviewer initially escalated over missing `test.log`/`build.log`/`lint.log` at phase c. Since review is deferred, this went to the panel: reviewer and devil's advocate (opus) both independently found those logs are a phase (d) convention, not required at (c); conciliator decided \"continue.\" Re-ran the adversarial review on the new HEAD: \"continue.\"\n\nGate (c) then parked on a pre-existing issue from phase (b): `spec.md`'s closed concern is worded `decided (by panel): ...` without the `#<n>` ledger reference the gate's `panel` check requires. This predates this run (it's already on `main` from the phase (b) merge), and `spec.md` is a file this phase is never allowed to edit.\n\n**PR:** https://github.com/luissiviero/sdlc-sample-python/pull/17 (branch `sdlc/0002/c`, labeled `sdlc:needs-human`)\n\n**What I need from you:** `spec.md`'s Flagged concerns entry needs a `#<n>` reference to its `evidence/decisions-b.json` ledger line (e.g. `decided (by panel #1): ...`) so the gate's panel check can match it. Once that's fixed on `main`/the relevant branch, re-run: `python framework/plugin/gate/cli.py check --root . --id 0002 --phase c`.",
++  "result_index": 7,
++  "session_id": "d4f01809-6baa-44b3-950b-f4ecd44be4f9",
++  "stop_reason": "end_turn",
++  "subagent_stats": {
++    "by_type": {
++      "general-purpose": 2,
++      "sdlc:adversarial-reviewer": 3,
++      "sdlc:code-simplifier": 1,
++      "sdlc:verifier": 1
++    },
++    "completed": 7,
++    "failed": 0,
++    "killed": {
++      "parent": 0,
++      "system": 0,
++      "user": 0
++    },
++    "max_depth": 1,
++    "refused": {
++      "budget": 0,
++      "concurrency_limit": 0,
++      "depth_limit": 0
++    },
++    "requested": {
++      "background": 0,
++      "foreground": 0,
++      "unset": 7
++    },
++    "spawned": 7,
++    "spawned_by_subagents": 0,
++    "started_in_background": 7
++  },
++  "subtype": "success",
++  "terminal_reason": "completed",
++  "time_to_request_ms": 24,
++  "total_cost_usd": 3.475979900000002,
++  "ttft_ms": 2115,
++  "ttft_stream_ms": 1579,
++  "type": "result",
++  "usage": {
++    "cache_creation": {
++      "ephemeral_1h_input_tokens": 7479,
++      "ephemeral_5m_input_tokens": 0
++    },
++    "cache_creation_input_tokens": 7479,
++    "cache_read_input_tokens": 621209,
++    "inference_geo": "not_available",
++    "input_tokens": 12,
++    "iterations": [
++      {
++        "cache_creation": {
++          "ephemeral_1h_input_tokens": 464,
++          "ephemeral_5m_input_tokens": 0
++        },
++        "cache_creation_input_tokens": 464,
++        "cache_read_input_tokens": 106704,
++        "input_tokens": 2,
++        "output_tokens": 817,
++        "type": "message"
++      }
++    ],
++    "output_tokens": 2786,
++    "output_tokens_details": {
++      "thinking_tokens": 1203
++    },
++    "server_tool_use": {
++      "web_fetch_requests": 0,
++      "web_search_requests": 0
++    },
++    "service_tier": "standard",
++    "speed": "standard"
++  },
++  "uuid": "f86c421c-8219-4e76-9451-0511538d8c9b"
++}
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/claude-c.stderr.txt b/changes/0002-add-mean-helper-to-sample-pkg/evidence/claude-c.stderr.txt
+new file mode 100644
+index 0000000..6e30b16
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/claude-c.stderr.txt
+@@ -0,0 +1 @@
++Ignoring 4 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects["/home/runner/work/sdlc-sample-python/sdlc-sample-python"].hasTrustDialogAccepted: true in /home/runner/.claude.json.
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.json
+new file mode 100644
+index 0000000..609fdea
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.json
+@@ -0,0 +1,27 @@
++{
++  "decisions": [
++    {
++      "advocate": "Reject the escalation: REQUIRED_EVIDENCE and definition-of-done both scope the three logs to gate (d), the deterministic gate-c commands check will independently verify build/test/lint, and REVIEW.md excludes evidence/* content.",
++      "at": "2026-09-24T17:56:42Z",
++      "cost_usd": null,
++      "decision": "continue",
++      "head": "a94e11bb008124df8227279a61162acfe77d0174",
++      "item": "adversarial reviewer says escalate: Phase c's only committed proof artifact is evidence/verifier.md, a hand-written narrative \u2014 not literal toolchain output. This project's own established convention for a build phase (change 0001, evidence/test.log, build.log, lint.log, each headed '# <command> \u2014 exit <code> \u2014 ...') is entirely absent here: no test.log, build.log or lint.log was committed for phase c of this change. verifier.md itself is a paraphrase (e.g. 'Last lines:' for the pytest run instead of full captured stdout) and explicitly states that two of the verifier's own verification commands were denied by the session's permission system, forcing it to re-run smaller ad hoc commands and write up the results from memory/observation rather than redirecting real command output to a file. A person cannot independently audit an exit code or a full test run here; they can only read the verifier's account of what it says it did.",
++      "key": "escalate:2b4a38d4c3e64c4e",
++      "kind": "escalate",
++      "n": 1,
++      "overturned": null,
++      "phase": "c",
++      "rationale": [
++        "Reviewer and advocate agree on the controlling fact: phase (c) requires only evidence/verifier.md; test.log/build.log/lint.log are phase (d) artifacts per REQUIRED_EVIDENCE and the definition-of-done skill.",
++        "Both independently checked change 0001's history and found the three logs were added in its phase (d) commit, not phase (c) \u2014 the escalation's cited 'convention' is misdated.",
++        "Both also point to REVIEW.md's 'Do not report' rule, which names anything under changes/*/evidence/, covering verifier.md's format directly.",
++        "No disagreement between the two verdicts to resolve; deciding with them is the safer and better-supported reading.",
++        "No change to make first: verifier.md's disclosed permission denials are transparent, and gate (c)'s own commands check will independently capture literal build/test/lint output."
++      ],
++      "reviewer": "Decline the escalation: test.log/build.log/lint.log are a phase (d) convention, not phase (c), and REVIEW.md excludes evidence/* content from findings."
++    }
++  ],
++  "phase": "c",
++  "schema_version": 1
++}
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.md b/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.md
+new file mode 100644
+index 0000000..c740a07
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.md
+@@ -0,0 +1,7 @@
++# Decisions taken for you — phase (c)
++
++One line per panel decision (decision 21): the item, the reviewer's and the devil's advocate's verdicts, the conciliator's decision and rationale, the cost. A review comment on any of them overturns it (/sdlc-fix); an overturned line says so.
++
++- 1. [escalate] adversarial reviewer says escalate: Phase c's only committed proof artifact is evidence/verifier.md, a hand-written narrative — not literal toolchain output. This project's own established convention for a build phase (change 0001, evidence/test.log, build.log, lint.log, each headed '# <command> — exit <code> — ...') is entirely absent here: no test.log, build.log or lint.log was committed for phase c of this change. verifier.md itself is a paraphrase (e.g. 'Last lines:' for the pytest run instead of full captured stdout) and explicitly states that two of the verifier's own verification commands were denied by the session's permission system, forcing it to re-run smaller ad hoc commands and write up the results from memory/observation rather than redirecting real command output to a file. A person cannot independently audit an exit code or a full test run here; they can only read the verifier's account of what it says it did. — reviewer: Decline the escalation: test.log/build.log/lint.log are a phase (d) convention, not phase (c), and REVIEW.md excludes evidence/* content from findings.; devil's advocate: Reject the escalation: REQUIRED_EVIDENCE and definition-of-done both scope the three logs to gate (d), the deterministic gate-c commands check will independently verify build/test/lint, and REVIEW.md excludes evidence/* content.; decision: continue; rationale: Reviewer and advocate agree on the controlling fact: phase (c) requires only evidence/verifier.md; test.log/build.log/lint.log are phase (d) artifacts per REQUIRED_EVIDENCE and the definition-of-done skill. Both independently checked change 0001's history and found the three logs were added in its phase (d) commit, not phase (c) — the escalation's cited 'convention' is misdated. Both also point to REVIEW.md's 'Do not report' rule, which names anything under changes/*/evidence/, covering verifier.md's format directly. No disagreement between the two verdicts to resolve; deciding with them is the safer and better-supported reading. No change to make first: verifier.md's disclosed permission denials are transparent, and gate (c)'s own commands check will independently capture literal build/test/lint output.; cost: n/a
++
++Total panel cost: $0.00
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/diff-c.patch b/changes/0002-add-mean-helper-to-sample-pkg/evidence/diff-c.patch
+new file mode 100644
+index 0000000..5a8a747
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/diff-c.patch
+@@ -0,0 +1,579 @@
++ .../evidence/adversarial-review-c.json             |  24 +++
++ .../evidence/decisions-c.json                      |  27 ++++
++ .../evidence/decisions-c.md                        |   7 +
++ .../evidence/diff-c.patch                          | 177 +++++++++++++++++++++
++ .../evidence/panel/c-1-advocate.md                 |  33 ++++
++ .../evidence/panel/c-1-conciliator.json            |  12 ++
++ .../evidence/panel/c-1-reviewer.md                 |  23 +++
++ .../evidence/panel/c-items.json                    |  34 ++++
++ .../evidence/run-c.json                            |   5 +
++ .../evidence/verifier.md                           |  43 +++++
++ changes/0002-add-mean-helper-to-sample-pkg/plan.md |   9 +-
++ .../0002-add-mean-helper-to-sample-pkg/status.yaml |   6 +-
++ sample_pkg/__init__.py                             |   4 +-
++ sample_pkg/calc.py                                 |  10 ++
++ tests/test_calc.py                                 |  19 ++-
++ 15 files changed, 423 insertions(+), 10 deletions(-)
++
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/adversarial-review-c.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/adversarial-review-c.json
++new file mode 100644
++index 0000000..48e6d29
++--- /dev/null
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/adversarial-review-c.json
++@@ -0,0 +1,24 @@
+++{
+++  "schema_version": 1,
+++  "phase": "c",
+++  "head": "a94e11bb008124df8227279a61162acfe77d0174",
+++  "verdict": "escalate",
+++  "reasons": [
+++    "Phase c's only committed proof artifact is evidence/verifier.md, a hand-written narrative — not literal toolchain output. This project's own established convention for a build phase (change 0001, evidence/test.log, build.log, lint.log, each headed '# <command> — exit <code> — ...') is entirely absent here: no test.log, build.log or lint.log was committed for phase c of this change. verifier.md itself is a paraphrase (e.g. 'Last lines:' for the pytest run instead of full captured stdout) and explicitly states that two of the verifier's own verification commands were denied by the session's permission system, forcing it to re-run smaller ad hoc commands and write up the results from memory/observation rather than redirecting real command output to a file. A person cannot independently audit an exit code or a full test run here; they can only read the verifier's account of what it says it did."
+++  ],
+++  "classification": "non-routine",
+++  "classification_reasons": [
+++    "Spec tightness: tight — both of spec.md's flagged concerns (empty-input ValueError, Collection[float] parameter type) are closed with a decision, and Acceptance is fully measurable (mean([1,2,3,4])==2.5, mean([5])==5.0, mean([]) raises ValueError, mean({1.0,2.0,3.0})==2.0, 9 passed, ruff clean, silent compileall).",
+++    "Blast radius: small — the diff touches exactly the files plan.md lists (sample_pkg/calc.py, sample_pkg/__init__.py, tests/test_calc.py) plus the change folder; no guardrail file, no sdlc.yaml risk_list item, no schema/contract/migration change; mean has no existing caller so add/divide/percent behaviour is unaffected.",
+++    "Test coverage: mean is brand-new code with no pre-existing test covering it before this change — the build supplies its own four tests — so the third routine criterion (code the existing tests already cover) fails and the plan stays non-routine."
+++  ],
+++  "attempted": [
+++    "Intent: diff adds mean(values) returning the arithmetic mean as a float, decides the empty-input (ValueError) and parameter-type (Collection[float]) questions intent.md left open, exports it from __init__.py/__all__, and covers normal, single-element, empty and non-Sequence-Collection cases in tests/test_calc.py. This is exactly intent's Proposed outcome, nothing extra, nothing missing.",
+++    "Spec and plan: read spec.md's Requirements, Design, Flagged concerns (both marked decided) and Acceptance, then plan.md's Files/Order of work/Proof. calc.py's mean body (guard clause raising ValueError, then divide(sum(values), len(values))) matches plan step 1 verbatim including the Collection import; __init__.py's import line and __all__ match step 2 exactly (alphabetical position between divide and percent); the four tests in tests/test_calc.py match step 3's names and assertions exactly, including the set-based test pinning Collection[float]. plan.md was amended in the same phase-c diff to reconcile the typing.Collection vs collections.abc.Collection wording with what the format-on-edit hook actually produced, so by HEAD the plan matches the diff.",
+++    "Proof: compared the diff's four new tests against evidence/verifier.md (no test.log/build.log/lint.log exist for this phase, unlike change 0001's phase c/d). verifier.md names all four new tests individually (via 'pytest -k mean -v'), reports 9 passed matching the 8 dots for tests/test_calc.py plus 1 for tests/test_flag.py (consistent with the diff's test count), and exercises the changed behaviour (empty raises ValueError not ZeroDivisionError, set input works, add/divide/percent unaffected). However it is a narrative summary, not a captured raw log with the project's '# <command> — exit <code> — ...' header, and it self-reports that some of its own verification commands were blocked by the permission system and worked around — this is the verifier's claim about what it ran, not an independently auditable record. Escalated on this basis.",
+++    "Blast radius: mean is additive and uncalled elsewhere; divide is called, not modified; __all__ gains one name in the correct alphabetical slot. No guardrail file (.claude/**, CLAUDE.md, REVIEW.md, sdlc.yaml), no sdlc.yaml risk_list item (auth, data migrations, money movement, production config), no schema or config file appears in the diff. status.yaml's diff is only the phase/timestamp bump expected at this point in the workflow.",
+++    "Policies: coding-standards' export-pattern and type-hint rules are met (Collection[float] hint, alphabetical import/__all__ placement matching add/divide/percent); no new dependency, statistics.mean is not wrapped; security-baseline, ux-conventions and data-conventions are correctly inapplicable to a pure in-process arithmetic helper with no I/O, UI or stored data; definition-of-done's three commands are reported green in verifier.md (though see the Proof finding on how that's evidenced).",
+++    "Tests: test_mean, test_mean_single_element, test_mean_empty and test_mean_accepts_non_sequence_collection each pin a distinct behaviour (correct averaging, single-element division, the explicit ValueError guard rather than a fallthrough ZeroDivisionError from divide, and the widened Collection[float]-not-Sequence contract via a set) — a bug in any of the guard condition, the divide call, or a Sequence-only implementation would fail one of them. No pre-existing test (test_add, test_divide_by_zero_raises, test_percent, test_percent_zero_whole_raises, tests/test_flag.py) is touched or weakened by this feature-type change."
+++  ],
+++  "at": "2026-09-24T18:05:00Z"
+++}
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.json
++new file mode 100644
++index 0000000..609fdea
++--- /dev/null
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.json
++@@ -0,0 +1,27 @@
+++{
+++  "decisions": [
+++    {
+++      "advocate": "Reject the escalation: REQUIRED_EVIDENCE and definition-of-done both scope the three logs to gate (d), the deterministic gate-c commands check will independently verify build/test/lint, and REVIEW.md excludes evidence/* content.",
+++      "at": "2026-09-24T17:56:42Z",
+++      "cost_usd": null,
+++      "decision": "continue",
+++      "head": "a94e11bb008124df8227279a61162acfe77d0174",
+++      "item": "adversarial reviewer says escalate: Phase c's only committed proof artifact is evidence/verifier.md, a hand-written narrative \u2014 not literal toolchain output. This project's own established convention for a build phase (change 0001, evidence/test.log, build.log, lint.log, each headed '# <command> \u2014 exit <code> \u2014 ...') is entirely absent here: no test.log, build.log or lint.log was committed for phase c of this change. verifier.md itself is a paraphrase (e.g. 'Last lines:' for the pytest run instead of full captured stdout) and explicitly states that two of the verifier's own verification commands were denied by the session's permission system, forcing it to re-run smaller ad hoc commands and write up the results from memory/observation rather than redirecting real command output to a file. A person cannot independently audit an exit code or a full test run here; they can only read the verifier's account of what it says it did.",
+++      "key": "escalate:2b4a38d4c3e64c4e",
+++      "kind": "escalate",
+++      "n": 1,
+++      "overturned": null,
+++      "phase": "c",
+++      "rationale": [
+++        "Reviewer and advocate agree on the controlling fact: phase (c) requires only evidence/verifier.md; test.log/build.log/lint.log are phase (d) artifacts per REQUIRED_EVIDENCE and the definition-of-done skill.",
+++        "Both independently checked change 0001's history and found the three logs were added in its phase (d) commit, not phase (c) \u2014 the escalation's cited 'convention' is misdated.",
+++        "Both also point to REVIEW.md's 'Do not report' rule, which names anything under changes/*/evidence/, covering verifier.md's format directly.",
+++        "No disagreement between the two verdicts to resolve; deciding with them is the safer and better-supported reading.",
+++        "No change to make first: verifier.md's disclosed permission denials are transparent, and gate (c)'s own commands check will independently capture literal build/test/lint output."
+++      ],
+++      "reviewer": "Decline the escalation: test.log/build.log/lint.log are a phase (d) convention, not phase (c), and REVIEW.md excludes evidence/* content from findings."
+++    }
+++  ],
+++  "phase": "c",
+++  "schema_version": 1
+++}
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.md b/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.md
++new file mode 100644
++index 0000000..c740a07
++--- /dev/null
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/decisions-c.md
++@@ -0,0 +1,7 @@
+++# Decisions taken for you — phase (c)
+++
+++One line per panel decision (decision 21): the item, the reviewer's and the devil's advocate's verdicts, the conciliator's decision and rationale, the cost. A review comment on any of them overturns it (/sdlc-fix); an overturned line says so.
+++
+++- 1. [escalate] adversarial reviewer says escalate: Phase c's only committed proof artifact is evidence/verifier.md, a hand-written narrative — not literal toolchain output. This project's own established convention for a build phase (change 0001, evidence/test.log, build.log, lint.log, each headed '# <command> — exit <code> — ...') is entirely absent here: no test.log, build.log or lint.log was committed for phase c of this change. verifier.md itself is a paraphrase (e.g. 'Last lines:' for the pytest run instead of full captured stdout) and explicitly states that two of the verifier's own verification commands were denied by the session's permission system, forcing it to re-run smaller ad hoc commands and write up the results from memory/observation rather than redirecting real command output to a file. A person cannot independently audit an exit code or a full test run here; they can only read the verifier's account of what it says it did. — reviewer: Decline the escalation: test.log/build.log/lint.log are a phase (d) convention, not phase (c), and REVIEW.md excludes evidence/* content from findings.; devil's advocate: Reject the escalation: REQUIRED_EVIDENCE and definition-of-done both scope the three logs to gate (d), the deterministic gate-c commands check will independently verify build/test/lint, and REVIEW.md excludes evidence/* content.; decision: continue; rationale: Reviewer and advocate agree on the controlling fact: phase (c) requires only evidence/verifier.md; test.log/build.log/lint.log are phase (d) artifacts per REQUIRED_EVIDENCE and the definition-of-done skill. Both independently checked change 0001's history and found the three logs were added in its phase (d) commit, not phase (c) — the escalation's cited 'convention' is misdated. Both also point to REVIEW.md's 'Do not report' rule, which names anything under changes/*/evidence/, covering verifier.md's format directly. No disagreement between the two verdicts to resolve; deciding with them is the safer and better-supported reading. No change to make first: verifier.md's disclosed permission denials are transparent, and gate (c)'s own commands check will independently capture literal build/test/lint output.; cost: n/a
+++
+++Total panel cost: $0.00
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/diff-c.patch b/changes/0002-add-mean-helper-to-sample-pkg/evidence/diff-c.patch
++new file mode 100644
++index 0000000..a656d6d
++--- /dev/null
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/diff-c.patch
++@@ -0,0 +1,177 @@
+++ .../evidence/run-c.json                            |  5 +++
+++ .../evidence/verifier.md                           | 43 ++++++++++++++++++++++
+++ changes/0002-add-mean-helper-to-sample-pkg/plan.md |  9 +++--
+++ .../0002-add-mean-helper-to-sample-pkg/status.yaml |  4 +-
+++ sample_pkg/__init__.py                             |  4 +-
+++ sample_pkg/calc.py                                 | 10 +++++
+++ tests/test_calc.py                                 | 19 +++++++++-
+++ 7 files changed, 85 insertions(+), 9 deletions(-)
+++
+++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/run-c.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/run-c.json
+++new file mode 100644
+++index 0000000..53a0b64
+++--- /dev/null
++++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/run-c.json
+++@@ -0,0 +1,5 @@
++++{
++++  "phase": "c",
++++  "spend_usd": null,
++++  "started_at": "2026-09-24T17:45:33Z"
++++}
+++\ No newline at end of file
+++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/verifier.md b/changes/0002-add-mean-helper-to-sample-pkg/evidence/verifier.md
+++new file mode 100644
+++index 0000000..a300605
+++--- /dev/null
++++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/verifier.md
+++@@ -0,0 +1,43 @@
++++All checks confirm the implementation exactly matches plan.md and spec.md.
++++
++++## Report
++++
++++**Commands run** (all from `/home/runner/work/sdlc-sample-python/sdlc-sample-python`, exactly as written in `sdlc.yaml: commands`):
++++
++++- `python -m compileall -q .` — exit 0, no output.
++++- `python -m pytest` — exit 0. Last lines:
++++  ```
++++  tests/test_calc.py ........                                              [ 88%]
++++  tests/test_flag.py .                                                     [100%]
++++  ============================== 9 passed in 0.01s ===============================
++++  ```
++++- `python -m ruff check .` — exit 0. Output: `All checks passed!`
++++
++++All three match plan.md's Proof section (9 passed, `All checks passed!`, silent compileall).
++++
++++**Behavior exercised**
++++
++++- `mean([1, 2, 3, 4])` → `2.5` (Acceptance: normal case).
++++- `mean([5])` → `5.0` (Acceptance: single-element case).
++++- `mean([])` → raised `ValueError: mean() requires at least one value` (exact message from plan.md's guard clause), not `ZeroDivisionError` — confirms Flagged concern 1's decision (mean raises its own ValueError, does not fall through to divide).
++++- `mean({1.0, 2.0, 3.0})` (a `set`, non-`Sequence` `Collection`) → `2.0` — confirms the `Collection[float]` contract from Flagged concern 2.
++++- Input just outside acceptance — a generator (`Iterable`, not `Collection`, no `__len__`): `mean(gen())` raised `TypeError: object of type 'generator' has no len()`. Note: `not values` (the emptiness guard) does not short-circuit on a generator (generators are always truthy), so `sum(values)` runs and consumes the generator before `len(values)` fails — the generator is still correctly rejected, just via `TypeError` at the `len()` call rather than at the guard clause. This matches the plan's intent ("still rejecting a generator (no `__len__`)") and is not contradicted by any spec/plan wording, but the plan doesn't explicitly describe this exact failure point.
++++- Neighboring flow `percent`: `percent(1, 4)` → `25.0`, `percent(7, 100)` → `7.0`; `percent(1, 0)` raised `ZeroDivisionError: b must not be zero` — confirms `percent` is untouched and still propagates `divide`'s error, unlike `mean`.
++++- Neighboring flow `divide`: `divide(1, 0)` raised `ZeroDivisionError: b must not be zero` — unchanged.
++++- `pytest -k mean -v` — all 4 new tests pass individually: `test_mean`, `test_mean_single_element`, `test_mean_empty`, `test_mean_accepts_non_sequence_collection`.
++++- `sample_pkg.__all__` → `['add', 'divide', 'mean', 'percent']` — confirms export/`__all__` per Acceptance.
++++
++++**Mismatches with plan.md / spec.md**
++++
++++- none.
++++
++++**Verdict**: matches the plan
++++
++++Relevant files:
++++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py`
++++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/__init__.py`
++++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py`
++++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0002-add-mean-helper-to-sample-pkg/plan.md`
++++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0002-add-mean-helper-to-sample-pkg/spec.md`
++++
++++One incidental note (not a mismatch, informational only): during Bash tool use, two of my commands were blocked by the permission system ("Permission to use Bash has been denied") — one combined multi-command line and one longer multi-line `python -c` script. I did not attempt to bypass these; I re-ran the same checks as smaller individual commands, which were permitted and produced the results above. This is a permission-system behavior in this session, not a code issue.
+++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/plan.md b/changes/0002-add-mean-helper-to-sample-pkg/plan.md
+++index 3dab215..1b4c6f4 100644
+++--- a/changes/0002-add-mean-helper-to-sample-pkg/plan.md
++++++ b/changes/0002-add-mean-helper-to-sample-pkg/plan.md
+++@@ -27,10 +27,11 @@
+++    panel): `Collection[float]`, not `Sequence[float]` (spec.md Flagged concern 2) — `sum`
+++    and `len` are all the body needs, so `Collection[float]` is the honest contract at no
+++    extra code, while still rejecting a generator (no `__len__`), which keeps "no
+++-   materialising". Import `Collection` from `typing` (project targets Python 3.10+;
+++-   `collections.abc.Collection` is also valid at runtime for the hint but `typing.Collection`
+++-   matches how a reader expects a typing-only import here — either is acceptable, `typing`
+++-   is used for consistency with common Python 3.10 style).
++++   materialising". Import `Collection` — this plan named `typing.Collection` for consistency
++++   with common Python 3.10 style, but the project's format-on-edit hook (ruff) rewrote it to
++++   `collections.abc.Collection` on commit; both are equally valid at runtime for the hint and
++++   the plan already called either acceptable, so the implementation keeps the hook's choice
++++   rather than fighting the formatter.
+++ 2. Add `mean` to `sample_pkg/__init__.py`'s import line and `__all__`, in the same position
+++    relative to `add`, `divide`, `percent` as they already appear.
+++ 3. Add four tests to `tests/test_calc.py`:
+++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/status.yaml b/changes/0002-add-mean-helper-to-sample-pkg/status.yaml
+++index ec5ddb3..c48d744 100644
+++--- a/changes/0002-add-mean-helper-to-sample-pkg/status.yaml
++++++ b/changes/0002-add-mean-helper-to-sample-pkg/status.yaml
+++@@ -1,7 +1,7 @@
+++ id: "0002"
+++ slug: add-mean-helper-to-sample-pkg
+++ title: Add mean helper to sample_pkg
+++-phase: b
++++phase: c
+++ entry_route: idea
+++ change_type: feature
+++ profile_override: null
+++@@ -23,5 +23,5 @@ iterations_reset_at: "2026-09-24T17:25:40Z"
+++ tests_unlocked_by: null
+++ abandoned_reason: null
+++ created_at: "2026-09-24T13:32:13Z"
+++-updated_at: "2026-09-24T17:30:52Z"
++++updated_at: "2026-09-24T17:45:36Z"
+++ schema_version: 1
+++diff --git a/sample_pkg/__init__.py b/sample_pkg/__init__.py
+++index 89ab3c5..e35a8eb 100644
+++--- a/sample_pkg/__init__.py
++++++ b/sample_pkg/__init__.py
+++@@ -1,5 +1,5 @@
+++ """Tiny package used by the fixture tests."""
+++ 
+++-from .calc import add, divide, percent
++++from .calc import add, divide, mean, percent
+++ 
+++-__all__ = ["add", "divide", "percent"]
++++__all__ = ["add", "divide", "mean", "percent"]
+++diff --git a/sample_pkg/calc.py b/sample_pkg/calc.py
+++index 54aa1dd..0c80870 100644
+++--- a/sample_pkg/calc.py
++++++ b/sample_pkg/calc.py
+++@@ -1,3 +1,6 @@
++++from collections.abc import Collection
++++
++++
+++ def add(a: float, b: float) -> float:
+++     return a + b
+++ 
+++@@ -10,3 +13,10 @@ def divide(a: float, b: float) -> float:
+++ 
+++ def percent(part: float, whole: float) -> float:
+++     return divide(part * 100, whole)
++++
++++
++++def mean(values: Collection[float]) -> float:
++++    """Return the arithmetic mean of values; raises ValueError if values is empty."""
++++    if not values:
++++        raise ValueError("mean() requires at least one value")
++++    return divide(sum(values), len(values))
+++diff --git a/tests/test_calc.py b/tests/test_calc.py
+++index 4bb9082..fc5aab9 100644
+++--- a/tests/test_calc.py
++++++ b/tests/test_calc.py
+++@@ -1,6 +1,6 @@
+++ import pytest
+++ 
+++-from sample_pkg import add, divide, percent
++++from sample_pkg import add, divide, mean, percent
+++ 
+++ 
+++ def test_add():
+++@@ -20,3 +20,20 @@ def test_percent():
+++ def test_percent_zero_whole_raises():
+++     with pytest.raises(ZeroDivisionError):
+++         percent(1, 0)
++++
++++
++++def test_mean():
++++    assert mean([1, 2, 3, 4]) == 2.5
++++
++++
++++def test_mean_single_element():
++++    assert mean([5]) == 5.0
++++
++++
++++def test_mean_empty():
++++    with pytest.raises(ValueError):
++++        mean([])
++++
++++
++++def test_mean_accepts_non_sequence_collection():
++++    assert mean({1.0, 2.0, 3.0}) == 2.0
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-advocate.md b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-advocate.md
++new file mode 100644
++index 0000000..9190e7a
++--- /dev/null
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-advocate.md
++@@ -0,0 +1,33 @@
+++## Verdict
+++Reject this escalation item — the missing logs are not required at gate (c) and the point restates a deterministic check; continue.
+++
+++## The case against
+++1. The premise is factually inverted. `plugin/gate/artifacts.py` sets
+++   `REQUIRED_EVIDENCE = {"c": (verifier.md,), "d": (test.log, build.log, lint.log, verifier.md),
+++   "e": (...)}`. `test.log`/`build.log`/`lint.log` are **phase (d)** artifacts, not build-phase
+++   ones; `definition-of-done/SKILL.md` says the same ("(d) test: fresh-context full run;
+++   `evidence/test.log`, `build.log`, `lint.log` ... verifier.md"), while its (c) list ends at
+++   "verifier report in `evidence/verifier.md`; adversarial verdict; gate (c)".
+++2. The "established convention" cited from change 0001 is a phase-(d) convention: 0001's
+++   `gate-d.json` carries the check `"evidence present: test.log, build.log, lint.log,
+++   verifier.md"`, and 0001's `test.log` shows `5 passed`, the post-build state collected in the
+++   test phase. Change 0002 has no logs for phase (b) either — and gate (b) passed.
+++3. Those logs are written by `plugin/evidence/collect.py`, a deterministic collector, not by the
+++   build agent; escalating because the agent did not hand-write them asks for an artifact the
+++   framework produces elsewhere, and parks a change on a step that has not come due.
+++4. The audit path the item says a person lacks exists and is machine-made: the gate's own
+++   `commands` check re-runs build, test and lint at HEAD in a fresh checkout and stores the
+++   literal stdout plus exit codes in `gate-c.json` (see `gate-b.json`, `"commands": ... "9/5
+++   passed"`, exit 0). That check runs *after* this verdict, so its absence now proves nothing —
+++   and quoting it as a reason is precisely the forbidden move (fifth live run, 2026-09-21).
+++5. `REVIEW.md` "Do not report" names "anything under `changes/*/evidence/`". This item is
+++   entirely about the contents of that directory.
+++6. The substantive proof is in the diff, not in `verifier.md`: four tests pin each acceptance
+++   line (`2.5`, `5.0`, `pytest.raises(ValueError)`, `mean({1.0,2.0,3.0}) == 2.0` for the
+++   `Collection` contract). `verifier.md` adds what a log cannot — generator rejection, `percent`
+++   and `divide` unchanged, `__all__` ordering — and discloses its permission denials honestly.
+++
+++I would decide: overturn item 1, no escalation on this ground. I would accept the escalation if
+++`REQUIRED_EVIDENCE["c"]` listed the three logs, if the gate's `commands` check were disabled for
+++phase (c), or if an acceptance criterion rested on `verifier.md`'s word alone with no test in the
+++diff pinning it — none of which holds here.
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-conciliator.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-conciliator.json
++new file mode 100644
++index 0000000..2c7968d
++--- /dev/null
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-conciliator.json
++@@ -0,0 +1,12 @@
+++{
+++  "reviewer": "Decline the escalation: test.log/build.log/lint.log are a phase (d) convention, not phase (c), and REVIEW.md excludes evidence/* content from findings.",
+++  "advocate": "Reject the escalation: REQUIRED_EVIDENCE and definition-of-done both scope the three logs to gate (d), the deterministic gate-c commands check will independently verify build/test/lint, and REVIEW.md excludes evidence/* content.",
+++  "decision": "continue",
+++  "rationale": [
+++    "Reviewer and advocate agree on the controlling fact: phase (c) requires only evidence/verifier.md; test.log/build.log/lint.log are phase (d) artifacts per REQUIRED_EVIDENCE and the definition-of-done skill.",
+++    "Both independently checked change 0001's history and found the three logs were added in its phase (d) commit, not phase (c) — the escalation's cited 'convention' is misdated.",
+++    "Both also point to REVIEW.md's 'Do not report' rule, which names anything under changes/*/evidence/, covering verifier.md's format directly.",
+++    "No disagreement between the two verdicts to resolve; deciding with them is the safer and better-supported reading.",
+++    "No change to make first: verifier.md's disclosed permission denials are transparent, and gate (c)'s own commands check will independently capture literal build/test/lint output."
+++  ]
+++}
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-reviewer.md b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-reviewer.md
++new file mode 100644
++index 0000000..0f84840
++--- /dev/null
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-reviewer.md
++@@ -0,0 +1,23 @@
+++## Verdict
+++Decline the escalation — downgrade to continue; this is not a reportable finding.
+++
+++## Why
+++- REVIEW.md is explicit: "Do not report: Generated files, anything under
+++  `changes/*/evidence/`, and anything CI already enforces." The entire escalate reason is
+++  about the format and completeness of `evidence/verifier.md` — content squarely inside
+++  `changes/*/evidence/`. By the project's own rule for what a review may raise, this cannot
+++  be an Important finding, let alone grounds to escalate.
+++- The cited "established convention" is factually wrong. Change 0001's phase-c verifier
+++  commit (`f2484ec build(0001): verifier evidence`) added only `evidence/verifier.md` — no
+++  `test.log`, `build.log` or `lint.log`. Those three logs were added later, at
+++  `74af865 test(0001): evidence`, which is the **phase (d)** commit. The
+++  `definition-of-done` skill confirms the split: phase (c) requires "build, test and lint
+++  targets green with their literal output pasted; verifier report in `evidence/verifier.md`";
+++  it is phase (d) that additionally requires committed `test.log`/`build.log`/`lint.log`.
+++  0002 is in phase (c) (`status.yaml: phase: c`), so the missing logs are expected, not a gap.
+++- 0002's `verifier.md` follows 0001's own phase-c precedent almost verbatim, including the
+++  identical "— exit 0. Last lines: ```...```" paraphrase style for pytest that 0001 used and
+++  that passed its own phase-c review.
+++- The permission-denial note is disclosed transparently in `verifier.md` (not hidden), and
+++  the verifier re-ran smaller commands and reported their real output rather than fabricating
+++  results — no rule requires a single unbroken command invocation.
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-items.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-items.json
++new file mode 100644
++index 0000000..50916dd
++--- /dev/null
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-items.json
++@@ -0,0 +1,34 @@
+++{
+++  "decided": 0,
+++  "gate": "park",
+++  "items": [
+++    {
+++      "decided": false,
+++      "item": "adversarial reviewer says escalate: Phase c's only committed proof artifact is evidence/verifier.md, a hand-written narrative \u2014 not literal toolchain output. This project's own established convention for a build phase (change 0001, evidence/test.log, build.log, lint.log, each headed '# <command> \u2014 exit <code> \u2014 ...') is entirely absent here: no test.log, build.log or lint.log was committed for phase c of this change. verifier.md itself is a paraphrase (e.g. 'Last lines:' for the pytest run instead of full captured stdout) and explicitly states that two of the verifier's own verification commands were denied by the session's permission system, forcing it to re-run smaller ad hoc commands and write up the results from memory/observation rather than redirecting real command output to a file. A person cannot independently audit an exit code or a full test run here; they can only read the verifier's account of what it says it did.",
+++      "key": "escalate:2b4a38d4c3e64c4e",
+++      "kind": "escalate",
+++      "n": 1
+++    }
+++  ],
+++  "iterations": {
+++    "cap": 2,
+++    "left": 1,
+++    "used": 1
+++  },
+++  "mode": "deferred",
+++  "panel_calls": {
+++    "cap": 4,
+++    "left": 4,
+++    "used": 0
+++  },
+++  "parks": [
+++    {
+++      "check": "panel",
+++      "reason": "spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val"
+++    }
+++  ],
+++  "pending": [
+++    1
+++  ],
+++  "phase": "c"
+++}
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/run-c.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/run-c.json
++new file mode 100644
++index 0000000..53a0b64
++--- /dev/null
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/run-c.json
++@@ -0,0 +1,5 @@
+++{
+++  "phase": "c",
+++  "spend_usd": null,
+++  "started_at": "2026-09-24T17:45:33Z"
+++}
++\ No newline at end of file
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/verifier.md b/changes/0002-add-mean-helper-to-sample-pkg/evidence/verifier.md
++new file mode 100644
++index 0000000..a300605
++--- /dev/null
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/verifier.md
++@@ -0,0 +1,43 @@
+++All checks confirm the implementation exactly matches plan.md and spec.md.
+++
+++## Report
+++
+++**Commands run** (all from `/home/runner/work/sdlc-sample-python/sdlc-sample-python`, exactly as written in `sdlc.yaml: commands`):
+++
+++- `python -m compileall -q .` — exit 0, no output.
+++- `python -m pytest` — exit 0. Last lines:
+++  ```
+++  tests/test_calc.py ........                                              [ 88%]
+++  tests/test_flag.py .                                                     [100%]
+++  ============================== 9 passed in 0.01s ===============================
+++  ```
+++- `python -m ruff check .` — exit 0. Output: `All checks passed!`
+++
+++All three match plan.md's Proof section (9 passed, `All checks passed!`, silent compileall).
+++
+++**Behavior exercised**
+++
+++- `mean([1, 2, 3, 4])` → `2.5` (Acceptance: normal case).
+++- `mean([5])` → `5.0` (Acceptance: single-element case).
+++- `mean([])` → raised `ValueError: mean() requires at least one value` (exact message from plan.md's guard clause), not `ZeroDivisionError` — confirms Flagged concern 1's decision (mean raises its own ValueError, does not fall through to divide).
+++- `mean({1.0, 2.0, 3.0})` (a `set`, non-`Sequence` `Collection`) → `2.0` — confirms the `Collection[float]` contract from Flagged concern 2.
+++- Input just outside acceptance — a generator (`Iterable`, not `Collection`, no `__len__`): `mean(gen())` raised `TypeError: object of type 'generator' has no len()`. Note: `not values` (the emptiness guard) does not short-circuit on a generator (generators are always truthy), so `sum(values)` runs and consumes the generator before `len(values)` fails — the generator is still correctly rejected, just via `TypeError` at the `len()` call rather than at the guard clause. This matches the plan's intent ("still rejecting a generator (no `__len__`)") and is not contradicted by any spec/plan wording, but the plan doesn't explicitly describe this exact failure point.
+++- Neighboring flow `percent`: `percent(1, 4)` → `25.0`, `percent(7, 100)` → `7.0`; `percent(1, 0)` raised `ZeroDivisionError: b must not be zero` — confirms `percent` is untouched and still propagates `divide`'s error, unlike `mean`.
+++- Neighboring flow `divide`: `divide(1, 0)` raised `ZeroDivisionError: b must not be zero` — unchanged.
+++- `pytest -k mean -v` — all 4 new tests pass individually: `test_mean`, `test_mean_single_element`, `test_mean_empty`, `test_mean_accepts_non_sequence_collection`.
+++- `sample_pkg.__all__` → `['add', 'divide', 'mean', 'percent']` — confirms export/`__all__` per Acceptance.
+++
+++**Mismatches with plan.md / spec.md**
+++
+++- none.
+++
+++**Verdict**: matches the plan
+++
+++Relevant files:
+++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py`
+++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/__init__.py`
+++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py`
+++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0002-add-mean-helper-to-sample-pkg/plan.md`
+++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0002-add-mean-helper-to-sample-pkg/spec.md`
+++
+++One incidental note (not a mismatch, informational only): during Bash tool use, two of my commands were blocked by the permission system ("Permission to use Bash has been denied") — one combined multi-command line and one longer multi-line `python -c` script. I did not attempt to bypass these; I re-ran the same checks as smaller individual commands, which were permitted and produced the results above. This is a permission-system behavior in this session, not a code issue.
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/plan.md b/changes/0002-add-mean-helper-to-sample-pkg/plan.md
++index 3dab215..1b4c6f4 100644
++--- a/changes/0002-add-mean-helper-to-sample-pkg/plan.md
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/plan.md
++@@ -27,10 +27,11 @@
++    panel): `Collection[float]`, not `Sequence[float]` (spec.md Flagged concern 2) — `sum`
++    and `len` are all the body needs, so `Collection[float]` is the honest contract at no
++    extra code, while still rejecting a generator (no `__len__`), which keeps "no
++-   materialising". Import `Collection` from `typing` (project targets Python 3.10+;
++-   `collections.abc.Collection` is also valid at runtime for the hint but `typing.Collection`
++-   matches how a reader expects a typing-only import here — either is acceptable, `typing`
++-   is used for consistency with common Python 3.10 style).
+++   materialising". Import `Collection` — this plan named `typing.Collection` for consistency
+++   with common Python 3.10 style, but the project's format-on-edit hook (ruff) rewrote it to
+++   `collections.abc.Collection` on commit; both are equally valid at runtime for the hint and
+++   the plan already called either acceptable, so the implementation keeps the hook's choice
+++   rather than fighting the formatter.
++ 2. Add `mean` to `sample_pkg/__init__.py`'s import line and `__all__`, in the same position
++    relative to `add`, `divide`, `percent` as they already appear.
++ 3. Add four tests to `tests/test_calc.py`:
++diff --git a/changes/0002-add-mean-helper-to-sample-pkg/status.yaml b/changes/0002-add-mean-helper-to-sample-pkg/status.yaml
++index ec5ddb3..158fd19 100644
++--- a/changes/0002-add-mean-helper-to-sample-pkg/status.yaml
+++++ b/changes/0002-add-mean-helper-to-sample-pkg/status.yaml
++@@ -1,7 +1,7 @@
++ id: "0002"
++ slug: add-mean-helper-to-sample-pkg
++ title: Add mean helper to sample_pkg
++-phase: b
+++phase: c
++ entry_route: idea
++ change_type: feature
++ profile_override: null
++@@ -13,7 +13,7 @@ gate:
++   at: "2026-09-24T17:30:52Z"
++ parked_reason: null
++ iterations: 1
++-panel_calls: 0
+++panel_calls: 1
++ external_ref: null
++ risk_accepted: []
++ tests_locked: false
++@@ -23,5 +23,5 @@ iterations_reset_at: "2026-09-24T17:25:40Z"
++ tests_unlocked_by: null
++ abandoned_reason: null
++ created_at: "2026-09-24T13:32:13Z"
++-updated_at: "2026-09-24T17:30:52Z"
+++updated_at: "2026-09-24T17:56:42Z"
++ schema_version: 1
++diff --git a/sample_pkg/__init__.py b/sample_pkg/__init__.py
++index 89ab3c5..e35a8eb 100644
++--- a/sample_pkg/__init__.py
+++++ b/sample_pkg/__init__.py
++@@ -1,5 +1,5 @@
++ """Tiny package used by the fixture tests."""
++ 
++-from .calc import add, divide, percent
+++from .calc import add, divide, mean, percent
++ 
++-__all__ = ["add", "divide", "percent"]
+++__all__ = ["add", "divide", "mean", "percent"]
++diff --git a/sample_pkg/calc.py b/sample_pkg/calc.py
++index 54aa1dd..0c80870 100644
++--- a/sample_pkg/calc.py
+++++ b/sample_pkg/calc.py
++@@ -1,3 +1,6 @@
+++from collections.abc import Collection
+++
+++
++ def add(a: float, b: float) -> float:
++     return a + b
++ 
++@@ -10,3 +13,10 @@ def divide(a: float, b: float) -> float:
++ 
++ def percent(part: float, whole: float) -> float:
++     return divide(part * 100, whole)
+++
+++
+++def mean(values: Collection[float]) -> float:
+++    """Return the arithmetic mean of values; raises ValueError if values is empty."""
+++    if not values:
+++        raise ValueError("mean() requires at least one value")
+++    return divide(sum(values), len(values))
++diff --git a/tests/test_calc.py b/tests/test_calc.py
++index 4bb9082..fc5aab9 100644
++--- a/tests/test_calc.py
+++++ b/tests/test_calc.py
++@@ -1,6 +1,6 @@
++ import pytest
++ 
++-from sample_pkg import add, divide, percent
+++from sample_pkg import add, divide, mean, percent
++ 
++ 
++ def test_add():
++@@ -20,3 +20,20 @@ def test_percent():
++ def test_percent_zero_whole_raises():
++     with pytest.raises(ZeroDivisionError):
++         percent(1, 0)
+++
+++
+++def test_mean():
+++    assert mean([1, 2, 3, 4]) == 2.5
+++
+++
+++def test_mean_single_element():
+++    assert mean([5]) == 5.0
+++
+++
+++def test_mean_empty():
+++    with pytest.raises(ValueError):
+++        mean([])
+++
+++
+++def test_mean_accepts_non_sequence_collection():
+++    assert mean({1.0, 2.0, 3.0}) == 2.0
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/gate-c.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/gate-c.json
+new file mode 100644
+index 0000000..4eb751c
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/gate-c.json
+@@ -0,0 +1,156 @@
++{
++  "schema_version": 1,
++  "change_id": "0002",
++  "slug": "add-mean-helper-to-sample-pkg",
++  "phase": "c",
++  "profile": "standard",
++  "human_gate": false,
++  "result": "park",
++  "label": "sdlc:needs-human",
++  "head": "b23dc6d31942c9b748e997fbe3ee223b03d38f3d",
++  "at": "2026-09-24T18:00:19Z",
++  "dry_run": false,
++  "reason": "panel: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val",
++  "config_note": "",
++  "checks": [
++    {
++      "name": "limits",
++      "ok": true,
++      "reason": "within the run limits",
++      "need": "",
++      "details": {
++        "iterations": 1,
++        "cap": 2,
++        "classification": "non-routine",
++        "panel_calls": 1,
++        "panel_cap": 4,
++        "elapsed_minutes": 14.8,
++        "spend_usd": null,
++        "max_budget_usd": null
++      }
++    },
++    {
++      "name": "clean_tree",
++      "ok": true,
++      "reason": "no uncommitted change outside the change folder",
++      "need": "",
++      "details": {
++        "ignored": [
++          ".env"
++        ]
++      }
++    },
++    {
++      "name": "artifacts",
++      "ok": true,
++      "reason": "every required artifact exists and has its template sections",
++      "need": "",
++      "details": {}
++    },
++    {
++      "name": "open_concerns",
++      "ok": true,
++      "reason": "no open flagged concern",
++      "need": "",
++      "details": {}
++    },
++    {
++      "name": "panel",
++      "ok": false,
++      "reason": "spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val",
++      "need": "Every panel decision is one ledger line in evidence/decisions-<phase>.json (panel/cli.py record writes it); a never-to-panel item parks for the owner.",
++      "details": {
++        "problems": [
++          "spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val"
++        ]
++      }
++    },
++    {
++      "name": "commands",
++      "ok": true,
++      "reason": "build, test and lint exit 0",
++      "need": "",
++      "details": {
++        "runs": {
++          "build": {
++            "command": "python -m compileall -q .",
++            "exit_code": 0,
++            "output": ""
++          },
++          "test": {
++            "command": "python -m pytest",
++            "exit_code": 0,
++            "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0\nrootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\ncollected 9 items\n\ntests/test_calc.py ........                                              [ 88%]\ntests/test_flag.py .                                                     [100%]\n\n============================== 9 passed in 0.01s ===============================\n"
++          },
++          "lint": {
++            "command": "python -m ruff check .",
++            "exit_code": 0,
++            "output": "All checks passed!\n"
++          }
++        }
++      }
++    },
++    {
++      "name": "evidence",
++      "ok": true,
++      "reason": "evidence present: verifier.md",
++      "need": "",
++      "details": {}
++    },
++    {
++      "name": "findings",
++      "ok": true,
++      "reason": "no review findings yet (the review pass runs in phase e)",
++      "need": "",
++      "details": {}
++    },
++    {
++      "name": "plan_sync",
++      "ok": true,
++      "reason": "every committed source file is in plan.md",
++      "need": "",
++      "details": {
++        "planned_but_unchanged": []
++      }
++    },
++    {
++      "name": "guardrails",
++      "ok": true,
++      "reason": "the diff does not touch a guardrail file",
++      "need": "",
++      "details": {}
++    },
++    {
++      "name": "risk_list",
++      "ok": true,
++      "reason": "no risk-list item touched",
++      "need": "",
++      "details": {
++        "accepted": []
++      }
++    },
++    {
++      "name": "owner_actions",
++      "ok": true,
++      "reason": "risk acceptances and iteration resets, if any, were committed by the owner or applied by the owner's label",
++      "need": "",
++      "details": {
++        "risk_accepted": [],
++        "label_actors": {
++          "iterations_reset": "luissiviero"
++        }
++      }
++    },
++    {
++      "name": "adversarial_review",
++      "ok": true,
++      "reason": "adversarial reviewer says continue",
++      "need": "",
++      "details": {
++        "classification": "non-routine",
++        "reasons": []
++      }
++    }
++  ],
++  "what_i_need": "## What I need from you\nGate (c) parked change 0002 (add-mean-helper-to-sample-pkg) on 2026-09-24T18:00:19Z.\n- **panel**: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val\n  - what I need: Every panel decision is one ledger line in evidence/decisions-<phase>.json (panel/cli.py record writes it); a never-to-panel item parks for the owner.\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0002 --phase c` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
++}
+\ No newline at end of file
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-advocate.md b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-advocate.md
+new file mode 100644
+index 0000000..9190e7a
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-advocate.md
+@@ -0,0 +1,33 @@
++## Verdict
++Reject this escalation item — the missing logs are not required at gate (c) and the point restates a deterministic check; continue.
++
++## The case against
++1. The premise is factually inverted. `plugin/gate/artifacts.py` sets
++   `REQUIRED_EVIDENCE = {"c": (verifier.md,), "d": (test.log, build.log, lint.log, verifier.md),
++   "e": (...)}`. `test.log`/`build.log`/`lint.log` are **phase (d)** artifacts, not build-phase
++   ones; `definition-of-done/SKILL.md` says the same ("(d) test: fresh-context full run;
++   `evidence/test.log`, `build.log`, `lint.log` ... verifier.md"), while its (c) list ends at
++   "verifier report in `evidence/verifier.md`; adversarial verdict; gate (c)".
++2. The "established convention" cited from change 0001 is a phase-(d) convention: 0001's
++   `gate-d.json` carries the check `"evidence present: test.log, build.log, lint.log,
++   verifier.md"`, and 0001's `test.log` shows `5 passed`, the post-build state collected in the
++   test phase. Change 0002 has no logs for phase (b) either — and gate (b) passed.
++3. Those logs are written by `plugin/evidence/collect.py`, a deterministic collector, not by the
++   build agent; escalating because the agent did not hand-write them asks for an artifact the
++   framework produces elsewhere, and parks a change on a step that has not come due.
++4. The audit path the item says a person lacks exists and is machine-made: the gate's own
++   `commands` check re-runs build, test and lint at HEAD in a fresh checkout and stores the
++   literal stdout plus exit codes in `gate-c.json` (see `gate-b.json`, `"commands": ... "9/5
++   passed"`, exit 0). That check runs *after* this verdict, so its absence now proves nothing —
++   and quoting it as a reason is precisely the forbidden move (fifth live run, 2026-09-21).
++5. `REVIEW.md` "Do not report" names "anything under `changes/*/evidence/`". This item is
++   entirely about the contents of that directory.
++6. The substantive proof is in the diff, not in `verifier.md`: four tests pin each acceptance
++   line (`2.5`, `5.0`, `pytest.raises(ValueError)`, `mean({1.0,2.0,3.0}) == 2.0` for the
++   `Collection` contract). `verifier.md` adds what a log cannot — generator rejection, `percent`
++   and `divide` unchanged, `__all__` ordering — and discloses its permission denials honestly.
++
++I would decide: overturn item 1, no escalation on this ground. I would accept the escalation if
++`REQUIRED_EVIDENCE["c"]` listed the three logs, if the gate's `commands` check were disabled for
++phase (c), or if an acceptance criterion rested on `verifier.md`'s word alone with no test in the
++diff pinning it — none of which holds here.
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-conciliator.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-conciliator.json
+new file mode 100644
+index 0000000..2c7968d
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-conciliator.json
+@@ -0,0 +1,12 @@
++{
++  "reviewer": "Decline the escalation: test.log/build.log/lint.log are a phase (d) convention, not phase (c), and REVIEW.md excludes evidence/* content from findings.",
++  "advocate": "Reject the escalation: REQUIRED_EVIDENCE and definition-of-done both scope the three logs to gate (d), the deterministic gate-c commands check will independently verify build/test/lint, and REVIEW.md excludes evidence/* content.",
++  "decision": "continue",
++  "rationale": [
++    "Reviewer and advocate agree on the controlling fact: phase (c) requires only evidence/verifier.md; test.log/build.log/lint.log are phase (d) artifacts per REQUIRED_EVIDENCE and the definition-of-done skill.",
++    "Both independently checked change 0001's history and found the three logs were added in its phase (d) commit, not phase (c) — the escalation's cited 'convention' is misdated.",
++    "Both also point to REVIEW.md's 'Do not report' rule, which names anything under changes/*/evidence/, covering verifier.md's format directly.",
++    "No disagreement between the two verdicts to resolve; deciding with them is the safer and better-supported reading.",
++    "No change to make first: verifier.md's disclosed permission denials are transparent, and gate (c)'s own commands check will independently capture literal build/test/lint output."
++  ]
++}
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-reviewer.md b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-reviewer.md
+new file mode 100644
+index 0000000..0f84840
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-1-reviewer.md
+@@ -0,0 +1,23 @@
++## Verdict
++Decline the escalation — downgrade to continue; this is not a reportable finding.
++
++## Why
++- REVIEW.md is explicit: "Do not report: Generated files, anything under
++  `changes/*/evidence/`, and anything CI already enforces." The entire escalate reason is
++  about the format and completeness of `evidence/verifier.md` — content squarely inside
++  `changes/*/evidence/`. By the project's own rule for what a review may raise, this cannot
++  be an Important finding, let alone grounds to escalate.
++- The cited "established convention" is factually wrong. Change 0001's phase-c verifier
++  commit (`f2484ec build(0001): verifier evidence`) added only `evidence/verifier.md` — no
++  `test.log`, `build.log` or `lint.log`. Those three logs were added later, at
++  `74af865 test(0001): evidence`, which is the **phase (d)** commit. The
++  `definition-of-done` skill confirms the split: phase (c) requires "build, test and lint
++  targets green with their literal output pasted; verifier report in `evidence/verifier.md`";
++  it is phase (d) that additionally requires committed `test.log`/`build.log`/`lint.log`.
++  0002 is in phase (c) (`status.yaml: phase: c`), so the missing logs are expected, not a gap.
++- 0002's `verifier.md` follows 0001's own phase-c precedent almost verbatim, including the
++  identical "— exit 0. Last lines: ```...```" paraphrase style for pytest that 0001 used and
++  that passed its own phase-c review.
++- The permission-denial note is disclosed transparently in `verifier.md` (not hidden), and
++  the verifier re-ran smaller commands and reported their real output rather than fabricating
++  results — no rule requires a single unbroken command invocation.
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-items.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-items.json
+new file mode 100644
+index 0000000..f1e58c3
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/c-items.json
+@@ -0,0 +1,24 @@
++{
++  "decided": 1,
++  "gate": "park",
++  "items": [],
++  "iterations": {
++    "cap": 2,
++    "left": 0,
++    "used": 2
++  },
++  "mode": "deferred",
++  "panel_calls": {
++    "cap": 4,
++    "left": 3,
++    "used": 1
++  },
++  "parks": [
++    {
++      "check": "adversarial_review",
++      "reason": "verdict is for commit b23dc6d319, HEAD is aad3551b71"
++    }
++  ],
++  "pending": [],
++  "phase": "c"
++}
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/run-c.json b/changes/0002-add-mean-helper-to-sample-pkg/evidence/run-c.json
+new file mode 100644
+index 0000000..e06f95f
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/run-c.json
+@@ -0,0 +1,5 @@
++{
++  "phase": "c",
++  "spend_usd": null,
++  "started_at": "2026-09-24T18:27:52Z"
++}
+\ No newline at end of file
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/evidence/verifier.md b/changes/0002-add-mean-helper-to-sample-pkg/evidence/verifier.md
+new file mode 100644
+index 0000000..a300605
+--- /dev/null
++++ b/changes/0002-add-mean-helper-to-sample-pkg/evidence/verifier.md
+@@ -0,0 +1,43 @@
++All checks confirm the implementation exactly matches plan.md and spec.md.
++
++## Report
++
++**Commands run** (all from `/home/runner/work/sdlc-sample-python/sdlc-sample-python`, exactly as written in `sdlc.yaml: commands`):
++
++- `python -m compileall -q .` — exit 0, no output.
++- `python -m pytest` — exit 0. Last lines:
++  ```
++  tests/test_calc.py ........                                              [ 88%]
++  tests/test_flag.py .                                                     [100%]
++  ============================== 9 passed in 0.01s ===============================
++  ```
++- `python -m ruff check .` — exit 0. Output: `All checks passed!`
++
++All three match plan.md's Proof section (9 passed, `All checks passed!`, silent compileall).
++
++**Behavior exercised**
++
++- `mean([1, 2, 3, 4])` → `2.5` (Acceptance: normal case).
++- `mean([5])` → `5.0` (Acceptance: single-element case).
++- `mean([])` → raised `ValueError: mean() requires at least one value` (exact message from plan.md's guard clause), not `ZeroDivisionError` — confirms Flagged concern 1's decision (mean raises its own ValueError, does not fall through to divide).
++- `mean({1.0, 2.0, 3.0})` (a `set`, non-`Sequence` `Collection`) → `2.0` — confirms the `Collection[float]` contract from Flagged concern 2.
++- Input just outside acceptance — a generator (`Iterable`, not `Collection`, no `__len__`): `mean(gen())` raised `TypeError: object of type 'generator' has no len()`. Note: `not values` (the emptiness guard) does not short-circuit on a generator (generators are always truthy), so `sum(values)` runs and consumes the generator before `len(values)` fails — the generator is still correctly rejected, just via `TypeError` at the `len()` call rather than at the guard clause. This matches the plan's intent ("still rejecting a generator (no `__len__`)") and is not contradicted by any spec/plan wording, but the plan doesn't explicitly describe this exact failure point.
++- Neighboring flow `percent`: `percent(1, 4)` → `25.0`, `percent(7, 100)` → `7.0`; `percent(1, 0)` raised `ZeroDivisionError: b must not be zero` — confirms `percent` is untouched and still propagates `divide`'s error, unlike `mean`.
++- Neighboring flow `divide`: `divide(1, 0)` raised `ZeroDivisionError: b must not be zero` — unchanged.
++- `pytest -k mean -v` — all 4 new tests pass individually: `test_mean`, `test_mean_single_element`, `test_mean_empty`, `test_mean_accepts_non_sequence_collection`.
++- `sample_pkg.__all__` → `['add', 'divide', 'mean', 'percent']` — confirms export/`__all__` per Acceptance.
++
++**Mismatches with plan.md / spec.md**
++
++- none.
++
++**Verdict**: matches the plan
++
++Relevant files:
++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py`
++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/__init__.py`
++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py`
++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0002-add-mean-helper-to-sample-pkg/plan.md`
++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0002-add-mean-helper-to-sample-pkg/spec.md`
++
++One incidental note (not a mismatch, informational only): during Bash tool use, two of my commands were blocked by the permission system ("Permission to use Bash has been denied") — one combined multi-command line and one longer multi-line `python -c` script. I did not attempt to bypass these; I re-ran the same checks as smaller individual commands, which were permitted and produced the results above. This is a permission-system behavior in this session, not a code issue.
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/plan.md b/changes/0002-add-mean-helper-to-sample-pkg/plan.md
+index 3dab215..1b4c6f4 100644
+--- a/changes/0002-add-mean-helper-to-sample-pkg/plan.md
++++ b/changes/0002-add-mean-helper-to-sample-pkg/plan.md
+@@ -27,10 +27,11 @@
+    panel): `Collection[float]`, not `Sequence[float]` (spec.md Flagged concern 2) — `sum`
+    and `len` are all the body needs, so `Collection[float]` is the honest contract at no
+    extra code, while still rejecting a generator (no `__len__`), which keeps "no
+-   materialising". Import `Collection` from `typing` (project targets Python 3.10+;
+-   `collections.abc.Collection` is also valid at runtime for the hint but `typing.Collection`
+-   matches how a reader expects a typing-only import here — either is acceptable, `typing`
+-   is used for consistency with common Python 3.10 style).
++   materialising". Import `Collection` — this plan named `typing.Collection` for consistency
++   with common Python 3.10 style, but the project's format-on-edit hook (ruff) rewrote it to
++   `collections.abc.Collection` on commit; both are equally valid at runtime for the hint and
++   the plan already called either acceptable, so the implementation keeps the hook's choice
++   rather than fighting the formatter.
+ 2. Add `mean` to `sample_pkg/__init__.py`'s import line and `__all__`, in the same position
+    relative to `add`, `divide`, `percent` as they already appear.
+ 3. Add four tests to `tests/test_calc.py`:
+diff --git a/changes/0002-add-mean-helper-to-sample-pkg/status.yaml b/changes/0002-add-mean-helper-to-sample-pkg/status.yaml
+index ec5ddb3..97019fc 100644
+--- a/changes/0002-add-mean-helper-to-sample-pkg/status.yaml
++++ b/changes/0002-add-mean-helper-to-sample-pkg/status.yaml
+@@ -1,19 +1,19 @@
+ id: "0002"
+ slug: add-mean-helper-to-sample-pkg
+ title: Add mean helper to sample_pkg
+-phase: b
++phase: c
+ entry_route: idea
+ change_type: feature
+ profile_override: null
+ review_override: deferred
+ gate:
+-  phase: b
+-  result: passed
+-  reason: waiting for the owner at gate (b)
+-  at: "2026-09-24T17:30:52Z"
+-parked_reason: null
+-iterations: 1
+-panel_calls: 0
++  phase: c
++  result: parked
++  reason: "panel: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val"
++  at: "2026-09-24T18:00:19Z"
++parked_reason: "panel: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val"
++iterations: 2
++panel_calls: 1
+ external_ref: null
+ risk_accepted: []
+ tests_locked: false
+@@ -23,5 +23,5 @@ iterations_reset_at: "2026-09-24T17:25:40Z"
+ tests_unlocked_by: null
+ abandoned_reason: null
+ created_at: "2026-09-24T13:32:13Z"
+-updated_at: "2026-09-24T17:30:52Z"
++updated_at: "2026-09-24T18:27:54Z"
+ schema_version: 1
+diff --git a/sample_pkg/__init__.py b/sample_pkg/__init__.py
+index 89ab3c5..e35a8eb 100644
+--- a/sample_pkg/__init__.py
++++ b/sample_pkg/__init__.py
+@@ -1,5 +1,5 @@
+ """Tiny package used by the fixture tests."""
+ 
+-from .calc import add, divide, percent
++from .calc import add, divide, mean, percent
+ 
+-__all__ = ["add", "divide", "percent"]
++__all__ = ["add", "divide", "mean", "percent"]
+diff --git a/sample_pkg/calc.py b/sample_pkg/calc.py
+index 54aa1dd..0c80870 100644
+--- a/sample_pkg/calc.py
++++ b/sample_pkg/calc.py
+@@ -1,3 +1,6 @@
++from collections.abc import Collection
++
++
+ def add(a: float, b: float) -> float:
+     return a + b
+ 
+@@ -10,3 +13,10 @@ def divide(a: float, b: float) -> float:
+ 
+ def percent(part: float, whole: float) -> float:
+     return divide(part * 100, whole)
++
++
++def mean(values: Collection[float]) -> float:
++    """Return the arithmetic mean of values; raises ValueError if values is empty."""
++    if not values:
++        raise ValueError("mean() requires at least one value")
++    return divide(sum(values), len(values))
+diff --git a/tests/test_calc.py b/tests/test_calc.py
+index 4bb9082..fc5aab9 100644
+--- a/tests/test_calc.py
++++ b/tests/test_calc.py
+@@ -1,6 +1,6 @@
+ import pytest
+ 
+-from sample_pkg import add, divide, percent
++from sample_pkg import add, divide, mean, percent
+ 
+ 
+ def test_add():
+@@ -20,3 +20,20 @@ def test_percent():
+ def test_percent_zero_whole_raises():
+     with pytest.raises(ZeroDivisionError):
+         percent(1, 0)
++
++
++def test_mean():
++    assert mean([1, 2, 3, 4]) == 2.5
++
++
++def test_mean_single_element():
++    assert mean([5]) == 5.0
++
++
++def test_mean_empty():
++    with pytest.raises(ValueError):
++        mean([])
++
++
++def test_mean_accepts_non_sequence_collection():
++    assert mean({1.0, 2.0, 3.0}) == 2.0

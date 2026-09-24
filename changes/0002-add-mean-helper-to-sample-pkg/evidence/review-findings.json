@@ -1,0 +1,21 @@
+{
+  "at": "2026-09-24T18:39:54Z",
+  "findings": [
+    {
+      "file": "CLAUDE.md",
+      "line": 22,
+      "pass": "compliance",
+      "rule": "REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated'; REVIEW.md: second occurrence of the same finding proposes a 'Things Claude gets wrong' entry",
+      "severity": "important",
+      "signature": "cc24ed45af8ee34d",
+      "summary": "sample_pkg gains a new public function (mean) but CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API; this is the same pattern flagged in change 0001's review (evidence/../0001-.../evidence/review-findings.json, CLAUDE.md:22) for percent, so it is a second occurrence and warrants a one-line 'Things Claude gets wrong' entry proposed for the owner (e.g. \"New public functions in sample_pkg/calc.py routinely leave CLAUDE.md's Layout/Commands sections outdated until the owner applies the review's proposed line by hand\")."
+    }
+  ],
+  "head": "d6f50060394ede0202b23c32e48026f46449a52d",
+  "schema_version": 1,
+  "tally": {
+    "important": 1,
+    "nit": 0,
+    "nits_omitted": 0
+  }
+}

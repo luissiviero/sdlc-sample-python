@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "change_id": "0002",
+  "slug": "add-mean-helper-to-sample-pkg",
+  "phase": "c",
+  "profile": "standard",
+  "human_gate": false,
+  "result": "continue",
+  "label": null,
+  "head": "ec2b2089da3675fcfe96c5b29b7e36013cc3d1db",
+  "at": "2026-09-24T18:32:01Z",
+  "dry_run": false,
+  "reason": "",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 2,
+        "cap": 2,
+        "classification": "non-routine",
+        "panel_calls": 1,
+        "panel_cap": 4,
+        "elapsed_minutes": 4.2,
+        "spend_usd": null,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "clean_tree",
+      "ok": true,
+      "reason": "no uncommitted change outside the change folder",
+      "need": "",
+      "details": {
+        "ignored": [
+          ".env"
+        ]
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "open_concerns",
+      "ok": true,
+      "reason": "no open flagged concern",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "panel",
+      "ok": true,
+      "reason": "1 panel decision(s) recorded",
+      "need": "",
+      "details": {
+        "decisions": [
+          {
+            "n": 1,
+            "kind": "escalate",
+            "decision": "continue"
+          }
+        ],
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "reason": "build, test and lint exit 0",
+      "need": "",
+      "details": {
+        "runs": {
+          "build": {
+            "command": "python -m compileall -q .",
+            "exit_code": 0,
+            "output": ""
+          },
+          "test": {
+            "command": "python -m pytest",
+            "exit_code": 0,
+            "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0\nrootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\ncollected 9 items\n\ntests/test_calc.py ........                                              [ 88%]\ntests/test_flag.py .                                                     [100%]\n\n============================== 9 passed in 0.01s ===============================\n"
+          },
+          "lint": {
+            "command": "python -m ruff check .",
+            "exit_code": 0,
+            "output": "All checks passed!\n"
+          }
+        }
+      }
+    },
+    {
+      "name": "evidence",
+      "ok": true,
+      "reason": "evidence present: verifier.md",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "findings",
+      "ok": true,
+      "reason": "no review findings yet (the review pass runs in phase e)",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "plan_sync",
+      "ok": true,
+      "reason": "every committed source file is in plan.md",
+      "need": "",
+      "details": {
+        "planned_but_unchanged": []
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "owner_actions",
+      "ok": true,
+      "reason": "risk acceptances and iteration resets, if any, were committed by the owner or applied by the owner's label",
+      "need": "",
+      "details": {
+        "risk_accepted": [],
+        "label_actors": {
+          "iterations_reset": "luissiviero"
+        }
+      }
+    },
+    {
+      "name": "adversarial_review",
+      "ok": true,
+      "reason": "adversarial reviewer says continue",
+      "need": "",
+      "details": {
+        "classification": "non-routine",
+        "reasons": []
+      }
+    }
+  ],
+  "what_i_need": ""
+}

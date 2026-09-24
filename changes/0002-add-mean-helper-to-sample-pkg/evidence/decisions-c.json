@@ -1,0 +1,27 @@
+{
+  "decisions": [
+    {
+      "advocate": "Reject the escalation: REQUIRED_EVIDENCE and definition-of-done both scope the three logs to gate (d), the deterministic gate-c commands check will independently verify build/test/lint, and REVIEW.md excludes evidence/* content.",
+      "at": "2026-09-24T17:56:42Z",
+      "cost_usd": null,
+      "decision": "continue",
+      "head": "a94e11bb008124df8227279a61162acfe77d0174",
+      "item": "adversarial reviewer says escalate: Phase c's only committed proof artifact is evidence/verifier.md, a hand-written narrative \u2014 not literal toolchain output. This project's own established convention for a build phase (change 0001, evidence/test.log, build.log, lint.log, each headed '# <command> \u2014 exit <code> \u2014 ...') is entirely absent here: no test.log, build.log or lint.log was committed for phase c of this change. verifier.md itself is a paraphrase (e.g. 'Last lines:' for the pytest run instead of full captured stdout) and explicitly states that two of the verifier's own verification commands were denied by the session's permission system, forcing it to re-run smaller ad hoc commands and write up the results from memory/observation rather than redirecting real command output to a file. A person cannot independently audit an exit code or a full test run here; they can only read the verifier's account of what it says it did.",
+      "key": "escalate:2b4a38d4c3e64c4e",
+      "kind": "escalate",
+      "n": 1,
+      "overturned": null,
+      "phase": "c",
+      "rationale": [
+        "Reviewer and advocate agree on the controlling fact: phase (c) requires only evidence/verifier.md; test.log/build.log/lint.log are phase (d) artifacts per REQUIRED_EVIDENCE and the definition-of-done skill.",
+        "Both independently checked change 0001's history and found the three logs were added in its phase (d) commit, not phase (c) \u2014 the escalation's cited 'convention' is misdated.",
+        "Both also point to REVIEW.md's 'Do not report' rule, which names anything under changes/*/evidence/, covering verifier.md's format directly.",
+        "No disagreement between the two verdicts to resolve; deciding with them is the safer and better-supported reading.",
+        "No change to make first: verifier.md's disclosed permission denials are transparent, and gate (c)'s own commands check will independently capture literal build/test/lint output."
+      ],
+      "reviewer": "Decline the escalation: test.log/build.log/lint.log are a phase (d) convention, not phase (c), and REVIEW.md excludes evidence/* content from findings."
+    }
+  ],
+  "phase": "c",
+  "schema_version": 1
+}
