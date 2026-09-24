@@ -10,9 +10,10 @@ Change id: 0002. Status: proposed. Produced by: sdlc plugin 0.2.14, /sdlc-design
 - The exact behaviour on an empty sequence, and whether `mean` accepts any iterable or only
   a `Sequence`, are not decided by this spec pass — see Open questions from intent and
   Flagged concerns. Acceptance below is written so either resolution satisfies it.
-- `tests/test_calc.py` gains tests for the normal case, the single-element case and the
-  empty case; no behaviour change ships without a test that fails without it
-  (coding-standards rule 4).
+- `tests/test_calc.py` gains tests for the normal case, the single-element case, the empty
+  case and a non-`Sequence` `Collection` (a `set`), the last to pin the `Collection[float]`
+  contract decided in Flagged concern 2; no behaviour change ships without a test that fails
+  without it (coding-standards rule 4).
 - `add`, `divide` and `percent` keep their current signatures and behaviour; they and
   `tests/test_flag.py` are not touched by this change (intent Constraints).
 - No new dependency: `mean` is written by hand, not as a wrapper around
@@ -80,19 +81,23 @@ Change id: 0002. Status: proposed. Produced by: sdlc plugin 0.2.14, /sdlc-design
   `ValueError`, or `0.0`. No loaded policy skill settles it (see Open questions from
   intent). Needs the panel's (or owner's) decision before `plan.md`'s test list and the
   docstring wording can be final.
-- decided (by panel): decided (by panel): `Sequence[float]` — mean's parameter type is undecided: a materialised `Sequence[float]` (simpler, matches intent's "keep it minimal") or a general `Iterable[float]` (more permissive, needs materialising code the minimal constraint argues against). — `mean`'s parameter type is undecided: a materialised `Sequence[float]` (simpler, matches
-  intent's "keep it minimal") or a general `Iterable[float]` (more permissive, needs
-  materialising code the minimal constraint argues against). No loaded policy skill settles
-  it (see Open questions from intent). Needs the panel's (or owner's) decision before
-  `plan.md`'s design can name the exact signature.
+- decided (owner, overturning the panel — evidence/decisions-b.md item 2): `Collection[float]`,
+  not `Sequence[float]`. `sum` and `len` are all the body needs, so `Collection[float]` is
+  the honest contract at no extra code; a generator is still rejected (it has no `__len__`),
+  which keeps "no materialising" — `mean`'s parameter type is undecided: a materialised
+  `Sequence[float]` (simpler, matches intent's "keep it minimal") or a general `Iterable[float]`
+  (more permissive, needs materialising code the minimal constraint argues against). No
+  loaded policy skill settles it (see Open questions from intent).
 
 ## Acceptance
-- `tests/test_calc.py` passes three new tests: a normal multi-value case (e.g.
-  `mean([1, 2, 3, 4]) == 2.5`), a single-element case (e.g. `mean([5]) == 5.0`), and an
+- `tests/test_calc.py` passes four new tests: a normal multi-value case (e.g.
+  `mean([1, 2, 3, 4]) == 2.5`), a single-element case (e.g. `mean([5]) == 5.0`), an
   empty-input case whose assertion matches whichever behaviour Flagged concern 1 resolves
-  to (an exception assertion or an equality check against `0.0`).
+  to (an exception assertion or an equality check against `0.0`), and a non-`Sequence`
+  `Collection` case (e.g. `mean({1.0, 2.0, 3.0}) == 2.0` with a `set`) pinning Flagged
+  concern 2's `Collection[float]` contract.
 - `from sample_pkg import mean` succeeds and `"mean"` is in `sample_pkg.__all__`.
 - `python -m compileall -q .` — no output, exit code 0.
-- `python -m pytest` — all tests pass, including the 5 that pass today plus the 3 new ones
-  (8 passed), and `tests/test_flag.py` is unchanged.
+- `python -m pytest` — all tests pass, including the 5 that pass today plus the 4 new ones
+  (9 passed), and `tests/test_flag.py` is unchanged.
 - `python -m ruff check .` — `All checks passed!`, exit code 0.

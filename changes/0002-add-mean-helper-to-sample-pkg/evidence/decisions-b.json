@@ -31,7 +31,10 @@
       "key": "concern:24e27412adee89fb",
       "kind": "concern",
       "n": 2,
-      "overturned": null,
+      "overturned": {
+        "at": "2026-09-24T15:43:54Z",
+        "comment": "Overturned: mean takes Collection[float], not Sequence[float]. sum and len are all the body needs, so Collection is the honest contract (the devil's advocate's point) at no extra code; a generator is still rejected, which keeps \"no materialising\". Update the closed concern in spec.md, the signature in plan.md's design and the test names accordingly."
+      },
       "phase": "b",
       "rationale": [
         "Both verdicts agree Iterable[float] loses: it needs materialising code (list(values)) that intent's \"keep it minimal\" constraint argues against, per spec.md's own Design section.",
