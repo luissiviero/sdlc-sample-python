@@ -7,9 +7,10 @@ Change id: 0002. Status: proposed. Produced by: sdlc plugin 0.2.14, /sdlc-design
 - `mean` is implemented in `sample_pkg/calc.py`, next to `add`, `divide` and `percent`, and
   exported from `sample_pkg/__init__.py` and listed in `__all__` the same way the other
   three are (coding-standards rule 2: match the existing export pattern).
-- The exact behaviour on an empty sequence, and whether `mean` accepts any iterable or only
-  a `Sequence`, are not decided by this spec pass — see Open questions from intent and
-  Flagged concerns. Acceptance below is written so either resolution satisfies it.
+- The empty-sequence behaviour and `mean`'s parameter type were open at this spec pass (see
+  Open questions from intent) and are now both decided in Flagged concerns below: `mean([])`
+  raises `ValueError`, and `mean` takes `Collection[float]` (owner, overturning the panel's
+  `Sequence[float]` pick). Acceptance below reflects both resolutions.
 - `tests/test_calc.py` gains tests for the normal case, the single-element case, the empty
   case and a non-`Sequence` `Collection` (a `set`), the last to pin the `Collection[float]`
   contract decided in Flagged concern 2; no behaviour change ships without a test that fails
@@ -46,10 +47,10 @@ Change id: 0002. Status: proposed. Produced by: sdlc plugin 0.2.14, /sdlc-design
   divide and percent").
 - Parameter type: accepting a generic `Iterable[float]` requires materialising it (e.g. into
   a `list`) before both `sum()` and `len()` can run, since a generator is consumed once —
-  extra code the intent's "keep it minimal" constraint argues against. Accepting only a
-  `Sequence[float]` needs no such step but narrows what a caller can pass. This is not
-  settled here (Flagged concerns); the signature in Acceptance is written generically as
-  "a sequence of numbers" pending the decision.
+  extra code the intent's "keep it minimal" constraint argues against. `mean` takes
+  `Collection[float]` instead: `sum()` and `len()` are all the body needs, so `Collection`
+  needs no materialising step while still rejecting a bare generator (no `__len__`) — decided
+  in Flagged concerns, overturning this pass's original `Sequence[float]` framing.
 - Empty input: intent lists three candidate behaviours (raise `ZeroDivisionError` via
   `divide`, raise `ValueError`, or return `0.0`) and says the owner has no preference. This
   is not settled here either (Flagged concerns). Whichever is chosen becomes the one line of

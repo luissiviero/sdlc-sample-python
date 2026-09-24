@@ -1,56 +1,41 @@
-# Fix response — phase (b), round 4
+# Fix response — phase (b), round 5
 
-- Review comment on `evidence/decisions-b.md` line 6 (Flagged concern 2 / panel decision
-  item 2): overturns the panel's `Sequence[float]` pick in favour of `Collection[float]`,
-  asking for the closed concern in `spec.md`, the signature in `plan.md`'s design, and the
-  test names to be updated accordingly. **Applied**: the owner un-parked the change with
-  `sdlc:reset-iterations` (`iterations_reset_by: luissiviero`), so `gate/cli.py
-  bump-iteration` accepted this round (iteration 1 of 2).
-  - `panel/cli.py overturn --item 2` marks `evidence/decisions-b.json` / `decisions-b.md`
-    item 2 `overturned` with the owner's comment, so the PR summary counts it correctly.
-  - `spec.md` Flagged concern 2 now reads `decided (owner, overturning the panel ...):
-    Collection[float], not Sequence[float] ...`.
-  - `plan.md`'s Order of work step 1 signature is `mean(values: Collection[float]) ->
-    float`, importing `Collection` from `typing`; the Risks and Options-not-taken sections
-    are updated to record the overturn instead of the panel's original `Sequence[float]`
-    pick.
-  - Test names: the plan's original three test names (`test_mean`,
-    `test_mean_single_element`, `test_mean_empty`) don't encode the parameter type — all
-    three pass a `list`, which is both a `Sequence` and a `Collection`, so none of them
-    would fail under either type and none needed renaming on that basis alone. What the
-    widened `Collection[float]` contract actually needs, and did not have before, is a test
-    that passes something that is a `Collection` but *not* a `Sequence` — otherwise the
-    overturn ships unproven. Added `test_mean_accepts_non_sequence_collection` (a `set`) to
-    `plan.md`'s Files that change, Order of work step 3 and Proof, and updated `spec.md`'s
-    Requirements and Acceptance to match (four new tests, 9 passed instead of 8). This is
-    the one place this round goes beyond a literal rename, on the reading that "test names
-    updated accordingly" is asking the test suite to actually cover the decision being
-    changed, not just to keep three unchanged names in sync.
-- `python -m compileall -q .`, `python -m pytest` (5 passed — phase (b) touches no source
-  file, so today's suite is unchanged; the plan's target of 9 passed applies once phase (c)
-  writes the four tests) and `python -m ruff check .` all green.
+Change request this round: the gate parked (escalate) after round 4 on two points (see
+`status.yaml: parked_reason` / `evidence/gate-b.json` at head `312a101`); the owner un-parked
+with `sdlc:reset-iterations` (`iterations_reset_by: luissiviero`), which is itself a change
+request (decision 24) — read here as "reconsider the escalate, on the reset count."
 
-## Gate (b) result: parked (escalate)
-After the fix above was committed (`312a101`), the adversarial reviewer returned `escalate`
-on this round's diff and the gate parked again — a new reason, not the iteration-cap park
-this round started from. Its primary point: `evidence/claude-fix.json`, the CI harness's own
-run-log for the *previous* (round-3, parked) `/sdlc-fix` session, still says "no changes
-applied" — because that file is written by the outer CI wrapper in a follow-up commit after
-an `/sdlc-fix` session ends (see the separate `run(fix): spend recorded` commits in this
-branch's history for phases `b` and `fix`), not by the session itself. This round's own
-`claude-fix.json` does not exist yet at review time; it lands after this session ends and
-will describe this round's actual result. The reviewer read the stale round-3 log against
-the round-4 diff and could not confirm from committed evidence alone that the diff came from
-an audited run.
-Not applied in this round: no further edit was made in response to the escalate. Deciding
-whether the harness's post-session evidence timing is a real process gap or an artifact to
-tolerate is the owner's call (the gate's own message: "Read the reviewer's reasons and
-decide: fix and re-run, or accept in review"), not something this round should route around
-by inventing evidence ahead of the log the harness itself will write. The reviewer's second,
-minor point (spec.md's Requirements/Design prose still describes the parameter type as an
-open question, even though Flagged concern 2 below it is now decided) is also not applied
-here: the owner's review comment asked only to update "the closed concern in spec.md", and
-plan.md — the document phase (c) actually implements from — already carries the decided
-`Collection[float]` type consistently.
-Iterations used: 1 of 2 (cap not reached; one more round is available if the owner wants
-this pursued further).
+1. **Proof mismatch** (primary): the reviewer compared the round-4 diff against
+   `evidence/claude-fix.json` and found the file describing the *previous*, iteration-capped
+   round ("no changes applied ... reset the count"), not round 4's actual result. Round 4's
+   `fix-response.md` already explained why: `claude-fix.json` is written by the outer CI
+   wrapper in a follow-up `run(fix): spend recorded` commit *after* an `/sdlc-fix` session
+   ends, so at review time inside a session the file on disk is always the *previous*
+   session's log, one round behind the diff being judged. That follow-up commit
+   (`2e4ae9e`, after `a657402`'s gate check) has since landed and `evidence/claude-fix.json`
+   now on this branch correctly describes round 4's own result (applying the Collection[float]
+   overturn, then parking escalate) — the specific file the reviewer flagged as contradicting
+   the diff no longer does. **Not applied as a new edit**: there is nothing to change in the
+   artifacts for this point; the harness's own evidence caught up with the diff between
+   rounds, which is what round 4's fix-response predicted would happen. Re-running the gate
+   this round gives the reviewer the caught-up evidence to check against.
+2. **Minor nit** (spec.md internal consistency): the reviewer repeated the observation that
+   Requirements bullet 3 and the Design section's parameter-type paragraph still described
+   the type choice as an open Sequence-vs-Iterable question after Flagged concern 2 was
+   decided as `Collection[float]`. Round 4 left this alone as out of scope of the owner's
+   literal comment ("update the closed concern in spec.md"); since the gate's own parked
+   reason names this as compounding the trust problem in spec.md as a single source of
+   truth, and the edit is small and low-risk, **applied** this round: Requirements bullet 3
+   now states both Flagged concerns are decided (empty input raises `ValueError`; parameter
+   type is `Collection[float]`) instead of calling them open, and the Design section's
+   parameter-type paragraph now describes the decided `Collection[float]` contract instead of
+   an unsettled Sequence-vs-Iterable choice. No change to `plan.md` (already consistent) or
+   to the "Open questions from intent" section (historical record of what intent carried
+   forward, not a live status).
+3. `python -m compileall -q .`, `python -m pytest` (5 passed — phase (b) still touches no
+   source file) and `python -m ruff check .` all green.
+
+## Gate (b) result
+See the fresh `gate/cli.py check` run and `evidence/adversarial-review-b.json` /
+`evidence/diff-b.patch` committed alongside this file for this round's verdict.
+Iterations used: 1 of 2 (reset by owner this cycle).
