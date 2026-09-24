@@ -1,0 +1,120 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 290722,
+  "duration_ms": 44157,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 979,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 101911,
+      "cacheReadInputTokens": 2073877,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 0.9707094000000002,
+      "inputTokens": 106,
+      "maxOutputTokens": 64000,
+      "outputTokens": 23971,
+      "provider": "firstParty",
+      "thinkingTokens": 6700,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 8,
+  "origin": {
+    "kind": "task-notification"
+  },
+  "permission_denials": [
+    {
+      "tool_input": {
+        "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" check --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0002 --phase d 2>&1; echo \"EXIT=$?\"",
+        "description": "Run gate check for phase d"
+      },
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_014Rm3uFTdTKanpBrbVAoCd7"
+    },
+    {
+      "tool_input": {
+        "content": "- [sdlc:verifier writes no file](sdlc_verifier_writes_no_file.md) \u2014 calling session must write evidence/verifier.md itself from its returned report\n",
+        "file_path": "/home/runner/.claude/projects/-home-runner-work-sdlc-sample-python-sdlc-sample-python/MEMORY.md"
+      },
+      "tool_name": "Write",
+      "tool_use_id": "toolu_01RqWHCdUn5dSTobw3zyQSz4"
+    }
+  ],
+  "queued_turn_count": 0,
+  "result": "Gate (d) evidence committed and pushed; couldn't update `MEMORY.md`'s index (blocked \u2014 sensitive file, no approval surface in this session) but the memory note itself was saved.\n\n## Phase (d) summary \u2014 change 0002\n\n- Evidence collected: build/test/lint all green (9 passed, `All checks passed!`, no compileall output).\n- Fresh-context verifier (`sdlc:verifier`): confirmed behavior matches spec.md/plan.md \u2014 normal, single-element, empty (`ValueError`), and `set`/`Collection` cases all exercised; no mismatches.\n- Adversarial reviewer: verdict **continue**, classified **non-routine**.\n- Deferred-review panel: no pending items \u2014 nothing to settle.\n- Gate (d) check: **continue** (profile: standard).\n- PR #17 updated, phase (d) check run posted as `success`.\n\nGate (d) passed \u2192 `/sdlc-deploy 0002`",
+  "result_index": 2,
+  "session_id": "4ceb4bd4-e2a5-4c4b-add2-deee42c004bd",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {
+      "sdlc:adversarial-reviewer": 1,
+      "sdlc:verifier": 1
+    },
+    "completed": 2,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 1,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 2
+    },
+    "spawned": 2,
+    "spawned_by_subagents": 0,
+    "started_in_background": 2
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 34,
+  "total_cost_usd": 0.9707094000000002,
+  "ttft_ms": 1610,
+  "ttft_stream_ms": 979,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 7076,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 7076,
+    "cache_read_input_tokens": 505312,
+    "inference_geo": "not_available",
+    "input_tokens": 16,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 434,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 434,
+        "cache_read_input_tokens": 66293,
+        "input_tokens": 2,
+        "output_tokens": 475,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 2858,
+    "output_tokens_details": {
+      "thinking_tokens": 678
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "c05439e4-f5d4-4adf-be52-d5ea8b9c27dc"
+}
