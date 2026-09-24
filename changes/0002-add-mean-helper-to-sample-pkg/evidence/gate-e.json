@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "change_id": "0002",
+  "slug": "add-mean-helper-to-sample-pkg",
+  "phase": "e",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "wait",
+  "label": "sdlc:e-ready",
+  "head": "05dfedb861536f0a53665d273ab1d9872d0ecb73",
+  "at": "2026-09-24T19:03:15Z",
+  "dry_run": false,
+  "reason": "",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 2,
+        "cap": 2,
+        "classification": "non-routine",
+        "panel_calls": 2,
+        "panel_cap": 4,
+        "elapsed_minutes": 22.7,
+        "spend_usd": null,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "clean_tree",
+      "ok": true,
+      "reason": "no uncommitted change outside the change folder",
+      "need": "",
+      "details": {
+        "ignored": [
+          ".env"
+        ]
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "open_concerns",
+      "ok": true,
+      "reason": "no open flagged concern",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "panel",
+      "ok": true,
+      "reason": "1 panel decision(s) recorded",
+      "need": "",
+      "details": {
+        "decisions": [
+          {
+            "n": 1,
+            "kind": "finding",
+            "decision": "Rewrite evidence/claude-md-proposals.md to drop the 'second occurrence' claim, keeping only the first-time CLAUDE.md-outdated flag for mean (no CLAUDE.md edit in this run)"
+          }
+        ],
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "reason": "build, test and lint exit 0",
+      "need": "",
+      "details": {
+        "runs": {
+          "build": {
+            "command": "python -m compileall -q .",
+            "exit_code": 0,
+            "output": ""
+          },
+          "test": {
+            "command": "python -m pytest",
+            "exit_code": 0,
+            "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0\nrootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\ncollected 9 items\n\ntests/test_calc.py ........                                              [ 88%]\ntests/test_flag.py .                                                     [100%]\n\n============================== 9 passed in 0.01s ===============================\n"
+          },
+          "lint": {
+            "command": "python -m ruff check .",
+            "exit_code": 0,
+            "output": "All checks passed!\n"
+          }
+        }
+      }
+    },
+    {
+      "name": "evidence",
+      "ok": true,
+      "reason": "evidence present: test.log, build.log, lint.log, verifier.md",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "findings",
+      "ok": true,
+      "reason": "1 Important finding(s) settled by the review panel, none open",
+      "need": "",
+      "details": {
+        "tally": {
+          "important": 1,
+          "nit": 1,
+          "nits_omitted": 0
+        },
+        "settled_by_panel": [
+          "CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API now that mean ships. The run cannot fix this itself (CLAUDE.md is a guardrail file only the owner may edit); the fix is proposed for the owner in evidence/claude-md-proposals.md, which this commit correctly narrowed to the plain first-time flag after the phase-e panel (decisions-e.md item 1) found the earlier 'second occurrence' framing unsupported by findings.py's own update_seen logic (repeated only fires when a signature's first_change differs from the current change id, which is not the case for either of 0002's own CLAUDE.md signatures in changes/.review-seen.json)."
+        ]
+      }
+    },
+    {
+      "name": "plan_sync",
+      "ok": true,
+      "reason": "every committed source file is in plan.md",
+      "need": "",
+      "details": {
+        "planned_but_unchanged": [
+          "sample_pkg/calc.py",
+          "sample_pkg/__init__.py",
+          "tests/test_calc.py"
+        ]
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "owner_actions",
+      "ok": true,
+      "reason": "risk acceptances and iteration resets, if any, were committed by the owner or applied by the owner's label",
+      "need": "",
+      "details": {
+        "risk_accepted": [],
+        "label_actors": {
+          "iterations_reset": "luissiviero"
+        }
+      }
+    },
+    {
+      "name": "adversarial_review",
+      "ok": true,
+      "reason": "no adversarial verdict required at gate (e)",
+      "need": "",
+      "details": {}
+    }
+  ],
+  "what_i_need": ""
+}

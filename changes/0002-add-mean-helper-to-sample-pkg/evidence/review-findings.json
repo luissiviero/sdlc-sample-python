@@ -1,26 +1,26 @@
 {
-  "at": "2026-09-24T18:52:40Z",
+  "at": "2026-09-24T19:02:35Z",
   "findings": [
     {
       "file": "CLAUDE.md",
       "line": 22,
       "pass": "compliance",
-      "rule": "REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated' and 'The second occurrence of the same finding across reviews produces a one-line entry in CLAUDE.md ... proposed in the review for the owner'",
+      "rule": "REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated'",
       "severity": "important",
       "signature": "3c842277b239326e",
-      "summary": "CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API now that mean ships, and this is at least the second time this exact pattern has been flagged (change 0001 for percent, and already twice within change 0002's own review history per changes/.review-seen.json), which should produce a proposed one-line 'Things Claude gets wrong' entry for the owner."
+      "summary": "CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API now that mean ships. The run cannot fix this itself (CLAUDE.md is a guardrail file only the owner may edit); the fix is proposed for the owner in evidence/claude-md-proposals.md, which this commit correctly narrowed to the plain first-time flag after the phase-e panel (decisions-e.md item 1) found the earlier 'second occurrence' framing unsupported by findings.py's own update_seen logic (repeated only fires when a signature's first_change differs from the current change id, which is not the case for either of 0002's own CLAUDE.md signatures in changes/.review-seen.json)."
     },
     {
       "file": "sample_pkg/calc.py",
       "line": 18,
       "pass": "bugs",
-      "rule": "spec.md Design / Flagged concern 2 (Collection[float] contract)",
+      "rule": "spec.md Design (Collection[float] contract, Flagged concern 2)",
       "severity": "nit",
-      "signature": "c469b35da19cfb19",
-      "summary": "mean's Collection[float] hint does not stop a str or dict from being passed (both are Collections): a str raises a confusing TypeError from sum() and a dict silently averages only its keys while ignoring values, and neither caveat is mentioned in the docstring, though this is an explicitly decided and already-reviewed contract so the doubt is only about whether it deserves a doc note."
+      "signature": "1e9343b53b13d07c",
+      "summary": "mean's Collection[float] hint does not stop a str or a dict from being passed at runtime: a str raises a confusing TypeError from sum() rather than a clear argument error, and a dict silently averages only its keys while ignoring its values, with neither caveat mentioned in the docstring; this is a corner of an already-decided, panel-reviewed contract (Collection[float] over Sequence[float]) so it is only worth a doc note, not a design change."
     }
   ],
-  "head": "0163854a24e75c11eb7b1d6e7283fa7aaee6c683",
+  "head": "05dfedb861536f0a53665d273ab1d9872d0ecb73",
   "schema_version": 1,
   "tally": {
     "important": 1,
