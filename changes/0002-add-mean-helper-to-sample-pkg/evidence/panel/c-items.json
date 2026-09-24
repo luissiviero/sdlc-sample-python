@@ -1,6 +1,6 @@
 {
   "decided": 1,
-  "gate": "park",
+  "gate": "continue",
   "items": [],
   "iterations": {
     "cap": 2,
@@ -13,12 +13,7 @@
     "left": 3,
     "used": 1
   },
-  "parks": [
-    {
-      "check": "adversarial_review",
-      "reason": "verdict is for commit b23dc6d319, HEAD is aad3551b71"
-    }
-  ],
+  "parks": [],
   "pending": [],
   "phase": "c"
 }

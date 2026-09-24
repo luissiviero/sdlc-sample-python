@@ -5,12 +5,12 @@
   "phase": "c",
   "profile": "standard",
   "human_gate": false,
-  "result": "park",
-  "label": "sdlc:needs-human",
-  "head": "b23dc6d31942c9b748e997fbe3ee223b03d38f3d",
-  "at": "2026-09-24T18:00:19Z",
+  "result": "continue",
+  "label": null,
+  "head": "ec2b2089da3675fcfe96c5b29b7e36013cc3d1db",
+  "at": "2026-09-24T18:32:01Z",
   "dry_run": false,
-  "reason": "panel: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val",
+  "reason": "",
   "config_note": "",
   "checks": [
     {
@@ -19,12 +19,12 @@
       "reason": "within the run limits",
       "need": "",
       "details": {
-        "iterations": 1,
+        "iterations": 2,
         "cap": 2,
         "classification": "non-routine",
         "panel_calls": 1,
         "panel_cap": 4,
-        "elapsed_minutes": 14.8,
+        "elapsed_minutes": 4.2,
         "spend_usd": null,
         "max_budget_usd": null
       }
@@ -56,13 +56,18 @@
     },
     {
       "name": "panel",
-      "ok": false,
-      "reason": "spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val",
-      "need": "Every panel decision is one ledger line in evidence/decisions-<phase>.json (panel/cli.py record writes it); a never-to-panel item parks for the owner.",
+      "ok": true,
+      "reason": "1 panel decision(s) recorded",
+      "need": "",
       "details": {
-        "problems": [
-          "spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val"
-        ]
+        "decisions": [
+          {
+            "n": 1,
+            "kind": "escalate",
+            "decision": "continue"
+          }
+        ],
+        "cost_usd": 0.0
       }
     },
     {
@@ -152,5 +157,5 @@
       }
     }
   ],
-  "what_i_need": "## What I need from you\nGate (c) parked change 0002 (add-mean-helper-to-sample-pkg) on 2026-09-24T18:00:19Z.\n- **panel**: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val\n  - what I need: Every panel decision is one ledger line in evidence/decisions-<phase>.json (panel/cli.py record writes it); a never-to-panel item parks for the owner.\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0002 --phase c` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
+  "what_i_need": ""
 }
