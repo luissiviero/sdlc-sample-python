@@ -1,43 +1,49 @@
-All checks confirm the implementation exactly matches plan.md and spec.md.
+# Verifier report — phase (d), change 0002
 
-## Report
+Fresh-context verification of the full suite (supersedes the phase (c) report).
 
-**Commands run** (all from `/home/runner/work/sdlc-sample-python/sdlc-sample-python`, exactly as written in `sdlc.yaml: commands`):
+## Commands run (sdlc.yaml: commands, project root)
 
-- `python -m compileall -q .` — exit 0, no output.
-- `python -m pytest` — exit 0. Last lines:
+- `python -m compileall -q .` — no output, exit code 0.
+- `python -m pytest` — output:
   ```
+  collected 9 items
   tests/test_calc.py ........                                              [ 88%]
   tests/test_flag.py .                                                     [100%]
   ============================== 9 passed in 0.01s ===============================
   ```
-- `python -m ruff check .` — exit 0. Output: `All checks passed!`
+  exit code 0.
+- `python -m ruff check .` — output: `All checks passed!`, exit code 0.
 
-All three match plan.md's Proof section (9 passed, `All checks passed!`, silent compileall).
+## Behaviour exercised
 
-**Behavior exercised**
+- `mean([1,2,3,4])` → `2.5` (spec.md Acceptance normal case).
+- `mean([5])` → `5.0` (single-element case).
+- `mean({1.0,2.0,3.0})` (a `set`, non-`Sequence` `Collection`) → `2.0` (pins the
+  `Collection[float]` contract from Flagged concern 2).
+- `mean([])` → raised `ValueError: mean() requires at least one value` (Flagged concern 1's
+  resolution, raised by `mean` itself, not inherited from `divide` — confirmed by the
+  traceback pointing at `calc.py` line 21, `mean`'s own guard clause, not `divide`).
+- `import sample_pkg; sample_pkg.__all__` → `['add', 'divide', 'mean', 'percent']` — `mean`
+  present, same position/pattern as the other three.
+- Neighbouring flow 1: `percent(1,4) == 25.0`, `percent(7,100) == 7.0` — unaffected by this
+  change.
+- Neighbouring flow 2: `divide(1,0)` raised `ZeroDivisionError: b must not be zero` —
+  unaffected by this change.
+- One input just outside the accepted contract: `mean(x for x in [1,2,3])` (a generator, a
+  `Collection`-rejecting case since it has no `__len__`) raised
+  `TypeError: object of type 'generator' has no len()` from inside `len(values)` — this is
+  the expected consequence of `Collection[float]` typing (spec.md Design: "still rejecting a
+  bare generator (no `__len__`)"), not a bug.
+- `python -m pytest -k mean -v` — all 4 new tests passed individually: `test_mean`,
+  `test_mean_single_element`, `test_mean_empty`, `test_mean_accepts_non_sequence_collection`.
+- Confirmed via `git log --oneline -- tests/test_flag.py` that the file has only the original
+  seed commit — untouched by this change, as spec.md and plan.md require.
 
-- `mean([1, 2, 3, 4])` → `2.5` (Acceptance: normal case).
-- `mean([5])` → `5.0` (Acceptance: single-element case).
-- `mean([])` → raised `ValueError: mean() requires at least one value` (exact message from plan.md's guard clause), not `ZeroDivisionError` — confirms Flagged concern 1's decision (mean raises its own ValueError, does not fall through to divide).
-- `mean({1.0, 2.0, 3.0})` (a `set`, non-`Sequence` `Collection`) → `2.0` — confirms the `Collection[float]` contract from Flagged concern 2.
-- Input just outside acceptance — a generator (`Iterable`, not `Collection`, no `__len__`): `mean(gen())` raised `TypeError: object of type 'generator' has no len()`. Note: `not values` (the emptiness guard) does not short-circuit on a generator (generators are always truthy), so `sum(values)` runs and consumes the generator before `len(values)` fails — the generator is still correctly rejected, just via `TypeError` at the `len()` call rather than at the guard clause. This matches the plan's intent ("still rejecting a generator (no `__len__`)") and is not contradicted by any spec/plan wording, but the plan doesn't explicitly describe this exact failure point.
-- Neighboring flow `percent`: `percent(1, 4)` → `25.0`, `percent(7, 100)` → `7.0`; `percent(1, 0)` raised `ZeroDivisionError: b must not be zero` — confirms `percent` is untouched and still propagates `divide`'s error, unlike `mean`.
-- Neighboring flow `divide`: `divide(1, 0)` raised `ZeroDivisionError: b must not be zero` — unchanged.
-- `pytest -k mean -v` — all 4 new tests pass individually: `test_mean`, `test_mean_single_element`, `test_mean_empty`, `test_mean_accepts_non_sequence_collection`.
-- `sample_pkg.__all__` → `['add', 'divide', 'mean', 'percent']` — confirms export/`__all__` per Acceptance.
+## Mismatches with plan.md / spec.md
 
-**Mismatches with plan.md / spec.md**
+None.
 
-- none.
+## Verdict
 
-**Verdict**: matches the plan
-
-Relevant files:
-- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py`
-- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/__init__.py`
-- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py`
-- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0002-add-mean-helper-to-sample-pkg/plan.md`
-- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0002-add-mean-helper-to-sample-pkg/spec.md`
-
-One incidental note (not a mismatch, informational only): during Bash tool use, two of my commands were blocked by the permission system ("Permission to use Bash has been denied") — one combined multi-command line and one longer multi-line `python -c` script. I did not attempt to bypass these; I re-ran the same checks as smaller individual commands, which were permitted and produced the results above. This is a permission-system behavior in this session, not a code issue.
+Matches the plan.
