@@ -1,0 +1,97 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 80646,
+  "duration_ms": 97659,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 1480,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 40803,
+      "cacheReadInputTokens": 1194299,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 0.48886780000000013,
+      "inputTokens": 48,
+      "maxOutputTokens": 64000,
+      "outputTokens": 8670,
+      "provider": "firstParty",
+      "thinkingTokens": 4579,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 26,
+  "permission_denials": [],
+  "queued_turn_count": 0,
+  "result": "PR #13 \u2014 parked, iteration cap (2) already reached before this round; no changes applied. 1 request left open: the owner's overturn of Flagged concern 2 (`Sequence[float]` \u2192 `Collection[float]`) in spec.md/plan.md, recorded in `evidence/fix-response.md`. The owner needs to run `state/cli.py set-iterations` to reset the count before another round can apply it.",
+  "result_index": 0,
+  "session_id": "192a66cb-ada8-4de8-9308-60ecf8800048",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {},
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 0,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "spawned": 0,
+    "spawned_by_subagents": 0,
+    "started_in_background": 0
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 101,
+  "total_cost_usd": 0.48886780000000013,
+  "ttft_ms": 2598,
+  "ttft_stream_ms": 1480,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 40803,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 40803,
+    "cache_read_input_tokens": 1194299,
+    "inference_geo": "not_available",
+    "input_tokens": 48,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 411,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 411,
+        "cache_read_input_tokens": 61016,
+        "input_tokens": 2,
+        "output_tokens": 137,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 8670,
+    "output_tokens_details": {
+      "thinking_tokens": 4579
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "e6b1a8b3-9c2e-47b4-8d13-2f2f49f7c150"
+}
