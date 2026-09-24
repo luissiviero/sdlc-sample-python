@@ -1,0 +1,51 @@
+{
+  "decisions": [
+    {
+      "advocate": "Reject that as an accident, not a decision; mean should raise an explicit ValueError itself, with a message naming the empty input.",
+      "at": "2026-09-24T13:58:35Z",
+      "cost_usd": null,
+      "decision": "mean([]) raises ValueError('mean() requires at least one value'), raised explicitly by mean itself via a guard clause (not inherited from divide)",
+      "head": "9c501fbada8c83cfaf710082b0f7e9ba97197b1a",
+      "item": "Empty-sequence behaviour for `mean` is undecided: `ZeroDivisionError` (via `divide`),",
+      "key": "concern:39862be8365ddc40",
+      "kind": "concern",
+      "n": 1,
+      "overturned": null,
+      "phase": "b",
+      "rationale": [
+        "Reviewer and advocate disagree: reviewer picks ZeroDivisionError via divide (percent precedent, no extra code); advocate rejects it for an explicit ValueError owned by mean.",
+        "Intent requires the empty-case behaviour to be 'stated in the docstring and covered by a test' \u2014 only true if mean's own code produces it, not a coincidental len(values)==0 divide.",
+        "Safer reading: ZeroDivisionError conflates 'no data' with 'arithmetic mistake', breaking callers who already catch ZeroDivisionError for arithmetic errors, and surprises anyone expecting statistics.mean's ValueError/StatisticsError convention.",
+        "Neither a loaded policy skill nor intent settles the specific choice (both say so explicitly), so per instructions the disagreement is resolved by the safer reading.",
+        "A one-line guard (`if not values: raise ValueError(...)`) still satisfies 'keep it minimal' while making the behaviour one mean's own tests actually pin."
+      ],
+      "reviewer": "Let ZeroDivisionError propagate from divide(sum(values), len(values)) unchanged \u2014 matches the percent precedent and needs zero extra code."
+    },
+    {
+      "advocate": "Objects to the Sequence-vs-Iterable framing itself, arguing `Collection[float]` matches what the body (`sum`/`len`) actually needs at the same cost, with no materialising and no under-promised contract.",
+      "at": "2026-09-24T14:01:13Z",
+      "cost_usd": null,
+      "decision": "decided (by panel): `Sequence[float]` \u2014 mean's parameter type is undecided: a materialised `Sequence[float]` (simpler, matches intent's \"keep it minimal\") or a general `Iterable[float]` (more permissive, needs materialising code the minimal constraint argues against).",
+      "head": "9c501fbada8c83cfaf710082b0f7e9ba97197b1a",
+      "item": "`mean`'s parameter type is undecided: a materialised `Sequence[float]` (simpler, matches",
+      "key": "concern:24e27412adee89fb",
+      "kind": "concern",
+      "n": 2,
+      "overturned": {
+        "at": "2026-09-24T15:43:54Z",
+        "comment": "Overturned: mean takes Collection[float], not Sequence[float]. sum and len are all the body needs, so Collection is the honest contract (the devil's advocate's point) at no extra code; a generator is still rejected, which keeps \"no materialising\". Update the closed concern in spec.md, the signature in plan.md's design and the test names accordingly."
+      },
+      "phase": "b",
+      "rationale": [
+        "Both verdicts agree Iterable[float] loses: it needs materialising code (list(values)) that intent's \"keep it minimal\" constraint argues against, per spec.md's own Design section.",
+        "coding-standards' \"match the surrounding code\" rule reinforces this: add/divide/percent take plain scalar args, no existing precedent for a lazy-iterable parameter.",
+        "The advocate's Collection[float] point is technically sound but proposes a third type outside this item's framed Sequence-vs-Iterable choice; deciding it would exceed this item's scope, so it is left for the owner to weigh separately, not decided here.",
+        "Within the framed choice, Sequence[float] is the reading the intent constraint settles.",
+        "Decide Sequence[float]."
+      ],
+      "reviewer": "Decide `Sequence[float]`: intent's minimal constraint and spec.md's own materialising-cost reasoning rule out `Iterable[float]`."
+    }
+  ],
+  "phase": "b",
+  "schema_version": 1
+}

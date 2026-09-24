@@ -1,0 +1,99 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 308103,
+  "duration_ms": 320522,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 876,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 108927,
+      "cacheReadInputTokens": 1999610,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 1.0601535,
+      "inputTokens": 78,
+      "maxOutputTokens": 64000,
+      "outputTokens": 30653,
+      "provider": "firstParty",
+      "thinkingTokens": 19671,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 29,
+  "permission_denials": [],
+  "queued_turn_count": 0,
+  "result": "PR #13 is refreshed. Per the runbook, this stops here since the gate parked again for the same reason \u2014 the next round is the owner's.\n\n**PR #13** (https://github.com/luissiviero/sdlc-sample-python/pull/13) \u2014 gate (b): **parked**, `owner_actions`, iterations used: 1 of 2.\n\nThe owner's `sdlc:reset-iterations` label re-application was picked up and processed (round registered, adversarial reviewer returned `continue`), but the gate parked again on the same check: `iterations_reset_by` stays `\"luissiviero\"` across resets, so the automation-authored drop commit can never show a *changed* actor value for the check to credit \u2014 a structural gap, not something this run can route around (decision 11 blocks self-certification). Left open for the owner: run `gate/cli.py set-iterations` themselves in their own session and commit under their own git identity (details in `evidence/fix-response.md`).",
+  "result_index": 0,
+  "session_id": "cce51bda-58ea-4e19-865c-fbc42ad227e6",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {
+      "sdlc:adversarial-reviewer": 1
+    },
+    "completed": 1,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 1,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 1,
+      "unset": 0
+    },
+    "spawned": 1,
+    "spawned_by_subagents": 0,
+    "started_in_background": 0
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 100,
+  "total_cost_usd": 1.0601535,
+  "ttft_ms": 1180,
+  "ttft_stream_ms": 876,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 54152,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 54152,
+    "cache_read_input_tokens": 1732826,
+    "inference_geo": "not_available",
+    "input_tokens": 58,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 391,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 391,
+        "cache_read_input_tokens": 79665,
+        "input_tokens": 2,
+        "output_tokens": 309,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 16773,
+    "output_tokens_details": {
+      "thinking_tokens": 10678
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "60d9a6c3-b084-4df2-a259-3882c3b562cb"
+}

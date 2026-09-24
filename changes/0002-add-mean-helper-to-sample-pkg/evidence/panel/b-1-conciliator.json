@@ -1,0 +1,12 @@
+{
+  "reviewer": "Let ZeroDivisionError propagate from divide(sum(values), len(values)) unchanged — matches the percent precedent and needs zero extra code.",
+  "advocate": "Reject that as an accident, not a decision; mean should raise an explicit ValueError itself, with a message naming the empty input.",
+  "decision": "mean([]) raises ValueError('mean() requires at least one value'), raised explicitly by mean itself via a guard clause (not inherited from divide)",
+  "rationale": [
+    "Reviewer and advocate disagree: reviewer picks ZeroDivisionError via divide (percent precedent, no extra code); advocate rejects it for an explicit ValueError owned by mean.",
+    "Intent requires the empty-case behaviour to be 'stated in the docstring and covered by a test' — only true if mean's own code produces it, not a coincidental len(values)==0 divide.",
+    "Safer reading: ZeroDivisionError conflates 'no data' with 'arithmetic mistake', breaking callers who already catch ZeroDivisionError for arithmetic errors, and surprises anyone expecting statistics.mean's ValueError/StatisticsError convention.",
+    "Neither a loaded policy skill nor intent settles the specific choice (both say so explicitly), so per instructions the disagreement is resolved by the safer reading.",
+    "A one-line guard (`if not values: raise ValueError(...)`) still satisfies 'keep it minimal' while making the behaviour one mean's own tests actually pin."
+  ]
+}
