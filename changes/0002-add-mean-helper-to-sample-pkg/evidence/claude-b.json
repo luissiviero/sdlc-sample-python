@@ -1,0 +1,117 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 1343588,
+  "duration_ms": 15055,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 762,
+  "is_error": false,
+  "modelUsage": {
+    "claude-opus-5": {
+      "cacheCreationInputTokens": 54592,
+      "cacheReadInputTokens": 246423,
+      "canonicalModel": "claude-opus-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 0.7470964999999998,
+      "inputTokens": 32,
+      "maxOutputTokens": 64000,
+      "outputTokens": 11301,
+      "provider": "firstParty",
+      "thinkingTokens": 6317,
+      "webSearchRequests": 0
+    },
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 499641,
+      "cacheReadInputTokens": 9739625,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 4.718446000000001,
+      "inputTokens": 254,
+      "maxOutputTokens": 64000,
+      "outputTokens": 127988,
+      "provider": "firstParty",
+      "thinkingTokens": 68889,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 4,
+  "origin": {
+    "kind": "task-notification"
+  },
+  "permission_denials": [],
+  "queued_turn_count": 0,
+  "result": "PR #13 opened with label `sdlc:b-ready`. Design phase (b) is complete.\n\n**Summary:** PR https://github.com/luissiviero/sdlc-sample-python/pull/13 \u2014 gate (b) result: `wait` (human gate, as always for phase b). 0 open flagged concerns (2 were opened during the spec pass and both closed by the deferred-review panel: empty-input behaviour \u2192 `ValueError`, parameter type \u2192 `Sequence[float]`). Nothing left to start here \u2014 gate (b) is the owner's merge in every profile.",
+  "result_index": 10,
+  "session_id": "a162673e-9704-4aec-82d7-ccbe202a2927",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {
+      "general-purpose": 4,
+      "sdlc:adversarial-reviewer": 6
+    },
+    "completed": 10,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 1,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 10,
+      "foreground": 0,
+      "unset": 0
+    },
+    "spawned": 10,
+    "spawned_by_subagents": 0,
+    "started_in_background": 10
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 40,
+  "total_cost_usd": 5.465542500000002,
+  "ttft_ms": 1260,
+  "ttft_stream_ms": 762,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 4356,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 4356,
+    "cache_read_input_tokens": 634084,
+    "inference_geo": "not_available",
+    "input_tokens": 8,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 490,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 490,
+        "cache_read_input_tokens": 160197,
+        "input_tokens": 2,
+        "output_tokens": 187,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 881,
+    "output_tokens_details": {
+      "thinking_tokens": 64
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "f316d789-d8bd-4dac-9a26-578a9832421c"
+}
