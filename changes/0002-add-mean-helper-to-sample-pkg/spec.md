@@ -76,11 +76,11 @@ Change id: 0002. Status: proposed. Produced by: sdlc plugin 0.2.14, /sdlc-design
   judgment. Carried to Flagged concerns for the panel.
 
 ## Flagged concerns
-- Empty-sequence behaviour for `mean` is undecided: `ZeroDivisionError` (via `divide`),
+- decided (by panel): mean([]) raises ValueError('mean() requires at least one value'), raised explicitly by mean itself via a guard clause (not inherited from divide) — Empty-sequence behaviour for `mean` is undecided: `ZeroDivisionError` (via `divide`),
   `ValueError`, or `0.0`. No loaded policy skill settles it (see Open questions from
   intent). Needs the panel's (or owner's) decision before `plan.md`'s test list and the
   docstring wording can be final.
-- `mean`'s parameter type is undecided: a materialised `Sequence[float]` (simpler, matches
+- decided (by panel): decided (by panel): `Sequence[float]` — mean's parameter type is undecided: a materialised `Sequence[float]` (simpler, matches intent's "keep it minimal") or a general `Iterable[float]` (more permissive, needs materialising code the minimal constraint argues against). — `mean`'s parameter type is undecided: a materialised `Sequence[float]` (simpler, matches
   intent's "keep it minimal") or a general `Iterable[float]` (more permissive, needs
   materialising code the minimal constraint argues against). No loaded policy skill settles
   it (see Open questions from intent). Needs the panel's (or owner's) decision before

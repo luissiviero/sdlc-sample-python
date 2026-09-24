@@ -1,0 +1,12 @@
+{
+  "reviewer": "Decide `Sequence[float]`: intent's minimal constraint and spec.md's own materialising-cost reasoning rule out `Iterable[float]`.",
+  "advocate": "Objects to the Sequence-vs-Iterable framing itself, arguing `Collection[float]` matches what the body (`sum`/`len`) actually needs at the same cost, with no materialising and no under-promised contract.",
+  "decision": "decided (by panel): `Sequence[float]` — mean's parameter type is undecided: a materialised `Sequence[float]` (simpler, matches intent's \"keep it minimal\") or a general `Iterable[float]` (more permissive, needs materialising code the minimal constraint argues against).",
+  "rationale": [
+    "Both verdicts agree Iterable[float] loses: it needs materialising code (list(values)) that intent's \"keep it minimal\" constraint argues against, per spec.md's own Design section.",
+    "coding-standards' \"match the surrounding code\" rule reinforces this: add/divide/percent take plain scalar args, no existing precedent for a lazy-iterable parameter.",
+    "The advocate's Collection[float] point is technically sound but proposes a third type outside this item's framed Sequence-vs-Iterable choice; deciding it would exceed this item's scope, so it is left for the owner to weigh separately, not decided here.",
+    "Within the framed choice, Sequence[float] is the reading the intent constraint settles.",
+    "Decide Sequence[float]."
+  ]
+}

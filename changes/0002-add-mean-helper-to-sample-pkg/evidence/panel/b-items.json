@@ -1,0 +1,40 @@
+{
+  "decided": 0,
+  "gate": "park",
+  "items": [
+    {
+      "decided": false,
+      "item": "Empty-sequence behaviour for `mean` is undecided: `ZeroDivisionError` (via `divide`),",
+      "key": "concern:39862be8365ddc40",
+      "kind": "concern",
+      "n": 1
+    },
+    {
+      "decided": false,
+      "item": "`mean`'s parameter type is undecided: a materialised `Sequence[float]` (simpler, matches",
+      "key": "concern:24e27412adee89fb",
+      "kind": "concern",
+      "n": 2
+    },
+    {
+      "decided": false,
+      "item": "adversarial reviewer says escalate: intent.md's Proposed outcome (bullet 5) requires that the design phase's spec 'closes its flagged concerns as decided (by panel): \u2026', that the design PR opens with 'Decisions taken for you (N)', and that evidence/ carries decisions-b.md and panel/ files. None of this happened: spec.md's Flagged concerns section (empty-sequence behaviour, parameter type) still lists both as fully undecided, and the diff (diff-b.patch) adds only spec.md, plan.md, status.yaml and run-b.json \u2014 no decisions-b.md, no panel/ directory exist anywhere under evidence/.; status.yaml sets review_override: deferred (unchanged by this diff), and sdlc.yaml's review:deferred definition requires that each judgment item such as an open flagged concern in spec.md be put to a review panel (reviewer + devil's advocate + conciliator) that 'applies the decision, records it in changes/<id>-<slug>/evidence/decisions-<phase>.md and continues.' That process did not run during this design phase: both flagged concerns in spec.md remain open with no 'decided (by panel): \u2026' language, so the run produced design output without executing the review mode its own status.yaml selected.; Because the concerns are unresolved, plan.md's step 1 and step 3 (mean's exact signature, its exact empty-input behaviour, and test_mean_empty's assertion) have no concrete content \u2014 plan.md itself says these are 'still open when this plan is written.' A build-phase implementer has no unambiguous design to build from; the plan is admittedly non-final for its single riskiest step.; intent.md's Problem section states this change exists partly 'to see the review panel settle the open questions below inside the design phase as to add the function' \u2014 i.e. running the deferred panel is as much the point of change 0002 as the code itself. Neither the panel run nor its recorded decisions appear anywhere in this diff or evidence/, so the artifact does not fulfill what intent.md asked the design phase to do.",
+      "key": "escalate:c615b745f06eaf72",
+      "kind": "escalate",
+      "n": 3
+    }
+  ],
+  "iterations": {
+    "cap": 2,
+    "left": 2,
+    "used": 0
+  },
+  "mode": "deferred",
+  "parks": [],
+  "pending": [
+    1,
+    2,
+    3
+  ],
+  "phase": "b"
+}

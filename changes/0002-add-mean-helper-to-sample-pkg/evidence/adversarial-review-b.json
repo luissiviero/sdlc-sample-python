@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "phase": "b",
+  "head": "9c501fbada8c83cfaf710082b0f7e9ba97197b1a",
+  "verdict": "escalate",
+  "reasons": [
+    "intent.md's Proposed outcome (bullet 5) requires that the design phase's spec 'closes its flagged concerns as decided (by panel): …', that the design PR opens with 'Decisions taken for you (N)', and that evidence/ carries decisions-b.md and panel/ files. None of this happened: spec.md's Flagged concerns section (empty-sequence behaviour, parameter type) still lists both as fully undecided, and the diff (diff-b.patch) adds only spec.md, plan.md, status.yaml and run-b.json — no decisions-b.md, no panel/ directory exist anywhere under evidence/.",
+    "status.yaml sets review_override: deferred (unchanged by this diff), and sdlc.yaml's review:deferred definition requires that each judgment item such as an open flagged concern in spec.md be put to a review panel (reviewer + devil's advocate + conciliator) that 'applies the decision, records it in changes/<id>-<slug>/evidence/decisions-<phase>.md and continues.' That process did not run during this design phase: both flagged concerns in spec.md remain open with no 'decided (by panel): …' language, so the run produced design output without executing the review mode its own status.yaml selected.",
+    "Because the concerns are unresolved, plan.md's step 1 and step 3 (mean's exact signature, its exact empty-input behaviour, and test_mean_empty's assertion) have no concrete content — plan.md itself says these are 'still open when this plan is written.' A build-phase implementer has no unambiguous design to build from; the plan is admittedly non-final for its single riskiest step.",
+    "intent.md's Problem section states this change exists partly 'to see the review panel settle the open questions below inside the design phase as to add the function' — i.e. running the deferred panel is as much the point of change 0002 as the code itself. Neither the panel run nor its recorded decisions appear anywhere in this diff or evidence/, so the artifact does not fulfill what intent.md asked the design phase to do."
+  ],
+  "classification": "non-routine",
+  "classification_reasons": [
+    "Spec is not tight: two Flagged concerns (empty-sequence behaviour, iterable vs Sequence parameter type) remain open and undecided in spec.md, so acceptance for the empty-input case is not yet a single measurable assertion.",
+    "Blast radius is otherwise small — plan.md names only sample_pkg/calc.py, sample_pkg/__init__.py and tests/test_calc.py, none of them a risk_list item, guardrail file, or schema/contract change — but a small blast radius alone does not make the plan routine while a concern is still open.",
+    "The eventual code (mean built via divide, sum, len) is simple and close to existing tested patterns (percent built on divide), so once the open concerns are decided the change would likely become low-risk, but as written the plan is not yet fully self-contained per its own Risks section."
+  ],
+  "attempted": [
+    "Intent: compared spec.md/plan.md against intent.md's Proposed outcome; found bullet 5 (panel closes flagged concerns, decisions-b.md + panel/ evidence) unmet — the artifact adds the function's design but skips the deferred-review mechanism the change was explicitly built to exercise.",
+    "Spec and plan: checked every intent requirement is reflected in spec.md's Requirements/Design/Acceptance (they are, generically, pending the two decisions), and that plan.md's Files/Order/Risks/Proof match spec.md and list the same three files in a coherent order — they do, but both documents openly admit the two Flagged concerns are unresolved rather than 'closed with a decision' as this brief's angle 2 requires.",
+    "Proof: diff-b.patch and evidence/ (run-b.json, .gitkeep, diff-b.patch) contain no build/test/lint logs and no decisions-b.md/panel/ files; for a design-only phase b that lack of build/test logs is expected, but the lack of decisions-b.md/panel/ files is not — it is the one piece of evidence intent.md and sdlc.yaml's deferred mode explicitly require at this phase.",
+    "Blast radius: diff-b.patch touches only changes/0002-add-mean-helper-to-sample-pkg/{spec.md,plan.md,status.yaml,evidence/run-b.json} — no guardrail file (.claude/**, CLAUDE.md, REVIEW.md, sdlc.yaml), no risk_list item, no schema/migration touched by this diff.",
+    "Policies: coding-standards, security-baseline, ux-conventions, data-conventions applicability calls in spec.md's Requirements read as correct and honestly reasoned (mean is pure, in-process, no I/O); definition-of-done's own closure ('no behaviour change ships without a test that fails without it') cannot yet be checked for the empty-input case because that assertion depends on the undecided behaviour.",
+    "Tests: no tests are in this diff (phase b is design-only, consistent with plan.md's Order of work putting tests in step 3 of the build phase); plan.md's named tests (test_mean, test_mean_single_element, test_mean_empty) are the right shape but test_mean_empty's assertion is explicitly unresolved."
+  ],
+  "at": "2026-09-24T14:05:00Z"
+}
