@@ -1,0 +1,117 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 1441153,
+  "duration_ms": 464692,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 1642,
+  "is_error": false,
+  "modelUsage": {
+    "claude-opus-5": {
+      "cacheCreationInputTokens": 45413,
+      "cacheReadInputTokens": 290286,
+      "canonicalModel": "claude-opus-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 0.6807192499999999,
+      "inputTokens": 24,
+      "maxOutputTokens": 64000,
+      "outputTokens": 10065,
+      "provider": "firstParty",
+      "thinkingTokens": 6388,
+      "webSearchRequests": 0
+    },
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 372499,
+      "cacheReadInputTokens": 9956573,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 4.175094099999997,
+      "inputTokens": 268,
+      "maxOutputTokens": 64000,
+      "outputTokens": 105924,
+      "provider": "firstParty",
+      "thinkingTokens": 63151,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 23,
+  "origin": {
+    "kind": "task-notification"
+  },
+  "permission_denials": [],
+  "queued_turn_count": 0,
+  "result": "The PR is populated correctly with decisions, findings, plan conformance, counters, proposed CLAUDE.md lines, and release notes. Everything is in order for hand-over.\n\n## Summary\n\nChange 0002 has reached gate (e). Along the way, review-findings.json's HEAD reference kept going stale each time I had to commit evidence (`.review-seen.json` lives outside the change folder and must be committed, but doing so shifts HEAD) \u2014 I resolved this by regenerating the review for each resulting HEAD via fresh sub-agents, and used `--no-record` on validate once the ledger was already committed to stop re-dirtying it.\n\nOne Important finding stood (CLAUDE.md's Layout section is outdated now that `mean` exists \u2014 a guardrail file the run can't edit). Since `review_override` is `deferred`, I ran the three-member panel (reviewer, adversarial advocate on opus, conciliator): they kept the core flag but the advocate caught that the \"second occurrence\" framing wasn't actually supported by the ledger's own repeat-detection logic, so the conciliator had me correct `evidence/claude-md-proposals.md` to the accurate first-time wording. Gate (e) then passed clean (build/test/lint green, findings settled, plan in sync, no guardrail/risk hits).\n\nPR: **https://github.com/luissiviero/sdlc-sample-python/pull/19** (labelled `sdlc:e-ready`)\n\ngate (e): merge = approve; a review comment is the change request (`/sdlc-fix 0002`).",
+  "result_index": 2,
+  "session_id": "8b90c6cd-3a41-4c73-a2b2-0f444fc14ced",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {
+      "general-purpose": 5,
+      "sdlc:adversarial-reviewer": 1
+    },
+    "completed": 6,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 1,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 2,
+      "foreground": 4,
+      "unset": 0
+    },
+    "spawned": 6,
+    "spawned_by_subagents": 0,
+    "started_in_background": 2
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 23,
+  "total_cost_usd": 4.855813349999997,
+  "ttft_ms": 2582,
+  "ttft_stream_ms": 1641,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 31469,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 31469,
+    "cache_read_input_tokens": 3177333,
+    "inference_geo": "not_available",
+    "input_tokens": 46,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2378,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 2378,
+        "cache_read_input_tokens": 152030,
+        "input_tokens": 2,
+        "output_tokens": 515,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 15000,
+    "output_tokens_details": {
+      "thinking_tokens": 6928
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "03f39778-5b8d-4a68-9f23-8a728bf8a767"
+}
