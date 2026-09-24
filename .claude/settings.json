@@ -22,7 +22,11 @@
       "Edit(sdlc.yaml)",
       "WebFetch",
       "Bash(curl *)",
-      "Bash(wget *)"
+      "Bash(wget *)",
+      "Edit(/.claude/**)",
+      "Edit(/CLAUDE.md)",
+      "Edit(/REVIEW.md)",
+      "Edit(/sdlc.yaml)"
     ],
     "allow": [
       "Bash(git *)",
