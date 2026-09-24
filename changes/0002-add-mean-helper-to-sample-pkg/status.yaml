@@ -8,10 +8,10 @@ profile_override: null
 review_override: deferred
 gate:
   phase: b
-  result: parked
-  reason: "owner_actions: iterations dropped from 1 to 0 in commit 52d3a2ac9e, authored by the automation identity (github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>) and no owner label actor is recorded for it"
-  at: "2026-09-24T17:22:37Z"
-parked_reason: "owner_actions: iterations dropped from 1 to 0 in commit 52d3a2ac9e, authored by the automation identity (github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>) and no owner label actor is recorded for it"
+  result: passed
+  reason: waiting for the owner at gate (b)
+  at: "2026-09-24T17:30:52Z"
+parked_reason: null
 iterations: 1
 panel_calls: 0
 external_ref: null
@@ -23,5 +23,5 @@ iterations_reset_at: "2026-09-24T17:25:40Z"
 tests_unlocked_by: null
 abandoned_reason: null
 created_at: "2026-09-24T13:32:13Z"
-updated_at: "2026-09-24T17:27:48Z"
+updated_at: "2026-09-24T17:30:52Z"
 schema_version: 1

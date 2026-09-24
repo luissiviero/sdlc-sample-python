@@ -1,11 +1,11 @@
 {
   "decided": 1,
-  "gate": "park",
+  "gate": "wait",
   "items": [],
   "iterations": {
     "cap": 2,
-    "left": 2,
-    "used": 0
+    "left": 1,
+    "used": 1
   },
   "mode": "deferred",
   "panel_calls": {
@@ -13,12 +13,7 @@
     "left": 4,
     "used": 0
   },
-  "parks": [
-    {
-      "check": "adversarial_review",
-      "reason": "verdict is for commit 37a47c2828, HEAD is 7cef4e0762"
-    }
-  ],
+  "parks": [],
   "pending": [],
   "phase": "b"
 }

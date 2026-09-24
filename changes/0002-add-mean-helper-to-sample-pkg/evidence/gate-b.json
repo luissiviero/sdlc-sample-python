@@ -5,12 +5,12 @@
   "phase": "b",
   "profile": "standard",
   "human_gate": true,
-  "result": "park",
-  "label": "sdlc:needs-human",
-  "head": "37a47c282820f214b829ae048f52b39b691fb618",
-  "at": "2026-09-24T17:22:37Z",
+  "result": "wait",
+  "label": "sdlc:b-ready",
+  "head": "e5088ebfdf1035155bbdb0ae543b07f31d5c1da9",
+  "at": "2026-09-24T17:30:52Z",
   "dry_run": false,
-  "reason": "owner_actions: iterations dropped from 1 to 0 in commit 52d3a2ac9e, authored by the automation identity (github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>) and no owner label actor is recorded for it",
+  "reason": "",
   "config_note": "",
   "checks": [
     {
@@ -22,7 +22,9 @@
         "iterations": 1,
         "cap": 2,
         "classification": "non-routine",
-        "elapsed_minutes": 2.7,
+        "panel_calls": 0,
+        "panel_cap": 4,
+        "elapsed_minutes": 3.1,
         "spend_usd": null,
         "max_budget_usd": null
       }
@@ -43,7 +45,8 @@
         "dirty": [
           ".env",
           "changes/0002-add-mean-helper-to-sample-pkg/evidence/adversarial-review-b.json",
-          "changes/0002-add-mean-helper-to-sample-pkg/evidence/diff-b.patch"
+          "changes/0002-add-mean-helper-to-sample-pkg/evidence/diff-b.patch",
+          "changes/0002-add-mean-helper-to-sample-pkg/evidence/panel/b-items.json"
         ]
       }
     },
@@ -113,17 +116,14 @@
     },
     {
       "name": "owner_actions",
-      "ok": false,
-      "reason": "iterations dropped from 1 to 0 in commit 52d3a2ac9e, authored by the automation identity (github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>) and no owner label actor is recorded for it",
-      "need": "accept-risk and set-iterations are the owner's: apply sdlc:accept-risk or sdlc:reset-iterations on the pull request, or run the command on your machine or in your own session and commit; a run cannot approve itself (decision 11).",
+      "ok": true,
+      "reason": "risk acceptances and iteration resets, if any, were committed by the owner or applied by the owner's label",
+      "need": "",
       "details": {
-        "problems": [
-          "iterations dropped from 1 to 0 in commit 52d3a2ac9e, authored by the automation identity (github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>) and no owner label actor is recorded for it"
-        ],
-        "automation_identity": [
-          "github-actions[bot]",
-          "41898282+github-actions[bot]@users.noreply.github.com"
-        ]
+        "risk_accepted": [],
+        "label_actors": {
+          "iterations_reset": "luissiviero"
+        }
       }
     },
     {
@@ -137,5 +137,5 @@
       }
     }
   ],
-  "what_i_need": "## What I need from you\nGate (b) parked change 0002 (add-mean-helper-to-sample-pkg) on 2026-09-24T17:22:37Z.\n- **owner_actions**: iterations dropped from 1 to 0 in commit 52d3a2ac9e, authored by the automation identity (github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>) and no owner label actor is recorded for it\n  - what I need: accept-risk and set-iterations are the owner's: apply sdlc:accept-risk or sdlc:reset-iterations on the pull request, or run the command on your machine or in your own session and commit; a run cannot approve itself (decision 11).\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0002 --phase b` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
+  "what_i_need": ""
 }
