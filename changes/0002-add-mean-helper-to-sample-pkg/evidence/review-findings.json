@@ -1,21 +1,30 @@
 {
-  "at": "2026-09-24T18:39:54Z",
+  "at": "2026-09-24T18:46:49Z",
   "findings": [
     {
       "file": "CLAUDE.md",
       "line": 22,
       "pass": "compliance",
-      "rule": "REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated'; REVIEW.md: second occurrence of the same finding proposes a 'Things Claude gets wrong' entry",
+      "rule": "REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated' and 'The second occurrence of the same finding across reviews produces a one-line entry in CLAUDE.md ... proposed in the review for the owner'",
       "severity": "important",
-      "signature": "cc24ed45af8ee34d",
-      "summary": "sample_pkg gains a new public function (mean) but CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API; this is the same pattern flagged in change 0001's review (evidence/../0001-.../evidence/review-findings.json, CLAUDE.md:22) for percent, so it is a second occurrence and warrants a one-line 'Things Claude gets wrong' entry proposed for the owner (e.g. \"New public functions in sample_pkg/calc.py routinely leave CLAUDE.md's Layout/Commands sections outdated until the owner applies the review's proposed line by hand\")."
+      "signature": "3c842277b239326e",
+      "summary": "CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API now that mean ships; this is the same 'CLAUDE.md outdated' pattern already flagged in change 0001's review for percent, so this is a second occurrence and should produce a proposed one-line 'Things Claude gets wrong' entry for the owner (e.g. 'New public functions in sample_pkg/calc.py routinely leave CLAUDE.md's Layout section outdated until the owner applies the review's proposed line by hand')."
+    },
+    {
+      "file": "sample_pkg/calc.py",
+      "line": 18,
+      "pass": "bugs",
+      "rule": "spec.md Design (Collection[float] contract, Flagged concern 2)",
+      "severity": "nit",
+      "signature": "c469b35da19cfb19",
+      "summary": "mean's Collection[float] hint does not stop a str or dict from being passed (both are Collections): a str raises a TypeError from sum() and a dict silently averages its keys only, ignoring values, which could surprise a caller since neither is flagged in the docstring; not sure this is worth more than a doc note given it is an explicitly decided, reviewed contract."
     }
   ],
-  "head": "d6f50060394ede0202b23c32e48026f46449a52d",
+  "head": "c7baab02701d73c0faf140c717a9e2c61e86a69e",
   "schema_version": 1,
   "tally": {
     "important": 1,
-    "nit": 0,
+    "nit": 1,
     "nits_omitted": 0
   }
 }

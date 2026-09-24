@@ -7,6 +7,22 @@
     "last_seen": "2026-09-23T09:18:08Z",
     "summary": "CLAUDE.md's Layout line for sample_pkg/calc.py still says only 'add' and 'divide', and the commit that tries to close this by hand-writing changes/0001-add-percent-helper-to-sample-pkg/evidence/claude-md-proposals.md does not durably fix it: that exact evidence filename is owned by review/cli.py's own validate step (framework/plugin/review/findings.py PROPOSALS_FILE, cmd_validate in framework/plugin/review/cli.py lines 185-197), which framework/plugin/ci/run_phase.py runs automatically immediately after every review pass (line 937, unconditionally for phase == 'review') and which deletes the file whenever fmod.claude_md_lines(repeated) is empty; repeated is empty here because changes/.review-seen.json shows both signatures' first_change == last_change == '0001' (no earlier change shares them), so this review's own validate run will unlink the file again and the '## Proposed CLAUDE.md lines' section will disappear from the PR body right after this review completes, leaving the guardrail file outdated with no live path to a fix."
   },
+  "3c842277b239326e": {
+    "count": 1,
+    "file": "CLAUDE.md",
+    "first_change": "0002",
+    "last_change": "0002",
+    "last_seen": "2026-09-24T18:47:14Z",
+    "summary": "CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API now that mean ships; this is the same 'CLAUDE.md outdated' pattern already flagged in change 0001's review for percent, so this is a second occurrence and should produce a proposed one-line 'Things Claude gets wrong' entry for the owner (e.g. 'New public functions in sample_pkg/calc.py routinely leave CLAUDE.md's Layout section outdated until the owner applies the review's proposed line by hand')."
+  },
+  "c469b35da19cfb19": {
+    "count": 1,
+    "file": "sample_pkg/calc.py",
+    "first_change": "0002",
+    "last_change": "0002",
+    "last_seen": "2026-09-24T18:47:14Z",
+    "summary": "mean's Collection[float] hint does not stop a str or dict from being passed (both are Collections): a str raises a TypeError from sum() and a dict silently averages its keys only, ignoring values, which could surprise a caller since neither is flagged in the docstring; not sure this is worth more than a doc note given it is an explicitly decided, reviewed contract."
+  },
   "cc24ed45af8ee34d": {
     "count": 2,
     "file": "CLAUDE.md",
