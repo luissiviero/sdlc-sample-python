@@ -12,7 +12,7 @@ gate:
   reason: "panel: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val"
   at: "2026-09-24T18:00:19Z"
 parked_reason: "panel: spec.md closes a concern by the panel with no ledger line: decided (by panel): mean([]) raises ValueError('mean() requires at least one val"
-iterations: 1
+iterations: 2
 panel_calls: 1
 external_ref: null
 risk_accepted: []
@@ -23,5 +23,5 @@ iterations_reset_at: "2026-09-24T17:25:40Z"
 tests_unlocked_by: null
 abandoned_reason: null
 created_at: "2026-09-24T13:32:13Z"
-updated_at: "2026-09-24T18:00:19Z"
+updated_at: "2026-09-24T18:27:54Z"
 schema_version: 1
