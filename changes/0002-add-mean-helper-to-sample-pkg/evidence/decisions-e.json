@@ -1,0 +1,27 @@
+{
+  "decisions": [
+    {
+      "advocate": "Uphold only the narrow CLAUDE.md-outdated flag; reject the 'second occurrence' framing and its proposal line as unsupported by the framework's own repeat-detection code.",
+      "at": "2026-09-24T18:58:00Z",
+      "cost_usd": null,
+      "decision": "Rewrite evidence/claude-md-proposals.md to drop the 'second occurrence' claim, keeping only the first-time CLAUDE.md-outdated flag for mean (no CLAUDE.md edit in this run)",
+      "head": "0163854a24e75c11eb7b1d6e7283fa7aaee6c683",
+      "item": "Important finding at CLAUDE.md:22: CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API now that mean ships, and this is at least the second time this exact pattern has been flagged (change 0001 for percent, and already twice within change 0002's own review history per changes/.review-seen.json), which should produce a proposed one-line 'Things Claude gets wrong' entry for the owner. [REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated' and 'The second occurrence of the same finding across reviews produces a one-line entry in CLAUDE.md ... proposed in the review for the owner']",
+      "key": "finding:3c842277b239326e",
+      "kind": "finding",
+      "n": 1,
+      "overturned": null,
+      "phase": "e",
+      "rationale": [
+        "Both agree the core fact is real: CLAUDE.md Layout (lines 22-23) omits mean and must be flagged; that flag already exists.",
+        "They disagree on the 'second occurrence' clause: findings.py's update_seen only marks a signature repeated when first_change != change_id, and .review-seen.json shows signature 3c842277/cc24ed45 have first_change == last_change == '0002' \u2014 the code's own mechanism does not fire here, and the 0001 entries are distinct signatures (different summary text).",
+        "The advocate's reading matches the checkable code; the safer fix is to correct the evidence wording rather than hand the owner an inaccurate 'second occurrence' justification.",
+        "The fix is in-run: editing evidence/claude-md-proposals.md (not a guardrail file) to state the accurate first-time flag, matching claude_md_first_time_lines' intended format.",
+        "Settled either way on CLAUDE.md itself: no run may edit it; the owner still applies the Layout line from the PR body."
+      ],
+      "reviewer": "Uphold as-is: the finding is Important, rule-satisfied, and settled because claude-md-proposals.md already carries the required 'Things Claude gets wrong' line."
+    }
+  ],
+  "phase": "e",
+  "schema_version": 1
+}

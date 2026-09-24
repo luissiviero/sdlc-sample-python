@@ -4,7 +4,7 @@
   "items": [
     {
       "decided": false,
-      "item": "Important finding at CLAUDE.md:22: CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API now that mean ships; this is the same 'CLAUDE.md outdated' pattern already flagged in change 0001's review for percent, so this is a second occurrence and should produce a proposed one-line 'Things Claude gets wrong' entry for the owner (e.g. 'New public functions in sample_pkg/calc.py routinely leave CLAUDE.md's Layout section outdated until the owner applies the review's proposed line by hand'). [REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated' and 'The second occurrence of the same finding across reviews produces a one-line entry in CLAUDE.md ... proposed in the review for the owner']",
+      "item": "Important finding at CLAUDE.md:22: CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API now that mean ships, and this is at least the second time this exact pattern has been flagged (change 0001 for percent, and already twice within change 0002's own review history per changes/.review-seen.json), which should produce a proposed one-line 'Things Claude gets wrong' entry for the owner. [REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated' and 'The second occurrence of the same finding across reviews produces a one-line entry in CLAUDE.md ... proposed in the review for the owner']",
       "key": "finding:3c842277b239326e",
       "kind": "finding",
       "n": 1
@@ -21,12 +21,7 @@
     "left": 3,
     "used": 1
   },
-  "parks": [
-    {
-      "check": "clean_tree",
-      "reason": "1 uncommitted file(s) outside the change folder: changes/.review-seen.json"
-    }
-  ],
+  "parks": [],
   "pending": [
     1
   ],
