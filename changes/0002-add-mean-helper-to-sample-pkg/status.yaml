@@ -12,7 +12,7 @@ gate:
   reason: "owner_actions: iterations dropped from 1 to 0 in commit 52d3a2ac9e, authored by the automation identity (github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>) and no owner label actor is recorded for it"
   at: "2026-09-24T17:22:37Z"
 parked_reason: "owner_actions: iterations dropped from 1 to 0 in commit 52d3a2ac9e, authored by the automation identity (github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>) and no owner label actor is recorded for it"
-iterations: 0
+iterations: 1
 panel_calls: 0
 external_ref: null
 risk_accepted: []
@@ -23,5 +23,5 @@ iterations_reset_at: "2026-09-24T17:25:40Z"
 tests_unlocked_by: null
 abandoned_reason: null
 created_at: "2026-09-24T13:32:13Z"
-updated_at: "2026-09-24T17:25:40Z"
+updated_at: "2026-09-24T17:27:48Z"
 schema_version: 1
