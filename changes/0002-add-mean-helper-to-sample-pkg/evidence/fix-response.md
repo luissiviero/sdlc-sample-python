@@ -29,3 +29,28 @@
 - `python -m compileall -q .`, `python -m pytest` (5 passed — phase (b) touches no source
   file, so today's suite is unchanged; the plan's target of 9 passed applies once phase (c)
   writes the four tests) and `python -m ruff check .` all green.
+
+## Gate (b) result: parked (escalate)
+After the fix above was committed (`312a101`), the adversarial reviewer returned `escalate`
+on this round's diff and the gate parked again — a new reason, not the iteration-cap park
+this round started from. Its primary point: `evidence/claude-fix.json`, the CI harness's own
+run-log for the *previous* (round-3, parked) `/sdlc-fix` session, still says "no changes
+applied" — because that file is written by the outer CI wrapper in a follow-up commit after
+an `/sdlc-fix` session ends (see the separate `run(fix): spend recorded` commits in this
+branch's history for phases `b` and `fix`), not by the session itself. This round's own
+`claude-fix.json` does not exist yet at review time; it lands after this session ends and
+will describe this round's actual result. The reviewer read the stale round-3 log against
+the round-4 diff and could not confirm from committed evidence alone that the diff came from
+an audited run.
+Not applied in this round: no further edit was made in response to the escalate. Deciding
+whether the harness's post-session evidence timing is a real process gap or an artifact to
+tolerate is the owner's call (the gate's own message: "Read the reviewer's reasons and
+decide: fix and re-run, or accept in review"), not something this round should route around
+by inventing evidence ahead of the log the harness itself will write. The reviewer's second,
+minor point (spec.md's Requirements/Design prose still describes the parameter type as an
+open question, even though Flagged concern 2 below it is now decided) is also not applied
+here: the owner's review comment asked only to update "the closed concern in spec.md", and
+plan.md — the document phase (c) actually implements from — already carries the decided
+`Collection[float]` type consistently.
+Iterations used: 1 of 2 (cap not reached; one more round is available if the owner wants
+this pursued further).
