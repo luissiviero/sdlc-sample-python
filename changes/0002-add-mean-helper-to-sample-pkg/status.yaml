@@ -8,11 +8,11 @@ profile_override: null
 review_override: deferred
 gate:
   phase: b
-  result: passed
-  reason: waiting for the owner at gate (b)
-  at: "2026-09-24T14:11:25Z"
-parked_reason: null
-iterations: 2
+  result: parked
+  reason: "iteration cap reached after review comments: overturn spec.md/plan.md Flagged concern 2 (mean's parameter type) from Sequence[float] to Collection[float] per owner's inline review comment on evidence/decisions-b.md"
+  at: "2026-09-24T15:39:42Z"
+parked_reason: "iteration cap reached after review comments: overturn spec.md/plan.md Flagged concern 2 (mean's parameter type) from Sequence[float] to Collection[float] per owner's inline review comment on evidence/decisions-b.md"
+iterations: 3
 external_ref: null
 risk_accepted: []
 tests_locked: false
@@ -21,5 +21,5 @@ iterations_reset_by: null
 tests_unlocked_by: null
 abandoned_reason: null
 created_at: "2026-09-24T13:32:13Z"
-updated_at: "2026-09-24T14:11:25Z"
+updated_at: "2026-09-24T15:39:42Z"
 schema_version: 1
