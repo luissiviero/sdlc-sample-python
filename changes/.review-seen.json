@@ -7,6 +7,14 @@
     "last_seen": "2026-09-23T09:18:08Z",
     "summary": "CLAUDE.md's Layout line for sample_pkg/calc.py still says only 'add' and 'divide', and the commit that tries to close this by hand-writing changes/0001-add-percent-helper-to-sample-pkg/evidence/claude-md-proposals.md does not durably fix it: that exact evidence filename is owned by review/cli.py's own validate step (framework/plugin/review/findings.py PROPOSALS_FILE, cmd_validate in framework/plugin/review/cli.py lines 185-197), which framework/plugin/ci/run_phase.py runs automatically immediately after every review pass (line 937, unconditionally for phase == 'review') and which deletes the file whenever fmod.claude_md_lines(repeated) is empty; repeated is empty here because changes/.review-seen.json shows both signatures' first_change == last_change == '0001' (no earlier change shares them), so this review's own validate run will unlink the file again and the '## Proposed CLAUDE.md lines' section will disappear from the PR body right after this review completes, leaving the guardrail file outdated with no live path to a fix."
   },
+  "cc24ed45af8ee34d": {
+    "count": 2,
+    "file": "CLAUDE.md",
+    "first_change": "0002",
+    "last_change": "0002",
+    "last_seen": "2026-09-24T18:40:48Z",
+    "summary": "sample_pkg gains a new public function (mean) but CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API; this is the same pattern flagged in change 0001's review (evidence/../0001-.../evidence/review-findings.json, CLAUDE.md:22) for percent, so it is a second occurrence and warrants a one-line 'Things Claude gets wrong' entry proposed for the owner (e.g. \"New public functions in sample_pkg/calc.py routinely leave CLAUDE.md's Layout/Commands sections outdated until the owner applies the review's proposed line by hand\")."
+  },
   "f06a27d48494b2e0": {
     "count": 3,
     "file": "sample_pkg/calc.py",

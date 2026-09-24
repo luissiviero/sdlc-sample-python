@@ -1,0 +1,34 @@
+{
+  "decided": 0,
+  "gate": "park",
+  "items": [
+    {
+      "decided": false,
+      "item": "Important finding at CLAUDE.md:22: sample_pkg gains a new public function (mean) but CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API; this is the same pattern flagged in change 0001's review (evidence/../0001-.../evidence/review-findings.json, CLAUDE.md:22) for percent, so it is a second occurrence and warrants a one-line 'Things Claude gets wrong' entry proposed for the owner (e.g. \"New public functions in sample_pkg/calc.py routinely leave CLAUDE.md's Layout/Commands sections outdated until the owner applies the review's proposed line by hand\"). [REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated'; REVIEW.md: second occurrence of the same finding proposes a 'Things Claude gets wrong' entry]",
+      "key": "finding:cc24ed45af8ee34d",
+      "kind": "finding",
+      "n": 1
+    }
+  ],
+  "iterations": {
+    "cap": 2,
+    "left": 0,
+    "used": 2
+  },
+  "mode": "deferred",
+  "panel_calls": {
+    "cap": 4,
+    "left": 3,
+    "used": 1
+  },
+  "parks": [
+    {
+      "check": "clean_tree",
+      "reason": "1 uncommitted file(s) outside the change folder: changes/.review-seen.json"
+    }
+  ],
+  "pending": [
+    1
+  ],
+  "phase": "e"
+}
