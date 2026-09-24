@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "change_id": "0002",
+  "slug": "add-mean-helper-to-sample-pkg",
+  "phase": "b",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "wait",
+  "label": "sdlc:b-ready",
+  "head": "4c3ba41f4c002d7416b688a81d8c48c424a82ec6",
+  "at": "2026-09-24T14:11:25Z",
+  "dry_run": false,
+  "reason": "",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 2,
+        "cap": 2,
+        "classification": "non-routine",
+        "elapsed_minutes": 21.3,
+        "spend_usd": null,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "design_scope",
+      "ok": true,
+      "reason": "the committed diff stays inside changes/0002-add-mean-helper-to-sample-pkg/",
+      "need": "",
+      "details": {
+        "dirty": [
+          ".env",
+          "changes/0002-add-mean-helper-to-sample-pkg/evidence/adversarial-review-b.json",
+          "changes/0002-add-mean-helper-to-sample-pkg/evidence/diff-b.patch"
+        ]
+      }
+    },
+    {
+      "name": "open_concerns",
+      "ok": true,
+      "reason": "no open flagged concern",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "panel",
+      "ok": true,
+      "reason": "2 panel decision(s) recorded",
+      "need": "",
+      "details": {
+        "decisions": [
+          {
+            "n": 1,
+            "kind": "concern",
+            "decision": "mean([]) raises ValueError('mean() requires at least one value'), raised explicitly by mean itself via a guard clause (not inherited from divide)"
+          },
+          {
+            "n": 2,
+            "kind": "concern",
+            "decision": "decided (by panel): `Sequence[float]` \u2014 mean's parameter type is undecided: a materialised `Sequence[float]` (simpler, matches intent's \"keep it minimal\") or a general `Iterable[float]` (more permissive, needs materialising code the minimal constraint argues against)."
+          }
+        ],
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "reason": "build, test and lint exit 0",
+      "need": "",
+      "details": {
+        "runs": {
+          "build": {
+            "command": "python -m compileall -q .",
+            "exit_code": 0,
+            "output": ""
+          },
+          "test": {
+            "command": "python -m pytest",
+            "exit_code": 0,
+            "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0\nrootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\ncollected 5 items\n\ntests/test_calc.py ....                                                  [ 80%]\ntests/test_flag.py .                                                     [100%]\n\n============================== 5 passed in 0.01s ===============================\n"
+          },
+          "lint": {
+            "command": "python -m ruff check .",
+            "exit_code": 0,
+            "output": "All checks passed!\n"
+          }
+        }
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "owner_actions",
+      "ok": true,
+      "reason": "risk acceptances and iteration resets, if any, were committed by the owner or applied by the owner's label",
+      "need": "",
+      "details": {
+        "risk_accepted": [],
+        "label_actors": {}
+      }
+    },
+    {
+      "name": "adversarial_review",
+      "ok": true,
+      "reason": "adversarial reviewer says continue",
+      "need": "",
+      "details": {
+        "classification": "non-routine",
+        "reasons": []
+      }
+    }
+  ],
+  "what_i_need": ""
+}

@@ -7,10 +7,10 @@ change_type: feature
 profile_override: null
 review_override: deferred
 gate:
-  phase: null
-  result: null
-  reason: null
-  at: null
+  phase: b
+  result: passed
+  reason: waiting for the owner at gate (b)
+  at: "2026-09-24T14:11:25Z"
 parked_reason: null
 iterations: 2
 external_ref: null
@@ -21,5 +21,5 @@ iterations_reset_by: null
 tests_unlocked_by: null
 abandoned_reason: null
 created_at: "2026-09-24T13:32:13Z"
-updated_at: "2026-09-24T14:01:13Z"
+updated_at: "2026-09-24T14:11:25Z"
 schema_version: 1
