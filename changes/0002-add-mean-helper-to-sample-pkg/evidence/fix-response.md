@@ -35,7 +35,31 @@ request (decision 24) — read here as "reconsider the escalate, on the reset co
 3. `python -m compileall -q .`, `python -m pytest` (5 passed — phase (b) still touches no
    source file) and `python -m ruff check .` all green.
 
-## Gate (b) result
-See the fresh `gate/cli.py check` run and `evidence/adversarial-review-b.json` /
-`evidence/diff-b.patch` committed alongside this file for this round's verdict.
-Iterations used: 1 of 2 (reset by owner this cycle).
+## Gate (b) result: parked (owner_actions)
+The adversarial reviewer returned **continue** on this round's diff (head `326c58d`,
+`evidence/adversarial-review-b.json`) — the proof-mismatch point is resolved and the spec.md
+consistency edit above checked out. But `gate/cli.py check` then parked on a different,
+deterministic check: **owner_actions**.
+
+`commit a6074a4` (the `sdlc:reset-iterations` label being performed) dropped
+`status.yaml: iterations` from 1 to 0, authored by the automation identity
+(`github-actions[bot]`), same as every commit in this CI session. The check credits an
+automation-authored drop only when *that same commit* also changes `iterations_reset_by`
+to a person's login (decision 24) — proving the drop came from a genuine label event, not
+the run approving itself (decision 11). Here `iterations_reset_by` was already
+`"luissiviero"` from the *earlier* reset (`d11d082`, round 3→4) and kept the same value in
+`a6074a4`, so the field shows no change for the check to credit, even though the owner did
+apply the label again (per `status.yaml` and the PR's label history).
+
+**Not applied**: this is a limitation in how the gate correlates a repeated label actor
+with a repeated reset event, in the framework's own `gate/checks.py` /
+`state/unpark.py` — not something this change's fix round edits (out of scope: it is
+framework/process logic, not this change's spec/plan/code, and decision 11 makes owner
+self-certification exactly the thing this check exists to block). Routing around it from
+inside a run would defeat the check's purpose.
+Parked again (`state/cli.py park`) so the owner can settle it directly, per the gate's own
+message: re-apply `sdlc:reset-iterations` on PR #13 in a way GitHub/the tooling records as
+a fresh actor event, or run `gate/cli.py set-iterations` themselves, in their own session,
+and commit it under their own git identity (which trivially satisfies "commit author is not
+the automation identity").
+Iterations used: 1 of 2 (reset by owner this cycle; unchanged by this park).
