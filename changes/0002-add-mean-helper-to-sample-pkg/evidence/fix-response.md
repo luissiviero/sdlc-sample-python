@@ -1,65 +1,52 @@
-# Fix response — phase (b), round 5
+# Fix response — phase (b), round 6
 
-Change request this round: the gate parked (escalate) after round 4 on two points (see
-`status.yaml: parked_reason` / `evidence/gate-b.json` at head `312a101`); the owner un-parked
-with `sdlc:reset-iterations` (`iterations_reset_by: luissiviero`), which is itself a change
-request (decision 24) — read here as "reconsider the escalate, on the reset count."
+Change request this round: the gate parked (owner_actions) after round 5 on the same point
+described below (`status.yaml: parked_reason` / `evidence/gate-b.json` at head `326c58d`).
+The owner re-applied `sdlc:reset-iterations` on PR #13 at 2026-09-24T17:17:21Z (GitHub label
+history); CI's `apply-labels` step performed it before this session started, committing
+`status.yaml: iterations` 1 → 0 as `52d3a2a` (automation identity) — itself a change request
+(decision 24), read here as "reconsider the park, on the reset count."
 
-1. **Proof mismatch** (primary): the reviewer compared the round-4 diff against
-   `evidence/claude-fix.json` and found the file describing the *previous*, iteration-capped
-   round ("no changes applied ... reset the count"), not round 4's actual result. Round 4's
-   `fix-response.md` already explained why: `claude-fix.json` is written by the outer CI
-   wrapper in a follow-up `run(fix): spend recorded` commit *after* an `/sdlc-fix` session
-   ends, so at review time inside a session the file on disk is always the *previous*
-   session's log, one round behind the diff being judged. That follow-up commit
-   (`2e4ae9e`, after `a657402`'s gate check) has since landed and `evidence/claude-fix.json`
-   now on this branch correctly describes round 4's own result (applying the Collection[float]
-   overturn, then parking escalate) — the specific file the reviewer flagged as contradicting
-   the diff no longer does. **Not applied as a new edit**: there is nothing to change in the
-   artifacts for this point; the harness's own evidence caught up with the diff between
-   rounds, which is what round 4's fix-response predicted would happen. Re-running the gate
-   this round gives the reviewer the caught-up evidence to check against.
-2. **Minor nit** (spec.md internal consistency): the reviewer repeated the observation that
-   Requirements bullet 3 and the Design section's parameter-type paragraph still described
-   the type choice as an open Sequence-vs-Iterable question after Flagged concern 2 was
-   decided as `Collection[float]`. Round 4 left this alone as out of scope of the owner's
-   literal comment ("update the closed concern in spec.md"); since the gate's own parked
-   reason names this as compounding the trust problem in spec.md as a single source of
-   truth, and the edit is small and low-risk, **applied** this round: Requirements bullet 3
-   now states both Flagged concerns are decided (empty input raises `ValueError`; parameter
-   type is `Collection[float]`) instead of calling them open, and the Design section's
-   parameter-type paragraph now describes the decided `Collection[float]` contract instead of
-   an unsettled Sequence-vs-Iterable choice. No change to `plan.md` (already consistent) or
-   to the "Open questions from intent" section (historical record of what intent carried
-   forward, not a live status).
-3. `python -m compileall -q .`, `python -m pytest` (5 passed — phase (b) still touches no
-   source file) and `python -m ruff check .` all green.
+1. **Nothing to change in spec.md / plan.md / code**: no new review comment content arrived
+   this round — only the reset-iterations label event, already performed. `python -m
+   compileall -q .`, `python -m pytest` (5 passed) and `python -m ruff check .` all still
+   green; the diff for this round is state bookkeeping only (`status.yaml`,
+   `evidence/run-b.json`, then this evidence).
+2. Registered the round: `gate/cli.py start-run` + `bump-iteration` (iterations 0 → 1, cap 2,
+   non-routine — not cap-reached), committed as `37a47c2`.
+3. Re-ran the verdict: delegated to `sdlc:adversarial-reviewer` against head `37a47c2`
+   (`evidence/diff-b.patch` vs `origin/main`) — **continue**, non-routine, no new reasons to
+   escalate (`evidence/adversarial-review-b.json`). spec.md/plan.md are byte-for-byte
+   unchanged since round 5's own `continue` verdict.
 
-## Gate (b) result: parked (owner_actions)
-The adversarial reviewer returned **continue** on this round's diff (head `326c58d`,
-`evidence/adversarial-review-b.json`) — the proof-mismatch point is resolved and the spec.md
-consistency edit above checked out. But `gate/cli.py check` then parked on a different,
-deterministic check: **owner_actions**.
+## Gate (b) result: parked (owner_actions), same reason as round 5
+`gate/cli.py check` parked again on the same deterministic check, now naming the newer
+commit: `iterations dropped from 1 to 0 in commit 52d3a2ac9e, authored by the automation
+identity (github-actions[bot]) and no owner label actor is recorded for it`.
 
-`commit a6074a4` (the `sdlc:reset-iterations` label being performed) dropped
-`status.yaml: iterations` from 1 to 0, authored by the automation identity
-(`github-actions[bot]`), same as every commit in this CI session. The check credits an
-automation-authored drop only when *that same commit* also changes `iterations_reset_by`
-to a person's login (decision 24) — proving the drop came from a genuine label event, not
-the run approving itself (decision 11). Here `iterations_reset_by` was already
-`"luissiviero"` from the *earlier* reset (`d11d082`, round 3→4) and kept the same value in
-`a6074a4`, so the field shows no change for the check to credit, even though the owner did
-apply the label again (per `status.yaml` and the PR's label history).
+This is the same structural gap round 5's fix-response already diagnosed, not a new one:
+`record_owner_label` (`state/status.py`) sets `iterations_reset_by` to the label's actor
+unconditionally, and the check only credits an automation-authored iteration drop when
+*that same commit* also **changes** `iterations_reset_by`'s value (`gate/checks.py
+check_owner_actions`: `reset_by = now["reset_by"] if now["reset_by"] != before["reset_by"]
+else None`). Because the same person (`luissiviero`) has been the recorded actor since the
+very first reset (`d11d082`), every subsequent automation-committed reset — including this
+round's `52d3a2a` — writes the same string the field already held, so the check sees no
+change and cannot credit it, even though GitHub's label timeline shows three distinct,
+genuine `sdlc:reset-iterations` events from the owner (`d11d082`, `a6074a4`, `52d3a2a`).
 
-**Not applied**: this is a limitation in how the gate correlates a repeated label actor
-with a repeated reset event, in the framework's own `gate/checks.py` /
-`state/unpark.py` — not something this change's fix round edits (out of scope: it is
-framework/process logic, not this change's spec/plan/code, and decision 11 makes owner
-self-certification exactly the thing this check exists to block). Routing around it from
-inside a run would defeat the check's purpose.
-Parked again (`state/cli.py park`) so the owner can settle it directly, per the gate's own
-message: re-apply `sdlc:reset-iterations` on PR #13 in a way GitHub/the tooling records as
-a fresh actor event, or run `gate/cli.py set-iterations` themselves, in their own session,
-and commit it under their own git identity (which trivially satisfies "commit author is not
-the automation identity").
-Iterations used: 1 of 2 (reset by owner this cycle; unchanged by this park).
+**Not applied**: as round 5 found, this is a limitation in how `gate/checks.py` /
+`state/unpark.py` correlate a *repeated* label actor with a *repeated* reset event — not
+something this change's fix round edits (out of scope: framework/process logic, not this
+change's spec/plan/code; decision 11 is exactly what blocks a run from routing around it).
+The label route (`sdlc:reset-iterations` on PR #13) cannot satisfy this check again while
+the same owner keeps applying it, by design of the string-equality freshness proxy — only
+the gate's other named remedy is structurally available: the owner runs `gate/cli.py
+set-iterations` themselves, in their own session, and commits `status.yaml` under their own
+git identity (not `github-actions[bot]`), which sidesteps the check entirely (it only
+scrutinises automation-authored drops).
+
+Parked again (`gate/cli.py check`, recorded in `status.yaml`). Per this command's own
+instructions ("if the gate parks again for the same reason, stop after this round: the next
+round is the owner's"), stopping here.
+Iterations used: 1 of 2 (bumped this cycle; unchanged by this park).
