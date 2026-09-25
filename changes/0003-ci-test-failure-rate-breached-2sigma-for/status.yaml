@@ -1,7 +1,7 @@
 id: "0003"
 slug: ci-test-failure-rate-breached-2sigma-for
 title: ci_test_failure_rate breached 2sigma (forced) on 2026-09-25
-phase: f
+phase: abandoned
 entry_route: incident
 change_type: fix
 profile_override: null
@@ -11,7 +11,7 @@ gate:
   result: parked
   reason: "design_scope: 1 committed file(s) outside changes/0003-ci-test-failure-rate-breached-2sigma-for/: .github/workflows/sdlc-detect.yml"
   at: "2026-09-25T17:12:48Z"
-parked_reason: "design_scope: 1 committed file(s) outside changes/0003-ci-test-failure-rate-breached-2sigma-for/: .github/workflows/sdlc-detect.yml"
+parked_reason: null
 iterations: 0
 panel_calls: 0
 external_ref: null
@@ -22,7 +22,7 @@ iterations_reset_by: null
 iterations_reset_at: null
 tests_unlocked_by: null
 runbook_authorized_by: null
-abandoned_reason: null
+abandoned_reason: pull request 25 closed without a merge
 created_at: "2026-09-25T17:11:14Z"
-updated_at: "2026-09-25T17:12:48Z"
+updated_at: "2026-09-25T17:17:32Z"
 schema_version: 1
