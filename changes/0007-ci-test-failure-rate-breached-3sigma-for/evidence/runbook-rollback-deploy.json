@@ -1,6 +1,6 @@
 {
   "args": {},
-  "at": "2026-09-25T20:19:37Z",
+  "at": "2026-09-25T20:22:21Z",
   "authorization": {
     "authorization": "go",
     "builtin": false,
@@ -11,7 +11,14 @@
     "source": "a forced finding (a rehearsal) never pre-approves a runbook: Go required",
     "supported": true
   },
-  "reason": "the route touches a running system (authorization: go, decision 14)",
+  "authorized_by": "luissiviero",
+  "branch": null,
+  "commit": null,
+  "exit_code": 0,
+  "output_tail": "$ python -c 'print('\"'\"'rollback rehearsal'\"'\"')'\nrollback rehearsal\n",
+  "pr_number": null,
+  "pr_url": null,
+  "reason": "",
   "runbook": "rollback-deploy",
-  "status": "go-requested"
+  "status": "ran"
 }

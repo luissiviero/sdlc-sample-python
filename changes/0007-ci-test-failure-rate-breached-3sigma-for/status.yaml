@@ -21,8 +21,8 @@ risk_accepted_by: []
 iterations_reset_by: null
 iterations_reset_at: null
 tests_unlocked_by: null
-runbook_authorized_by: null
+runbook_authorized_by: luissiviero
 abandoned_reason: null
 created_at: "2026-09-25T20:14:15Z"
-updated_at: "2026-09-25T20:19:50Z"
+updated_at: "2026-09-25T20:22:21Z"
 schema_version: 1
