@@ -1,0 +1,14 @@
+--- a/.github/workflows/sdlc-fix.yml
++++ b/.github/workflows/sdlc-fix.yml
+@@ -63,9 +63,10 @@
+     if: >-
+       ${{ github.event_name == 'workflow_dispatch' ||
+       (github.event_name == 'pull_request_review' &&
+       github.event.review.state == 'changes_requested' &&
+-      !endsWith(github.event.review.user.login, '[bot]')) ||
++      !endsWith(github.event.review.user.login, '[bot]') &&
++      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.review.author_association)) ||
+       (github.event_name == 'pull_request' &&
+       (github.event.label.name == 'sdlc:accept-risk' ||
+       github.event.label.name == 'sdlc:reset-iterations' ||
+       github.event.label.name == 'sdlc:unlock-tests')) }}
