@@ -1,7 +1,7 @@
 id: "0004"
 slug: security-secrets-the-fixture-env-file-is
 title: "security: secrets: The fixture `.env` file is committed and tracked in git (pre"
-phase: f
+phase: abandoned
 entry_route: incident
 change_type: feature
 profile_override: null
@@ -22,7 +22,7 @@ iterations_reset_by: null
 iterations_reset_at: null
 tests_unlocked_by: null
 runbook_authorized_by: null
-abandoned_reason: null
+abandoned_reason: pull request 26 closed without a merge
 created_at: "2026-09-25T17:23:19Z"
-updated_at: "2026-09-25T17:23:21Z"
+updated_at: "2026-09-25T17:28:37Z"
 schema_version: 1
