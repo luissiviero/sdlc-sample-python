@@ -1,0 +1,28 @@
+{
+  "action": "propose",
+  "at": "2026-09-25T17:27:44Z",
+  "breach_start": null,
+  "commits": [],
+  "direction": "above",
+  "failed_run_urls": [],
+  "forced": true,
+  "kind": "detect",
+  "latest": null,
+  "mean": null,
+  "metric": "ci_test_failure_rate",
+  "n_baseline": 0,
+  "n_tail": 0,
+  "observations": [],
+  "reason": "tier 3 forced by workflow_dispatch (a rehearsal of the loop); no complete-day observation in the window: the source returned none",
+  "rule": "forced",
+  "rules_hit": [
+    "forced"
+  ],
+  "schema_version": 1,
+  "sigma": null,
+  "sigmas": null,
+  "signature": "dcfe764c7235cd9c",
+  "source": "github-actions",
+  "tier": 3,
+  "window_days": 30
+}
