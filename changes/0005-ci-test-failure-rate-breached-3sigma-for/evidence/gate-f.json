@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "change_id": "0005",
+  "slug": "ci-test-failure-rate-breached-3sigma-for",
+  "phase": "f",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "wait",
+  "label": "sdlc:f-ready",
+  "head": "db9955ccdae069ec97ca607a837af4097b263b89",
+  "at": "2026-09-25T17:29:38Z",
+  "dry_run": false,
+  "reason": "",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 0,
+        "cap": 3,
+        "classification": null,
+        "panel_calls": 0,
+        "panel_cap": 4,
+        "elapsed_minutes": 0.9,
+        "spend_usd": 0.24258580000000002,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "design_scope",
+      "ok": true,
+      "reason": "the committed diff stays inside changes/0005-ci-test-failure-rate-breached-3sigma-for/",
+      "need": "",
+      "details": {
+        "dirty": [
+          ".sdlc/detect-cache.json",
+          "detect-log.jsonl"
+        ]
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "detection",
+      "ok": true,
+      "reason": "ci_test_failure_rate at tier 3 (forced), signature dcfe764c7235cd9c, not dismissed",
+      "need": "",
+      "details": {
+        "tier": 3,
+        "rule": "forced",
+        "signature": "dcfe764c7235cd9c",
+        "forced": true
+      }
+    },
+    {
+      "name": "route",
+      "ok": true,
+      "reason": "pull_request: this intent PR is the route (p.44 step 5)",
+      "need": "",
+      "details": {
+        "proposal": {
+          "schema_version": 1,
+          "tier": 3,
+          "route": "pull_request",
+          "args": {},
+          "rationale": "The finding is a forced rehearsal (forced: true, rule: forced) with every quantitative field null or empty: no observations, no baseline, no failed_run_urls, no commits in a breach window. There is no test to name for runbook:quarantine-flaky-test and no commit sha to name for runbook:revert-pr - both were ruled out for lack of any evidence to target, not chosen against on preference. runbook:rollback-deploy is unsupported for this project. pull_request is the only route the evidence supports: the intent PR carries the diagnosis (that this was an empty rehearsal) to the owner for triage/dismissal."
+        },
+        "resolved": {
+          "route": "pull_request",
+          "authorization": "preapproved",
+          "source": "the incident intent PR (p.44 step 5)",
+          "runbook": null,
+          "builtin": false,
+          "supported": true,
+          "note": "",
+          "rehearsed_at": null
+        }
+      }
+    }
+  ],
+  "what_i_need": ""
+}
