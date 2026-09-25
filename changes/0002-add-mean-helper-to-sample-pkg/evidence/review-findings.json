@@ -1,21 +1,30 @@
 {
-  "at": "2026-09-24T18:39:54Z",
+  "at": "2026-09-24T19:02:35Z",
   "findings": [
     {
       "file": "CLAUDE.md",
       "line": 22,
       "pass": "compliance",
-      "rule": "REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated'; REVIEW.md: second occurrence of the same finding proposes a 'Things Claude gets wrong' entry",
+      "rule": "REVIEW.md Framework rules: 'Flag when the change has made CLAUDE.md outdated'",
       "severity": "important",
-      "signature": "cc24ed45af8ee34d",
-      "summary": "sample_pkg gains a new public function (mean) but CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API; this is the same pattern flagged in change 0001's review (evidence/../0001-.../evidence/review-findings.json, CLAUDE.md:22) for percent, so it is a second occurrence and warrants a one-line 'Things Claude gets wrong' entry proposed for the owner (e.g. \"New public functions in sample_pkg/calc.py routinely leave CLAUDE.md's Layout/Commands sections outdated until the owner applies the review's proposed line by hand\")."
+      "signature": "3c842277b239326e",
+      "summary": "CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API now that mean ships. The run cannot fix this itself (CLAUDE.md is a guardrail file only the owner may edit); the fix is proposed for the owner in evidence/claude-md-proposals.md, which this commit correctly narrowed to the plain first-time flag after the phase-e panel (decisions-e.md item 1) found the earlier 'second occurrence' framing unsupported by findings.py's own update_seen logic (repeated only fires when a signature's first_change differs from the current change id, which is not the case for either of 0002's own CLAUDE.md signatures in changes/.review-seen.json)."
+    },
+    {
+      "file": "sample_pkg/calc.py",
+      "line": 18,
+      "pass": "bugs",
+      "rule": "spec.md Design (Collection[float] contract, Flagged concern 2)",
+      "severity": "nit",
+      "signature": "1e9343b53b13d07c",
+      "summary": "mean's Collection[float] hint does not stop a str or a dict from being passed at runtime: a str raises a confusing TypeError from sum() rather than a clear argument error, and a dict silently averages only its keys while ignoring its values, with neither caveat mentioned in the docstring; this is a corner of an already-decided, panel-reviewed contract (Collection[float] over Sequence[float]) so it is only worth a doc note, not a design change."
     }
   ],
-  "head": "d6f50060394ede0202b23c32e48026f46449a52d",
+  "head": "05dfedb861536f0a53665d273ab1d9872d0ecb73",
   "schema_version": 1,
   "tally": {
     "important": 1,
-    "nit": 0,
+    "nit": 1,
     "nits_omitted": 0
   }
 }

@@ -1,0 +1,12 @@
+{
+  "reviewer": "Uphold as-is: the finding is Important, rule-satisfied, and settled because claude-md-proposals.md already carries the required 'Things Claude gets wrong' line.",
+  "advocate": "Uphold only the narrow CLAUDE.md-outdated flag; reject the 'second occurrence' framing and its proposal line as unsupported by the framework's own repeat-detection code.",
+  "decision": "Rewrite evidence/claude-md-proposals.md to drop the 'second occurrence' claim, keeping only the first-time CLAUDE.md-outdated flag for mean (no CLAUDE.md edit in this run)",
+  "rationale": [
+    "Both agree the core fact is real: CLAUDE.md Layout (lines 22-23) omits mean and must be flagged; that flag already exists.",
+    "They disagree on the 'second occurrence' clause: findings.py's update_seen only marks a signature repeated when first_change != change_id, and .review-seen.json shows signature 3c842277/cc24ed45 have first_change == last_change == '0002' — the code's own mechanism does not fire here, and the 0001 entries are distinct signatures (different summary text).",
+    "The advocate's reading matches the checkable code; the safer fix is to correct the evidence wording rather than hand the owner an inaccurate 'second occurrence' justification.",
+    "The fix is in-run: editing evidence/claude-md-proposals.md (not a guardrail file) to state the accurate first-time flag, matching claude_md_first_time_lines' intended format.",
+    "Settled either way on CLAUDE.md itself: no run may edit it; the owner still applies the Layout line from the PR body."
+  ]
+}
