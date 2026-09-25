@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "tier": 2,
+  "route": "pull_request",
+  "args": {},
+  "rationale": "Tier 2 permits only the pull_request route (routes --id 0003 lists exactly one: pull_request, preapproved). The finding is also forced:true with every statistical field null/empty, no failed_run_urls, and no commits in a breach window — a rehearsal of the loop rather than a live regression — so there is nothing for a runbook to act on even if one were available at this tier. The intent PR itself is the diagnosis's whole output; the owner's triage at gate (f) decides whether to merge, schedule, or dismiss it."
+}
