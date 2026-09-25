@@ -1,7 +1,7 @@
 id: "0006"
 slug: security-authz-the-fix-round-job-fires-o
 title: "security: authz: The fix-round job fires on any 'changes requested' pull_requ"
-phase: f
+phase: abandoned
 entry_route: incident
 change_type: fix
 profile_override: null
@@ -22,7 +22,7 @@ iterations_reset_by: null
 iterations_reset_at: null
 tests_unlocked_by: null
 runbook_authorized_by: null
-abandoned_reason: null
+abandoned_reason: pull request 30 closed without a merge
 created_at: "2026-09-25T18:44:15Z"
-updated_at: "2026-09-25T18:44:17Z"
+updated_at: "2026-09-25T20:06:07Z"
 schema_version: 1
