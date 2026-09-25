@@ -1,0 +1,99 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 437229,
+  "duration_ms": 447557,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 940,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 155752,
+      "cacheReadInputTokens": 1905792,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 1.3469459000000001,
+      "inputTokens": 72,
+      "maxOutputTokens": 64000,
+      "outputTokens": 44965,
+      "provider": "firstParty",
+      "thinkingTokens": 31134,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 44,
+  "permission_denials": [],
+  "queued_turn_count": 0,
+  "result": "PR #34 opened, labeled `sdlc:needs-human`, and parked. Gate (b) is now the owner's to close in review.\n\n**Report:** PR https://github.com/luissiviero/sdlc-sample-python/pull/34 \u2014 gate (b) result: **park**. 1 open flagged concern (fix-type reproducing-test rule vs. intent's explicit read-only constraint \u2014 intent.md forecloses any source/test change, but only policy-skill text closes a concern, so it's left for the owner's sign-off). Review mode is `parked`, so no panel decisions were made. Adversarial reviewer verdict: continue (classification: non-routine).",
+  "result_index": 0,
+  "session_id": "a5a3d184-4e27-4b64-bc14-de1f17025621",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {
+      "sdlc:adversarial-reviewer": 1
+    },
+    "completed": 1,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 1,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 1,
+      "unset": 0
+    },
+    "spawned": 1,
+    "spawned_by_subagents": 0,
+    "started_in_background": 0
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 72,
+  "total_cost_usd": 1.3469459000000001,
+  "ttft_ms": 1481,
+  "ttft_stream_ms": 940,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 84409,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 84409,
+    "cache_read_input_tokens": 1370042,
+    "inference_geo": "not_available",
+    "input_tokens": 46,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 513,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 513,
+        "cache_read_input_tokens": 83896,
+        "input_tokens": 2,
+        "output_tokens": 217,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 20903,
+    "output_tokens_details": {
+      "thinking_tokens": 12644
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "c7badb99-d790-4c3c-af6f-46d516eb0a65"
+}
