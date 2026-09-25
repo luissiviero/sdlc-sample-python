@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "tier": 3,
+  "route": "pull_request",
+  "args": {},
+  "rationale": "The finding is a forced rehearsal (forced: true, rule: forced) with every quantitative field null or empty: no observations, no baseline, no failed_run_urls, no commits in a breach window. There is no test to name for runbook:quarantine-flaky-test and no commit sha to name for runbook:revert-pr - both were ruled out for lack of any evidence to target, not chosen against on preference. runbook:rollback-deploy is unsupported for this project. pull_request is the only route the evidence supports: the intent PR carries the diagnosis (that this was an empty rehearsal) to the owner for triage/dismissal."
+}
