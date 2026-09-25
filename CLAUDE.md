@@ -11,7 +11,7 @@ Run all three from the repository root. Dev tools: `python -m pip install pytest
 | Target | Command                      | Healthy output                          |
 |--------|------------------------------|-----------------------------------------|
 | build  | `python -m compileall -q .`  | no output, exit code 0                  |
-| test   | `python -m pytest`           | `3 passed in 0.01s`, exit code 0        |
+| test   | `python -m pytest`           | `9 passed in 0.01s`, exit code 0        |
 | lint   | `python -m ruff check .`     | `All checks passed!`, exit code 0       |
 
 A single failing test makes `python -m pytest` exit non-zero. `SAMPLE_FAIL=1 python -m pytest`
