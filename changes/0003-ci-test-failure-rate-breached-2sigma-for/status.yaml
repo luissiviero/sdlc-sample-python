@@ -7,11 +7,11 @@ change_type: fix
 profile_override: null
 review_override: null
 gate:
-  phase: null
-  result: null
-  reason: null
-  at: null
-parked_reason: null
+  phase: f
+  result: parked
+  reason: "design_scope: 1 committed file(s) outside changes/0003-ci-test-failure-rate-breached-2sigma-for/: .github/workflows/sdlc-detect.yml"
+  at: "2026-09-25T17:12:48Z"
+parked_reason: "design_scope: 1 committed file(s) outside changes/0003-ci-test-failure-rate-breached-2sigma-for/: .github/workflows/sdlc-detect.yml"
 iterations: 0
 panel_calls: 0
 external_ref: null
@@ -24,5 +24,5 @@ tests_unlocked_by: null
 runbook_authorized_by: null
 abandoned_reason: null
 created_at: "2026-09-25T17:11:14Z"
-updated_at: "2026-09-25T17:11:14Z"
+updated_at: "2026-09-25T17:12:48Z"
 schema_version: 1

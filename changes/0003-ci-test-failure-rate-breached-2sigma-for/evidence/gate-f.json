@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "change_id": "0003",
+  "slug": "ci-test-failure-rate-breached-2sigma-for",
+  "phase": "f",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "park",
+  "label": "sdlc:needs-human",
+  "head": "cb9910382852a2863d6440989a9dae8457f97896",
+  "at": "2026-09-25T17:12:48Z",
+  "dry_run": false,
+  "reason": "design_scope: 1 committed file(s) outside changes/0003-ci-test-failure-rate-breached-2sigma-for/: .github/workflows/sdlc-detect.yml",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 0,
+        "cap": 3,
+        "classification": null,
+        "panel_calls": 0,
+        "panel_cap": 4,
+        "elapsed_minutes": 0.8,
+        "spend_usd": 0.4013236,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "design_scope",
+      "ok": false,
+      "reason": "1 committed file(s) outside changes/0003-ci-test-failure-rate-breached-2sigma-for/: .github/workflows/sdlc-detect.yml",
+      "need": "Revert them on the branch: phase (f) commits only changes/0003-ci-test-failure-rate-breached-2sigma-for/; the first run with edit tools on source is phase (c) (the diagnosis of phase (f) is read-only, p.43 step 3; a runbook works on a branch of its own).",
+      "details": {
+        "outside": [
+          ".github/workflows/sdlc-detect.yml"
+        ],
+        "dirty": [
+          ".sdlc/detect-cache.json",
+          "detect-log.jsonl"
+        ]
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "detection",
+      "ok": true,
+      "reason": "ci_test_failure_rate at tier 2 (forced), signature dcfe764c7235cd9c, not dismissed",
+      "need": "",
+      "details": {
+        "tier": 2,
+        "rule": "forced",
+        "signature": "dcfe764c7235cd9c",
+        "forced": true
+      }
+    },
+    {
+      "name": "route",
+      "ok": true,
+      "reason": "pull_request: this intent PR is the route (p.44 step 5)",
+      "need": "",
+      "details": {
+        "proposal": {
+          "schema_version": 1,
+          "tier": 2,
+          "route": "pull_request",
+          "args": {},
+          "rationale": "Tier 2 permits only the pull_request route (routes --id 0003 lists exactly one: pull_request, preapproved). The finding is also forced:true with every statistical field null/empty, no failed_run_urls, and no commits in a breach window \u2014 a rehearsal of the loop rather than a live regression \u2014 so there is nothing for a runbook to act on even if one were available at this tier. The intent PR itself is the diagnosis's whole output; the owner's triage at gate (f) decides whether to merge, schedule, or dismiss it."
+        },
+        "resolved": {
+          "route": "pull_request",
+          "authorization": "preapproved",
+          "source": "the incident intent PR (p.44 step 5)",
+          "runbook": null,
+          "builtin": false,
+          "supported": true,
+          "note": "",
+          "rehearsed_at": null
+        }
+      }
+    }
+  ],
+  "what_i_need": "## What I need from you\nGate (f) parked change 0003 (ci-test-failure-rate-breached-2sigma-for) on 2026-09-25T17:12:48Z.\n- **design_scope**: 1 committed file(s) outside changes/0003-ci-test-failure-rate-breached-2sigma-for/: .github/workflows/sdlc-detect.yml\n  - what I need: Revert them on the branch: phase (f) commits only changes/0003-ci-test-failure-rate-breached-2sigma-for/; the first run with edit tools on source is phase (c) (the diagnosis of phase (f) is read-only, p.43 step 3; a runbook works on a branch of its own).\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0003 --phase f` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
+}
