@@ -1,0 +1,326 @@
+ .../evidence/claude-b.json                         | 97 ++++++++++++++++++++++
+ .../evidence/claude-b.stderr.txt                   |  1 +
+ .../evidence/hook-log.jsonl                        | 14 ++++
+ .../evidence/run-b.json                            |  5 ++
+ .../plan.md                                        | 54 ++++++++++++
+ .../spec.md                                        | 77 +++++++++++++++++
+ .../status.yaml                                    |  8 +-
+ 7 files changed, 252 insertions(+), 4 deletions(-)
+
+diff --git a/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/claude-b.json b/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/claude-b.json
+new file mode 100644
+index 0000000..d0433d3
+--- /dev/null
++++ b/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/claude-b.json
+@@ -0,0 +1,97 @@
++{
++  "api_error_status": null,
++  "duration_api_ms": 80725,
++  "duration_ms": 81356,
++  "fast_mode_disabled_reason": "sdk_opt_in_required",
++  "fast_mode_state": "off",
++  "first_content_frame_ms": 982,
++  "is_error": false,
++  "modelUsage": {
++    "claude-sonnet-5": {
++      "cacheCreationInputTokens": 43189,
++      "cacheReadInputTokens": 81158,
++      "canonicalModel": "claude-sonnet-5",
++      "contextWindow": 1000000,
++      "costBasis": "list",
++      "costUSD": 0.2681696,
++      "inputTokens": 6,
++      "maxOutputTokens": 64000,
++      "outputTokens": 7917,
++      "provider": "firstParty",
++      "thinkingTokens": 6456,
++      "webSearchRequests": 0
++    }
++  },
++  "num_turns": 6,
++  "permission_denials": [],
++  "queued_turn_count": 0,
++  "result": "I stopped before doing any design work. Here's what I found for change `0005`:\n\n**State mismatch \u2014 this change isn't at phase (a)/(b), it's already at phase (f).**\n\n`changes/0005-ci-test-failure-rate-breached-3sigma-for/status.yaml` on the current branch (which tracks `origin/main`) shows:\n- `phase: f`\n- `entry_route: incident`, `change_type: fix`\n- `gate: { phase: f, result: passed, reason: \"waiting for the owner at gate (f)\" }`\n- No `spec.md` or `plan.md` in the change folder \u2014 only `intent.md`, `status.yaml`, `evidence/`\n\nThe commit history (`4c67e73 maintain(0005): diagnosis`, `f1c40d3 maintain(0005): detection ci_test_failure_rate tier 3`, `298e972 maintain(0005): gate (f) evidence`, `db9955c run(f): spend recorded`) shows this change went through the framework's **incident detection \u2192 diagnosis \u2192 gate (f)** pipeline, which bypasses phases (b)/(c)/(d)/(e) entirely for this entry route. It has already been merged to `main` and is sitting at gate (f) waiting on the owner \u2014 there's nothing for `/sdlc-design` (phase b, spec+plan) to do here, since this change never goes through a design phase.\n\n**Also worth flagging:** the working tree has uncommitted local modifications to `.env` and `evidence/hook-log.jsonl` that predate this run. I have not read or touched `.env` (per the deny-read rule) and made no commits.\n\n**What I need from you:** confirm whether `0005` is really the id you meant for `/sdlc-design`. If you intended a different change (one whose `intent.md` was just merged and is sitting in phase `a`), let me know the correct id and I'll proceed. I did not register a gate run, create a PR, or write any files, so nothing needs to be undone.",
++  "result_index": 0,
++  "session_id": "4003e718-ce86-4d53-a7a0-659ba748bbc1",
++  "stop_reason": "end_turn",
++  "subagent_stats": {
++    "by_type": {},
++    "completed": 0,
++    "failed": 0,
++    "killed": {
++      "parent": 0,
++      "system": 0,
++      "user": 0
++    },
++    "max_depth": 0,
++    "refused": {
++      "budget": 0,
++      "concurrency_limit": 0,
++      "depth_limit": 0
++    },
++    "requested": {
++      "background": 0,
++      "foreground": 0,
++      "unset": 0
++    },
++    "spawned": 0,
++    "spawned_by_subagents": 0,
++    "started_in_background": 0
++  },
++  "subtype": "success",
++  "terminal_reason": "completed",
++  "time_to_request_ms": 63,
++  "total_cost_usd": 0.2681696,
++  "ttft_ms": 1891,
++  "ttft_stream_ms": 982,
++  "type": "result",
++  "usage": {
++    "cache_creation": {
++      "ephemeral_1h_input_tokens": 43189,
++      "ephemeral_5m_input_tokens": 0
++    },
++    "cache_creation_input_tokens": 43189,
++    "cache_read_input_tokens": 81158,
++    "inference_geo": "not_available",
++    "input_tokens": 6,
++    "iterations": [
++      {
++        "cache_creation": {
++          "ephemeral_1h_input_tokens": 1966,
++          "ephemeral_5m_input_tokens": 0
++        },
++        "cache_creation_input_tokens": 1966,
++        "cache_read_input_tokens": 41223,
++        "input_tokens": 2,
++        "output_tokens": 6422,
++        "type": "message"
++      }
++    ],
++    "output_tokens": 7917,
++    "output_tokens_details": {
++      "thinking_tokens": 6456
++    },
++    "server_tool_use": {
++      "web_fetch_requests": 0,
++      "web_search_requests": 0
++    },
++    "service_tier": "standard",
++    "speed": "standard"
++  },
++  "uuid": "05d813f4-5aa7-42bb-a0c7-c5f6738a3651"
++}
+diff --git a/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/claude-b.stderr.txt b/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/claude-b.stderr.txt
+new file mode 100644
+index 0000000..6e30b16
+--- /dev/null
++++ b/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/claude-b.stderr.txt
+@@ -0,0 +1 @@
++Ignoring 4 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects["/home/runner/work/sdlc-sample-python/sdlc-sample-python"].hasTrustDialogAccepted: true in /home/runner/.claude.json.
+diff --git a/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/hook-log.jsonl b/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/hook-log.jsonl
+index 5970594..1e82443 100644
+--- a/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/hook-log.jsonl
++++ b/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/hook-log.jsonl
+@@ -8,3 +8,17 @@
+ {"at": "2026-09-25T17:29:27Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/proposal.json"], "reason": "", "tool": "Write", "verdict": "allow"}
+ {"at": "2026-09-25T17:29:27Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/proposal.json"], "reason": "", "tool": "Write", "verdict": "allow"}
+ {"at": "2026-09-25T17:29:27Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/proposal.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-25T18:37:10Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-25T18:37:18Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-25T20:01:05Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-25T20:01:05Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-25T20:01:13Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-25T20:01:45Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-25T20:03:49Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0005-ci-test-failure-rate-breached-3sigma-for/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-25T20:03:49Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0005-ci-test-failure-rate-breached-3sigma-for/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-25T20:03:49Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0005-ci-test-failure-rate-breached-3sigma-for/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-25T20:03:49Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0005-ci-test-failure-rate-breached-3sigma-for/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-25T20:04:00Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0005-ci-test-failure-rate-breached-3sigma-for/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-25T20:04:00Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0005-ci-test-failure-rate-breached-3sigma-for/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-25T20:04:00Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0005-ci-test-failure-rate-breached-3sigma-for/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-25T20:04:00Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0005-ci-test-failure-rate-breached-3sigma-for/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
+diff --git a/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/run-b.json b/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/run-b.json
+new file mode 100644
+index 0000000..41dec5f
+--- /dev/null
++++ b/changes/0005-ci-test-failure-rate-breached-3sigma-for/evidence/run-b.json
+@@ -0,0 +1,5 @@
++{
++  "phase": "b",
++  "spend_usd": null,
++  "started_at": "2026-09-25T20:01:49Z"
++}
+\ No newline at end of file
+diff --git a/changes/0005-ci-test-failure-rate-breached-3sigma-for/plan.md b/changes/0005-ci-test-failure-rate-breached-3sigma-for/plan.md
+new file mode 100644
+index 0000000..d75322d
+--- /dev/null
++++ b/changes/0005-ci-test-failure-rate-breached-3sigma-for/plan.md
+@@ -0,0 +1,54 @@
++# Plan: ci_test_failure_rate breached 3sigma (forced) on 2026-09-25 (from intent.md 2026-09-25, spec.md 2026-09-25)
++
++## Files that change
++- None under `sample_pkg/` or `tests/`: this is a no-op change (spec.md Design).
++- `changes/0005-ci-test-failure-rate-breached-3sigma-for/`: `spec.md` and `plan.md` are
++  written now; `evidence/` gains the phase (c) and (d) run artifacts (build/test/lint logs,
++  verifier report, adversarial verdicts, gate evidence) as later phases execute. Those are
++  evidence, not source, so they need no further plan.md update as they are added.
++
++## Order of work
++1. Phase (c) build: run the project's existing commands unchanged —
++   `python -m compileall -q .`, `python -m pytest`, `python -m ruff check .` — and save their
++   literal output as evidence that nothing in `sample_pkg/` or `tests/` needs to change. No
++   reproducing test is written (spec.md Flagged concerns): there is no failing behavior to
++   reproduce one for.
++2. Phase (d) test: repeat the same three commands in a fresh context; save `evidence/test.log`,
++   `build.log`, `lint.log`.
++3. Phase (e): publish the PR summary (no code change; all three commands green; incident
++   confirmed to be an empty rehearsal) for the owner's merge, which closes the incident
++   (`sdlc.yaml: deploy.action` is `none`, so nothing runs after merge).
++
++## Risks
++- Procedural risk only: a later phase's automation could assume every `fix`-type change
++  commits a reproducing test before locking test paths, and misfire on this change for
++  having none. Mitigation: spec.md's Flagged concerns names this departure from the generic
++  fix-type default explicitly, citing intent.md's read-only constraint, so the owner
++  confirms it at gate (b) before phase (c) runs.
++- No caller, consumer or data shape is touched (no source file changes), so there is nothing
++  downstream this change can break.
++- The riskiest step is step 1 (phase (c) build) only in the sense that it is the first phase
++  that could, in principle, find a reason to touch source; since spec.md's Design commits to
++  no implementation, the risk is a process one (see above), not a code one.
++
++## Options not taken
++1. Writing a reproducing test to follow the generic fix-type convention literally: not done,
++   because there is no failing behavior to reproduce it for — `evidence/detection.json` and
++   intent.md both confirm the finding is an empty rehearsal, and intent.md's Constraints
++   forbid any source file change.
++2. Treating this as a plain no-op change outside the incident pipeline (skipping phases
++   (c)-(e)): not done, because `status.yaml: entry_route: incident` and decision 25 route a
++   merged incident intent through the full phase sequence regardless of whether a code fix
++   results, for traceability.
++3. Proposing a fix to the `ci_test_failure_rate` source's baseline data (`n_baseline` was 0
++   even before forcing): not done, because intent.md explicitly excludes it from this design
++   ("not an open question this intent needs design to answer, since no fix is proposed
++   here").
++
++## Proof
++- `python -m compileall -q .` — no output, exit code 0.
++- `python -m pytest` — `9 passed in 0.01s`, exit code 0 (all 9 existing tests; none added,
++  removed or skipped).
++- `python -m ruff check .` — `All checks passed!`, exit code 0.
++- All three are existing, already-runnable project commands (`sdlc.yaml: commands`), not
++  tests still to be written: this change adds none.
+diff --git a/changes/0005-ci-test-failure-rate-breached-3sigma-for/spec.md b/changes/0005-ci-test-failure-rate-breached-3sigma-for/spec.md
+new file mode 100644
+index 0000000..1f4e3a3
+--- /dev/null
++++ b/changes/0005-ci-test-failure-rate-breached-3sigma-for/spec.md
+@@ -0,0 +1,77 @@
++# Spec: ci_test_failure_rate breached 3sigma (forced) on 2026-09-25
++Change id: 0005. Status: proposed. Produced by: sdlc plugin 0.2.19, /sdlc-design prompt v1 (article p.14). Skills: coding-standards, security-baseline, ux-conventions, data-conventions, definition-of-done (plugin 0.2.19); overrides: none
++
++## Requirements
++- The change makes no change to `sample_pkg/` or `tests/`: `evidence/detection.json` shows a
++  forced rehearsal (`forced: true`, `rule: forced`) with every quantitative field null or
++  empty, so there is no CI test-failure anomaly to fix (intent Problem, Proposed outcome).
++- The change carries the confirmation, for the owner, that the detect → diagnose → route →
++  PR pipeline exercised correctly end to end for a forced tier-3 finding (intent Proposed
++  outcome).
++- coding-standards rule 4 ("every behavior change ships with a test that fails without it")
++  does not apply: there is no behavior change.
++- coding-standards rule 5 (new dependency needs a Risks line) does not apply: no dependency
++  is added.
++- security-baseline rules 1-7 (authentication, input, secrets, data, audit, dependencies,
++  network) do not apply: no endpoint, secret, external input or dependency is touched. Rule 8
++  (a risk-list hit) was checked against `sdlc.yaml: risk_list` (auth, data migrations, money
++  movement, production config): none is touched.
++- ux-conventions does not apply: this project has no user interface and this change adds
++  none.
++- data-conventions does not apply: no schema, migration, stored field or personal data is
++  added, touched or logged.
++- definition-of-done: the phase (b) artifact set (spec.md and plan.md, adversarial verdict,
++  gate (b)) still applies even though the change itself is a no-op, because a merged incident
++  intent is routed through the full phase sequence for traceability (decision 25; `status.yaml:
++  entry_route: incident`, `gate.phase: a`, `result: passed`).
++- Build, test and lint stay exactly as green as they are today (`python -m compileall -q .`,
++  `python -m pytest`, `python -m ruff check .`); the change proves this rather than changing
++  it.
++
++## Design
++- No module, file, interface or data shape in this repository changes. The design of this
++  change is procedural: the change folder
++  (`changes/0005-ci-test-failure-rate-breached-3sigma-for/`) carries the rehearsal record
++  (`intent.md`, this `spec.md`, `plan.md`, `evidence/`) through phases (b)-(e) so the
++  incident closes with full traceability, per decision 25's treatment of a merged incident
++  intent whose diagnosis found nothing to fix.
++- Phase (c) build has no implementation step; it runs the project's existing build/test/lint
++  targets unchanged and records their output as evidence that the rehearsal touched nothing
++  in `sample_pkg/` or `tests/`.
++- Phase (d) test repeats the same fresh-context run for the same reason.
++- Phase (e) is the owner's merge (or dismissal) of the resulting PR, closing the incident;
++  `sdlc.yaml: deploy.action` is `none`, so nothing runs after merge.
++
++## Open questions from intent
++- Intent's "Open questions" section states: "None for this incident." It also notes, as an
++  aside and not as a question for this design: whether the `ci_test_failure_rate` source
++  should be configured so a genuine (non-forced) run has real baseline data
++  (`n_baseline` was 0 even before forcing). Intent is explicit that this "is not an open
++  question this intent needs design to answer, since no fix is proposed here" — carried
++  forward to the owner as a separate future concern, not answered or acted on by this design.
++
++## Flagged concerns
++- Fix-type reproducing-test rule vs. intent's read-only constraint: the `plan-template`
++  skill's rule for a `fix`-type change (`status.yaml: change_type: fix`) is that the first
++  item of Order of work is "write the reproducing test and see it fail," locking the test
++  paths from then on. intent.md's Constraints section states plainly "Read-only
++  investigation: no source file may change as part of this diagnosis," and its Proposed
++  outcome states "No code or test change: there is no anomaly to fix" — there is no failing
++  behavior to write a reproducing test for. `plan.md` below follows intent.md (no reproducing
++  test, no test-file lock) rather than the generic fix-type default. This is left open for
++  the owner: intent.md is the gate-(a)-approved source and states the constraint explicitly,
++  but it is not one of the five policy skills, so this design does not close the concern
++  itself — the owner's sign-off at gate (b) (a human gate in every profile) is the
++  confirmation that skipping the reproducing test is correct for this rehearsal-classed
++  incident.
++
++## Acceptance
++- `python -m compileall -q .` — no output, exit code 0 (unchanged).
++- `python -m pytest` — `9 passed in 0.01s`, exit code 0 (unchanged: no test added, removed or
++  skipped).
++- `python -m ruff check .` — `All checks passed!`, exit code 0 (unchanged).
++- No diff under `sample_pkg/` or `tests/` at any phase of this change; the only diff across
++  phases (b)-(e) stays inside
++  `changes/0005-ci-test-failure-rate-breached-3sigma-for/`.
++- The owner's merge (or dismissal) of the resulting PR is the measure of "done" for this
++  incident.
+diff --git a/changes/0005-ci-test-failure-rate-breached-3sigma-for/status.yaml b/changes/0005-ci-test-failure-rate-breached-3sigma-for/status.yaml
+index 09bc5f3..a853c89 100644
+--- a/changes/0005-ci-test-failure-rate-breached-3sigma-for/status.yaml
++++ b/changes/0005-ci-test-failure-rate-breached-3sigma-for/status.yaml
+@@ -1,15 +1,15 @@
+ id: "0005"
+ slug: ci-test-failure-rate-breached-3sigma-for
+ title: ci_test_failure_rate breached 3sigma (forced) on 2026-09-25
+-phase: f
++phase: b
+ entry_route: incident
+ change_type: fix
+ profile_override: null
+ review_override: null
+ gate:
+-  phase: f
++  phase: a
+   result: passed
+-  reason: waiting for the owner at gate (f)
++  reason: "merged by the owner: the incident intent PR's merge is gate (a) (decision 25)"
+   at: "2026-09-25T17:29:38Z"
+ parked_reason: null
+ iterations: 0
+@@ -24,5 +24,5 @@ tests_unlocked_by: null
+ runbook_authorized_by: null
+ abandoned_reason: null
+ created_at: "2026-09-25T17:27:44Z"
+-updated_at: "2026-09-25T17:29:38Z"
++updated_at: "2026-09-25T20:04:02Z"
+ schema_version: 1
