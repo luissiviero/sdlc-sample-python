@@ -5,12 +5,12 @@
   "phase": "f",
   "profile": "standard",
   "human_gate": true,
-  "result": "park",
-  "label": "sdlc:needs-human",
-  "head": "9abaac3d4d5e5dc962d9228eed77d39018d80aa4",
-  "at": "2026-09-25T20:19:50Z",
+  "result": "wait",
+  "label": "sdlc:f-ready",
+  "head": "c911bef240c6d35a9a20287a4914040f625503b4",
+  "at": "2026-09-25T20:22:23Z",
   "dry_run": false,
-  "reason": "route: runbook rollback-deploy touches a running system (authorization: go): Go requested",
+  "reason": "",
   "config_note": "",
   "checks": [
     {
@@ -24,8 +24,8 @@
         "classification": null,
         "panel_calls": 0,
         "panel_cap": 4,
-        "elapsed_minutes": 0.5,
-        "spend_usd": null,
+        "elapsed_minutes": 3.0,
+        "spend_usd": 0.4757874,
         "max_budget_usd": null
       }
     },
@@ -43,8 +43,7 @@
       "need": "",
       "details": {
         "dirty": [
-          ".env",
-          "changes/0007-ci-test-failure-rate-breached-3sigma-for/evidence/hook-log.jsonl"
+          "framework/"
         ]
       }
     },
@@ -78,9 +77,9 @@
     },
     {
       "name": "route",
-      "ok": false,
-      "reason": "runbook rollback-deploy touches a running system (authorization: go): Go requested",
-      "need": "Apply `sdlc:go` on this PR to run runbook rollback-deploy now (it touches a running system, decision 14), or merge to fix through the pipeline, or close with a reason to dismiss the finding.",
+      "ok": true,
+      "reason": "runbook rollback-deploy ran (go: a forced finding (a rehearsal) never pre-approves a runbook: Go required)",
+      "need": "",
       "details": {
         "proposal": {
           "schema_version": 1,
@@ -101,7 +100,7 @@
         },
         "outcome": {
           "args": {},
-          "at": "2026-09-25T20:19:37Z",
+          "at": "2026-09-25T20:22:21Z",
           "authorization": {
             "authorization": "go",
             "builtin": false,
@@ -112,12 +111,19 @@
             "source": "a forced finding (a rehearsal) never pre-approves a runbook: Go required",
             "supported": true
           },
-          "reason": "the route touches a running system (authorization: go, decision 14)",
+          "authorized_by": "luissiviero",
+          "branch": null,
+          "commit": null,
+          "exit_code": 0,
+          "output_tail": "$ python -c 'print('\"'\"'rollback rehearsal'\"'\"')'\nrollback rehearsal\n",
+          "pr_number": null,
+          "pr_url": null,
+          "reason": "",
           "runbook": "rollback-deploy",
-          "status": "go-requested"
+          "status": "ran"
         }
       }
     }
   ],
-  "what_i_need": "## What I need from you\nGate (f) parked change 0007 (ci-test-failure-rate-breached-3sigma-for) on 2026-09-25T20:19:50Z.\n- **route**: runbook rollback-deploy touches a running system (authorization: go): Go requested\n  - what I need: Apply `sdlc:go` on this PR to run runbook rollback-deploy now (it touches a running system, decision 14), or merge to fix through the pipeline, or close with a reason to dismiss the finding.\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0007 --phase f` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
+  "what_i_need": ""
 }
