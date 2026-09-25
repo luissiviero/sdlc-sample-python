@@ -1,0 +1,17 @@
+{
+  "args": {},
+  "at": "2026-09-25T20:19:37Z",
+  "authorization": {
+    "authorization": "go",
+    "builtin": false,
+    "note": "",
+    "rehearsed_at": null,
+    "route": "runbook:rollback-deploy",
+    "runbook": "rollback-deploy",
+    "source": "a forced finding (a rehearsal) never pre-approves a runbook: Go required",
+    "supported": true
+  },
+  "reason": "the route touches a running system (authorization: go, decision 14)",
+  "runbook": "rollback-deploy",
+  "status": "go-requested"
+}

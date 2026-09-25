@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "tier": 3,
-  "route": "pull_request",
+  "route": "runbook:rollback-deploy",
   "args": {},
-  "rationale": "The finding is a forced rehearsal (forced: true, rule: forced) with no observation data: mean, sigma, latest and observations are all null/empty, and both commits and failed_run_urls are empty. There is no specific pytest node id showing intermittent failure (ruling out runbook:quarantine-flaky-test) and no single commit in the breach window implicated (ruling out runbook:revert-pr, and breach_start is null so there is no window to check). runbook:rollback-deploy does not apply either: nothing was deployed or degraded, this is a rehearsal of the detection loop itself, not a production incident. A forced finding never pre-approves a runbook regardless of what is proposed here, so pull_request is both the only justified route and the one that reaches the owner for triage."
+  "rationale": "Change request from the owner's fix-round review: this rehearsal is meant to exercise the Go path, so the route is rewritten to propose the project runbook runbook:rollback-deploy (no arguments) rather than pull_request. The finding itself is still a forced rehearsal (forced: true, rule: forced) with no observation data: mean, sigma, latest and observations are all null/empty, and both commits and failed_run_urls are empty, so there is no specific pytest node id or bad commit in scope (ruling out runbook:quarantine-flaky-test and runbook:revert-pr on the merits). runbook:rollback-deploy is listed as a rehearsed rollback on a declared production for 2026-09-25 (decision 26), which is exactly the scenario this rehearsal is exercising: no production system was actually degraded, but the route lets the owner rehearse the Go authorization mechanics end to end."
 }

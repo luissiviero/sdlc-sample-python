@@ -13,11 +13,15 @@ anomaly — `mean`, `sigma`, `sigmas`, `latest`, `observations`, `n_baseline`, `
 failure signal to diagnose.
 
 ## Proposed outcome
-No code fix is proposed: there is no anomaly in the running system to fix. The rehearsal
-exercised the tier 3 diagnosis-and-routing path end to end (this intent, the route proposal,
-gate (f), and the triage PR) so the owner can confirm the loop behaves correctly on a forced
-trigger. The outcome is a reviewed record of that rehearsal; the owner closes this PR with a
-comment once satisfied the mechanics worked, per the framework's dismissal path.
+No code fix is proposed: there is no anomaly in the running system to fix. Per the owner's
+fix-round review comment, this rehearsal is meant to exercise the Go path: the route
+proposal (`evidence/proposal.json`) names `runbook:rollback-deploy` (no arguments), listed
+as a rehearsed rollback on a declared production for 2026-09-25 (decision 26). The rehearsal
+exercises the tier 3 diagnosis-and-routing path end to end (this intent, the route proposal,
+gate (f), and the Go authorization mechanics) so the owner can confirm the loop behaves
+correctly on a forced trigger through to a runbook route. The outcome is a reviewed record of
+that rehearsal; the owner closes this PR with a comment once satisfied the mechanics worked,
+per the framework's dismissal path.
 
 ## Affected users and systems
 None. No production system, test suite or CI pipeline was actually degraded. The only
