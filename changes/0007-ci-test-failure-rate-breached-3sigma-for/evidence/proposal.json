@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "tier": 3,
+  "route": "pull_request",
+  "args": {},
+  "rationale": "The finding is a forced rehearsal (forced: true, rule: forced) with no observation data: mean, sigma, latest and observations are all null/empty, and both commits and failed_run_urls are empty. There is no specific pytest node id showing intermittent failure (ruling out runbook:quarantine-flaky-test) and no single commit in the breach window implicated (ruling out runbook:revert-pr, and breach_start is null so there is no window to check). runbook:rollback-deploy does not apply either: nothing was deployed or degraded, this is a rehearsal of the detection loop itself, not a production incident. A forced finding never pre-approves a runbook regardless of what is proposed here, so pull_request is both the only justified route and the one that reaches the owner for triage."
+}
