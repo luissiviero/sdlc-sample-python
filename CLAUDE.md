@@ -19,8 +19,8 @@ demonstrates this on purpose via `tests/test_flag.py`; never set that variable i
 
 ## Layout
 
-- `sample_pkg/calc.py`: `add`, `divide` and `percent`. `divide` raises `ZeroDivisionError` on a zero divisor; `percent(part, whole)` is `part * 100 / whole` through `divide`, so it raises the same on a zero `whole`.
-- `sample_pkg/__init__.py`: re-exports `add`, `divide` and `percent` (the public API).
+- `sample_pkg/calc.py`: `add`, `divide`, `percent` and `mean`. `divide` raises `ZeroDivisionError` on a zero divisor; `percent(part, whole)` is `part * 100 / whole` through `divide`, so it raises the same on a zero `whole`; `mean(values)` takes a `Collection[float]`, raises `ValueError` on an empty collection and averages through `divide` otherwise.
+- - `sample_pkg/__init__.py`: re-exports `add`, `divide`, `percent` and `mean` (the public API).
 - `tests/test_calc.py`: behaviour tests for the package.
 - `tests/test_flag.py`: the intentional flag-gated failure. Leave it in place.
 - `pyproject.toml`: project metadata, pytest `testpaths = ["tests"]`, ruff `line-length = 100`.
@@ -35,7 +35,7 @@ demonstrates this on purpose via `tests/test_flag.py`; never set that variable i
 
 ## Things Claude gets wrong
 <!-- One line per recurring mistake; added when a review flags the same finding twice. -->
-- (none yet)
+- A new public function in `sample_pkg/calc.py` leaves the Layout section above outdated: update the two Layout entries in the same change, and say so in plan.md
 
 ## SDLC framework
 - Every change lives in `changes/<id>-<slug>/` (intent.md → spec.md + plan.md → evidence/);
