@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-28T14:21:23Z",
+  "bounded": false,
+  "class": "supply-chain",
+  "file": ".github/workflows/sdlc-fix.yml",
+  "head": "52cacff591170f1fa98be1ff3dbfc06e5048d6ee",
+  "kind": "scan",
+  "line": 87,
+  "schema_version": 1,
+  "severity": "important",
+  "signature": "25040a03deaeb46c",
+  "summary": "sdlc-fix.yml, sdlc-abandon.yml, sdlc-runbook.yml and sdlc-evals.yml all check out an unmerged, unreviewed pull-request head (or its merge ref) and then execute `.github/scripts/sdlc_pin.py` straight out of that checkout before any review gate runs, so anyone who can push the head branch of an open PR (a same-repo contributor, or the PR author for evals.yml's plain `pull_request` trigger) can replace that script to point the next `actions/checkout` of `luissiviero/sdlc-framework` at a ref they control, or to emit an arbitrary npm version string, and get their own code executed in a job that holds ANTHROPIC_API_KEY, CLAUDE_CODE_OAUTH_TOKEN and a GITHUB_TOKEN scoped contents/pull-requests/issues/checks/actions write - entirely bypassing the branch-protection/PR-review gate the rest of the pipeline relies on, since the PR never has to be merged or approved for the run to fire."
+}
