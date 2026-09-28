@@ -1,0 +1,103 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 766562,
+  "duration_ms": 20950,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 534,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 266103,
+      "cacheReadInputTokens": 4145088,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 2.4825201000000003,
+      "inputTokens": 126,
+      "maxOutputTokens": 64000,
+      "outputTokens": 79182,
+      "provider": "firstParty",
+      "thinkingTokens": 47560,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 5,
+  "origin": {
+    "kind": "task-notification"
+  },
+  "permission_denials": [],
+  "queued_turn_count": 0,
+  "result": "PR #47 opened and parked (label `sdlc:needs-human`). Phase (b) design is complete for this run.\n\n**Report:** PR https://github.com/luissiviero/sdlc-sample-python/pull/47 \u2014 gate (b) result: **park** (4 open flagged concerns in spec.md, plus a `production config` risk-list hit needing the owner's `accept-risk`). No deferred-review panel ran (`review: parked` mode). Nothing further started; the owner reviews at the gate.",
+  "result_index": 2,
+  "session_id": "f31a766e-7a1e-46bb-a90a-74e2677e0e8d",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {
+      "sdlc:adversarial-reviewer": 1,
+      "sdlc:researcher": 1
+    },
+    "completed": 2,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 1,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 2
+    },
+    "spawned": 2,
+    "spawned_by_subagents": 0,
+    "started_in_background": 2
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 26,
+  "total_cost_usd": 2.4825201000000003,
+  "ttft_ms": 3056,
+  "ttft_stream_ms": 534,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 6811,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 6811,
+    "cache_read_input_tokens": 636604,
+    "inference_geo": "not_available",
+    "input_tokens": 10,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 520,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 520,
+        "cache_read_input_tokens": 130262,
+        "input_tokens": 2,
+        "output_tokens": 167,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 1356,
+    "output_tokens_details": {
+      "thinking_tokens": 341
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "98247029-ea7b-43a8-b9cc-1b899a64d40a"
+}
