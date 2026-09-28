@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "change_id": "0008",
+  "slug": "security-supply-chain-sdlc-fix-yml-sdlc",
+  "phase": "b",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "park",
+  "label": "sdlc:needs-human",
+  "head": "1f4fd866824b2affa4786f07e9b640e53dbd1636",
+  "at": "2026-09-28T15:44:31Z",
+  "dry_run": false,
+  "reason": "open_concerns: 4 flagged concern(s) still open in spec.md; risk_list: risk-list hit: 'production config' in spec.md Flagged concerns: text",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 0,
+        "cap": 2,
+        "classification": "non-routine",
+        "panel_calls": 0,
+        "panel_cap": 4,
+        "elapsed_minutes": 11.1,
+        "spend_usd": null,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "design_scope",
+      "ok": true,
+      "reason": "the committed diff stays inside changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/",
+      "need": "",
+      "details": {
+        "dirty": [
+          ".env",
+          "changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/evidence/adversarial-review-b.json",
+          "changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/evidence/diff-b.patch",
+          "changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/evidence/hook-log.jsonl",
+          "changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/evidence/panel/b-items.json"
+        ]
+      }
+    },
+    {
+      "name": "open_concerns",
+      "ok": false,
+      "reason": "4 flagged concern(s) still open in spec.md",
+      "need": "Close each open item under '## Flagged concerns' with a decision (article p.14 step 4), or leave a review comment for /sdlc-fix.",
+      "details": {
+        "open": [
+          "- Risk-list item `production config` (sdlc.yaml) is touched: the six workflows hold a",
+          "- Scope beyond the four files the finding names: including `sdlc-test.yml` and",
+          "- Step-ordering prerequisite: extracting the trusted copy via `git show",
+          "- Test approach is new territory for this project: nothing in `tests/` today exercises"
+        ]
+      }
+    },
+    {
+      "name": "panel",
+      "ok": true,
+      "reason": "no panel decision at this gate",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "reason": "build, test and lint exit 0",
+      "need": "",
+      "details": {
+        "runs": {
+          "build": {
+            "command": "python -m compileall -q .",
+            "exit_code": 0,
+            "output": ""
+          },
+          "test": {
+            "command": "python -m pytest",
+            "exit_code": 0,
+            "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0\nrootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\ncollected 9 items\n\ntests/test_calc.py ........                                              [ 88%]\ntests/test_flag.py .                                                     [100%]\n\n============================== 9 passed in 0.01s ===============================\n"
+          },
+          "lint": {
+            "command": "python -m ruff check .",
+            "exit_code": 0,
+            "output": "All checks passed!\n"
+          }
+        }
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": false,
+      "reason": "risk-list hit: 'production config' in spec.md Flagged concerns: text",
+      "need": "Review the change with the risk in mind. To let it continue, accept the item for this change: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/state/cli.py\" accept-risk --root . --id 0008 --item \"<item>\"` (recorded in status.yaml).",
+      "details": {
+        "hits": {
+          "production config": [
+            "spec.md Flagged concerns: text"
+          ]
+        },
+        "accepted": []
+      }
+    },
+    {
+      "name": "owner_actions",
+      "ok": true,
+      "reason": "risk acceptances, iteration resets and test-lock lifts, if any, were committed by the owner or applied by the owner's label",
+      "need": "",
+      "details": {
+        "risk_accepted": [],
+        "label_actors": {}
+      }
+    },
+    {
+      "name": "adversarial_review",
+      "ok": true,
+      "reason": "adversarial reviewer says continue",
+      "need": "",
+      "details": {
+        "classification": "non-routine",
+        "reasons": []
+      }
+    }
+  ],
+  "what_i_need": "## What I need from you\nGate (b) parked change 0008 (security-supply-chain-sdlc-fix-yml-sdlc) on 2026-09-28T15:44:31Z.\n- **open_concerns**: 4 flagged concern(s) still open in spec.md\n  - what I need: Close each open item under '## Flagged concerns' with a decision (article p.14 step 4), or leave a review comment for /sdlc-fix.\n- **risk_list**: risk-list hit: 'production config' in spec.md Flagged concerns: text\n  - what I need: Review the change with the risk in mind. To let it continue, accept the item for this change: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/state/cli.py\" accept-risk --root . --id 0008 --item \"<item>\"` (recorded in status.yaml).\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0008 --phase b` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
+}

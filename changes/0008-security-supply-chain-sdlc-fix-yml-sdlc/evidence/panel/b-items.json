@@ -1,0 +1,58 @@
+{
+  "decided": 0,
+  "gate": "park",
+  "items": [
+    {
+      "decided": false,
+      "item": "Risk-list item `production config` (sdlc.yaml) is touched: the six workflows hold a",
+      "key": "concern:1ea7a9aed1f0c356",
+      "kind": "concern",
+      "n": 1
+    },
+    {
+      "decided": false,
+      "item": "Scope beyond the four files the finding names: including `sdlc-test.yml` and",
+      "key": "concern:6284be822834f73f",
+      "kind": "concern",
+      "n": 2
+    },
+    {
+      "decided": false,
+      "item": "Step-ordering prerequisite: extracting the trusted copy via `git show",
+      "key": "concern:bd3bd60bb03d7193",
+      "kind": "concern",
+      "n": 3
+    },
+    {
+      "decided": false,
+      "item": "Test approach is new territory for this project: nothing in `tests/` today exercises",
+      "key": "concern:754497738431fbca",
+      "kind": "concern",
+      "n": 4
+    }
+  ],
+  "iterations": {
+    "cap": 2,
+    "left": 2,
+    "used": 0
+  },
+  "mode": "parked",
+  "panel_calls": {
+    "cap": 4,
+    "left": 4,
+    "used": 0
+  },
+  "parks": [
+    {
+      "check": "risk_list",
+      "reason": "risk-list hit: 'production config' in spec.md Flagged concerns: text"
+    }
+  ],
+  "pending": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "phase": "b"
+}

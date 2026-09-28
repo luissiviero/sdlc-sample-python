@@ -1,0 +1,403 @@
+ .../evidence/hook-log.jsonl                        |  38 ++++++
+ .../evidence/run-b.json                            |   5 +
+ .../plan.md                                        | 148 ++++++++++++++++++++
+ .../spec.md                                        | 150 +++++++++++++++++++++
+ .../status.yaml                                    |   8 +-
+ 5 files changed, 345 insertions(+), 4 deletions(-)
+
+diff --git a/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/evidence/hook-log.jsonl b/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/evidence/hook-log.jsonl
+new file mode 100644
+index 0000000..c8dcddb
+--- /dev/null
++++ b/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/evidence/hook-log.jsonl
+@@ -0,0 +1,38 @@
++{"action": "none", "at": "2026-09-28T15:32:36Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" show --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0008", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-28T15:32:44Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:32:44Z", "command": "git status && echo ---- && git log --oneline -15 && echo ---- && git diff --stat", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-28T15:32:50Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:32:50Z", "command": "git diff -- changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/status.yaml && echo ---- && git status --porcelain -- .env && echo ---- && git log -1 --format=%H -- .env", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:32:59Z", "command": "grep -n \"def commit_phase\\|def commit-phase\\|add(\\|git add\\|subprocess\" framework/plugin/state/cli.py | head -50", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-28T15:33:05Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:33:05Z", "command": "git fetch origin && git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo \"no-symbolic-ref\"", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-28T15:33:07Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:33:07Z", "command": "git branch -a | grep \"0008/b\" && git status --branch --porcelain=v1 | head -5", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:33:11Z", "command": "ls changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/ && echo ---- && ls changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/evidence/ 2>/dev/null", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-28T15:33:20Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:33:20Z", "command": "git log origin/main..sdlc/0008/b --oneline && echo \"---(above: commits unique to sdlc/0008/b)---\" && git rev-parse sdlc/0008/b origin/main", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:33:22Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" start-run --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0008 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:33:25Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" spec-header --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0008", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:33:30Z", "command": "cat sdlc.yaml", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:33:34Z", "command": "ls .github/workflows/ && echo --- && ls .github/scripts/ 2>/dev/null", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:33:44Z", "command": "wc -l .github/workflows/sdlc-fix.yml .github/workflows/sdlc-abandon.yml .github/workflows/sdlc-runbook.yml .github/workflows/sdlc-evals.yml .github/scripts/sdlc_pin.py .github/workflows/sdlc-build.yml", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:34:04Z", "command": "cat CLAUDE.md 2>/dev/null | head -100", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:34:09Z", "command": "cat changes/README.md 2>/dev/null | head -60", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:34:14Z", "command": "ls evals/ && echo --- && cat evals/check.py | head -80", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:34:16Z", "command": "ls evals/cases/ 2>/dev/null && echo \"---count---\" && find evals/cases -maxdepth 1 -type d | wc -l", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:34:43Z", "command": "sed -n '1,40p' .github/workflows/sdlc-fix.yml", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:34:55Z", "command": "sleep 1", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:37:10Z", "command": "ls framework/plugin/evals/ 2>/dev/null; echo ---; ls framework/plugin/ci/ 2>/dev/null; echo ---; sed -n '1,20p' framework/plugin/ci/run_phase.py 2>/dev/null | head -20", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:37:59Z", "command": "cat pyproject.toml && echo --- && python -c \"import yaml; print(yaml.__version__)\" 2>&1 && echo --- && grep -rn \"yaml\" framework/plugin/state/*.py 2>/dev/null | grep -i import | head -5", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:39:14Z", "command": "sed -n '83,110p' .github/workflows/sdlc-fix.yml", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-09-28T15:40:35Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-28T15:40:35Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-28T15:40:35Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-28T15:40:35Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-28T15:41:15Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-28T15:41:15Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-28T15:41:15Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-28T15:41:16Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-09-28T15:41:18Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:41:18Z", "command": "git status --porcelain", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-09-28T15:41:21Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0008 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+diff --git a/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/evidence/run-b.json b/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/evidence/run-b.json
+new file mode 100644
+index 0000000..881489e
+--- /dev/null
++++ b/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/evidence/run-b.json
+@@ -0,0 +1,5 @@
++{
++  "phase": "b",
++  "spend_usd": null,
++  "started_at": "2026-09-28T15:33:23Z"
++}
+\ No newline at end of file
+diff --git a/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/plan.md b/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/plan.md
+new file mode 100644
+index 0000000..7c0092a
+--- /dev/null
++++ b/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/plan.md
+@@ -0,0 +1,148 @@
++# Plan: security: supply-chain: sdlc-fix.yml, sdlc-abandon.yml, sdlc-runbook.yml and (from intent.md 2026-09-28, spec.md 2026-09-28)
++
++## Files that change
++- `tests/test_workflow_pin_trust.py` — new. The reproducing test: for each of the six
++  workflow files below, extracts the `id: pin` step's `run:` block by plain text search and
++  executes it inside a throwaway git fixture whose `origin/<default>` and working-tree
++  copies of `.github/scripts/sdlc_pin.py` print different sentinel values; asserts the
++  `origin/<default>` sentinel is the one that ran. Written first, and seen to fail against
++  the unfixed workflow files (build guide step 25 pattern; the change is `change_type:
++  feature` in `status.yaml` but the intent's own Constraints require this regardless).
++- `.github/workflows/sdlc-fix.yml` — the `pin` step (currently `sdlc-fix.yml:93-97`) gains a
++  preliminary `git fetch origin "$SDLC_DEFAULT_BRANCH"` and executes
++  `git show "origin/$SDLC_DEFAULT_BRANCH:.github/scripts/sdlc_pin.py"` piped to `python`
++  instead of `python .github/scripts/sdlc_pin.py` from the working tree; `id: pin` and its
++  `ref`/`claude_code` outputs are unchanged.
++- `.github/workflows/sdlc-abandon.yml` — same change to its `pin` step
++  (currently `sdlc-abandon.yml:61-65`).
++- `.github/workflows/sdlc-runbook.yml` — same change to its `pin` step
++  (currently `sdlc-runbook.yml:57-61`).
++- `.github/workflows/sdlc-evals.yml` — same change to its `pin` step
++  (currently `sdlc-evals.yml:56-60`).
++- `.github/workflows/sdlc-test.yml` — same change to its `pin` step (the narrower instance
++  this design pass found; spec.md Open questions #1).
++- `.github/workflows/sdlc-deploy.yml` — same change to its `pin` step (same reason).
++- `evals/cases/0008-security-supply-chain-sdlc-fix-yml-sdlc/prompt.md` — new. States the
++  vulnerability class per `evals/README.md`'s layout: a workflow step executes a repository
++  script straight out of an untrusted, unreviewed checkout before any review gate.
++- `evals/cases/0008-security-supply-chain-sdlc-fix-yml-sdlc/checks.yaml` — new. Requires the
++  diff to stay inside the six workflow files, `tests/` and `evals/`, and requires
++  `python -m pytest tests/test_workflow_pin_trust.py` to exit 0.
++
++## Order of work
++1. Write `tests/test_workflow_pin_trust.py` and run it; confirm it fails against the current
++   (unfixed) content of all six workflow files — the reproducing test, written before any
++   fix (intent Constraints).
++2. Fix `.github/workflows/sdlc-fix.yml`'s `pin` step; re-run the test and confirm that
++   file's case now passes while the other five still fail.
++3. Fix `.github/workflows/sdlc-abandon.yml`'s `pin` step the same way.
++4. Fix `.github/workflows/sdlc-runbook.yml`'s `pin` step the same way.
++5. Fix `.github/workflows/sdlc-evals.yml`'s `pin` step the same way.
++6. Fix `.github/workflows/sdlc-test.yml`'s `pin` step the same way.
++7. Fix `.github/workflows/sdlc-deploy.yml`'s `pin` step the same way; run the full test file
++   and confirm all six cases pass.
++8. Add the eval case (`evals/cases/0008-security-supply-chain-sdlc-fix-yml-sdlc/prompt.md`
++   and `checks.yaml`).
++9. Run the project's verification block in full: `python -m compileall -q .`,
++   `python -m pytest`, `python -m ruff check .`; paste the literal output (CLAUDE.md
++   Verifying your work; definition-of-done).
++
++## Risks
++1. **What this could break**: every one of the twelve SDLC workflows reads
++   `steps.pin.outputs.ref`/`steps.pin.outputs.claude_code` from the `pin` step — the
++   `actions/checkout` of `luissiviero/sdlc-framework` and the `npm install -g
++   @anthropic-ai/claude-code@...` step, in all twelve files, not just the six touched here.
++   A malformed `pin` step in any of the six breaks every later phase run through that
++   workflow (nobody would be notified — a run that can't finish parks). Callers: none
++   outside the workflow files themselves; no Python code imports or calls `sdlc_pin.py`
++   directly.
++2. **Riskiest step**: step 1 through 7 (rewriting the `pin` step's `run:` content in each of
++   the six files) — a one-character mistake in the `git show`/pipe syntax silently breaks
++   the pin step for that workflow's every future run, and nothing in `ci.yml` (Python
++   build/test/lint only) would catch a broken workflow step; only the new reproducing test
++   and, ultimately, the workflow actually firing in CI would. Mitigation: apply the exact
++   same snippet at all six sites (reduces one-off mistakes), and make the reproducing test
++   execute the real extracted shell snippet (not just grep for a string) so a syntactically
++   broken pin step fails the test too.
++3. **Fetch-ordering risk** (spec.md Flagged concerns): `git show
++   "origin/$SDLC_DEFAULT_BRANCH:..."` needs that ref present locally. `sdlc-fix.yml`'s first
++   checkout uses `fetch-depth: 0` but only for the checked-out ref, not necessarily every
++   remote branch, so `origin/$SDLC_DEFAULT_BRANCH` may not exist locally yet at the `pin`
++   step; the added `git fetch origin "$SDLC_DEFAULT_BRANCH"` must run before the `git show`,
++   in all six files. Not yet confirmed for `sdlc-abandon.yml`/`sdlc-runbook.yml`/
++   `sdlc-evals.yml`/`sdlc-test.yml`/`sdlc-deploy.yml`'s own checkout options individually —
++   phase (c) confirms each one and adds the fetch regardless, since it is cheap and
++   idempotent.
++4. **`sdlc_pin.py` run via a pipe, not a file path**: piping the script's bytes to
++   `python -` means `sys.argv[0]`/`__file__` are not a real path. Phase (c) must confirm
++   `sdlc_pin.py` does not rely on `__file__` (its own relative imports, if any) before
++   relying on this invocation shape; if it does, the fetch step instead writes the trusted
++   bytes to a temp file and invokes `python <tempfile>` (`$TMPDIR`, not `/tmp` per the
++   project's sandbox convention).
++5. **Risk-list hit** (`production config`): flagged in spec.md, open; the change parks at
++   gate (b) until the owner accepts it (`state/cli.py accept-risk`) — expected, not a defect
++   to fix here.
++
++## Options not taken
++- **Re-architecting the primary checkout** (default branch first, PR content pulled in only
++  for the specific paths each workflow legitimately needs) instead of fixing only the
++  `sdlc_pin.py` invocation: rejected. `sdlc-fix.yml`/`sdlc-abandon.yml`/`sdlc-runbook.yml`
++  intentionally check out the PR's own head to commit back onto it (the files' own header
++  comments say so); replacing that primary checkout would be a much larger, riskier change
++  than the vulnerability requires, and the finding's actual mechanism is specifically that
++  the *script* runs untrusted, not that the PR content is checked out at all.
++- **A shared composite action or script file** instead of the same snippet repeated six
++  times: rejected (spec.md, Open questions #2) — a shared file living in this repository's
++  tree would face the identical trust problem if it were itself read from the PR-head
++  checkout; the six sites would still each need the same `git fetch`/`git show` guard ahead
++  of using it, so a shared file adds indirection without removing the duplication.
++- **A YAML-parsing test** (`import yaml`, walk the parsed steps) instead of text extraction
++  plus an executable fixture: rejected (spec.md Flagged concerns, closed) — introduces a
++  runtime dependency this project does not otherwise have, against coding-standards rule 5
++  and CLAUDE.md's "Keep the project minimal" convention, for a check that a plain-text
++  extraction of one named step (`id: pin`) does not need.
++- **Narrowing the fix to only the four files the finding names**, leaving `sdlc-test.yml`
++  and `sdlc-deploy.yml` for a follow-up change: considered, not taken by this plan (spec.md
++  Flagged concerns leaves it open for the owner to override) — the intent's own Proposed
++  outcome asks for "every other place with the same pattern," and the design pass found two
++  more with the identical structural flaw, so this plan fixes all six; the owner can still
++  ask for the narrower scope with a review comment (`/sdlc-fix`).
++
++## Proof
++- `tests/test_workflow_pin_trust.py` (new; written in step 1) — fails on the current six
++  files, passes once all six are fixed. This is the test named by the intent's "a test that
++  reproduces the vulnerability is written first" constraint.
++- `python -m pytest` — all tests pass (the existing `tests/test_calc.py`,
++  `tests/test_flag.py`, plus the new file); paste the literal `N passed in ...` line.
++- `python -m compileall -q .` — no output, exit code 0.
++- `python -m ruff check .` — `All checks passed!`.
++- `evals/cases/0008-security-supply-chain-sdlc-fix-yml-sdlc/checks.yaml` — the case's own
++  check that `python -m pytest tests/test_workflow_pin_trust.py` exits 0 (evidence that the
++  eval case actually exercises the fix, not just documents it).
++
++## Interrogation
++1. **What could this change break?** Every one of the twelve SDLC workflows depends on the
++   `pin` step's `ref`/`claude_code` outputs (see Risks #1); only six are edited, but a
++   mistake in any of them stops that workflow's every future phase run. No Python caller
++   depends on `sdlc_pin.py`'s CLI directly — it is invoked only from workflow YAML.
++2. **Which step is riskiest, and why?** Rewriting the `pin` step's shell content in each of
++   the six files (Order of work steps 2–7): it sits on the critical path of every phase this
++   project runs through CI, and nothing in the existing Python test/lint/build targets can
++   catch a broken GitHub Actions step directly — only the new reproducing test, which
++   executes the real extracted snippet, stands in for that check (Risks #2).
++3. **What other options were considered, and why not?** See Options not taken: a checkout
++   re-architecture (too large for the actual flaw), a shared composite-action file (doesn't
++   remove the duplication, adds indirection), a YAML-parsing test (new dependency against
++   project convention), and narrowing scope to the four named files (left open for the owner
++   rather than decided here, since the intent asks for full coverage of the pattern).
++4. **Could an engineer who never saw this conversation implement this from the plan alone?**
++   Yes, with two things worth restating here since they are easy to miss from Files that
++   change alone: (a) the fix is to *which copy* of `sdlc_pin.py` executes, not to the
++   primary PR-head/merge-ref checkout, which stays as it is in all six files; (b) the
++   `git fetch origin "$SDLC_DEFAULT_BRANCH"` addition must land *before* the `git show`
++   that extracts the trusted script, in every file, or the extraction fails closed (Risks
++   #3).
++5. **Does every item in Proof exist as a runnable test, or is it still to be written?**
++   `tests/test_workflow_pin_trust.py` and the eval case's `checks.yaml` are both still to be
++   written (Order of work steps 1 and 8); `tests/test_calc.py` and `tests/test_flag.py`
++   already exist and are unmodified by this change.
+diff --git a/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/spec.md b/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/spec.md
+new file mode 100644
+index 0000000..531b979
+--- /dev/null
++++ b/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/spec.md
+@@ -0,0 +1,150 @@
++# Spec: security: supply-chain: sdlc-fix.yml, sdlc-abandon.yml, sdlc-runbook.yml and
++Change id: 0008. Status: proposed. Produced by: sdlc plugin 0.2.26, /sdlc-design prompt v1 (article p.14). Skills: coding-standards, security-baseline, ux-conventions, data-conventions, definition-of-done (plugin 0.2.26); overrides: none
++
++## Requirements
++- Every workflow step that runs `.github/scripts/sdlc_pin.py` after checking out an
++  unmerged/unreviewed PR ref (head or merge ref) executes the default branch's copy of the
++  script, never the just-checked-out working-tree copy — in `.github/workflows/sdlc-fix.yml`,
++  `sdlc-abandon.yml`, `sdlc-runbook.yml`, `sdlc-evals.yml` (named in the finding) and
++  `sdlc-test.yml`, `sdlc-deploy.yml` (the same pattern, found by this design pass; see
++  Open questions #1). Security-baseline rule 6 ("no `eval`/`exec` ... on external data").
++- The `ref=`/`claude_code=` outputs every workflow's later steps consume
++  (`actions/checkout` of `luissiviero/sdlc-framework`, `npm install -g
++  @anthropic-ai/claude-code@"$CLAUDE_CODE_VERSION"`) are therefore always produced by the
++  trusted copy of the script, in all six files.
++- `sdlc_pin.py`'s existing behaviour (reading `sdlc.yaml`'s `plugin.version` /
++  `plugin.claude_code` from the default branch via its own `--ref` argument) is unchanged;
++  only which copy of the `.py` file's bytes execute changes.
++- The six files that already avoid the pattern are not touched: `sdlc-build.yml` and
++  `sdlc-design.yml` (job gated on `pull_request.merged == true` before anything but the
++  "find the change" step runs), `sdlc-release.yml` (checkout pinned to
++  `merge_commit_sha`, read-only permissions, no model secret), `sdlc-detect.yml`,
++  `sdlc-digest.yml`, `sdlc-scan.yml` (no `pull_request` trigger at all). Coding-standards
++  rule 3 ("one change, one concern").
++- A reproducing test exists (intent Constraints) that fails against the current six files
++  and passes once each is fixed, without executing real GitHub Actions and without a new
++  runtime dependency (coding-standards rule 5; CLAUDE.md "Keep the project minimal").
++- No credential appears in the change, its test or its evidence (security-baseline rule 3;
++  intent Constraints).
++- An eval case is added under `evals/cases/` capturing this vulnerability class (intent
++  Proposed outcome; article p.48 step 7).
++- No pre-existing test is edited to make the fix pass (intent Constraints; coding-standards
++  rule 4).
++- `CLAUDE.md`'s Layout section does not need an update: its "Things Claude gets wrong" rule
++  is scoped to a new public function in `sample_pkg/calc.py`, which this change does not
++  add. `CLAUDE.md` is guardrail-protected regardless (never edited by a run) — no edit is
++  proposed either way.
++- `data-conventions` and `ux-conventions`: not applicable — the change touches no schema,
++  migration, stored field, event contract or user-facing surface.
++
++## Design
++`sdlc_pin.py` already draws a trust boundary around the *data* it reads: called with
++`--ref "origin/$SDLC_DEFAULT_BRANCH"`, it reads `sdlc.yaml`'s pin block from the default
++branch (via `git show <ref>:<file>`) rather than from whatever `sdlc.yaml` happens to sit in
++the working tree. It does not draw the same boundary around its own *code*: every affected
++workflow's `pin` step runs `python .github/scripts/sdlc_pin.py ...` straight from the
++working tree, which for `sdlc-fix.yml`, `sdlc-abandon.yml`, `sdlc-runbook.yml` and
++`sdlc-evals.yml` is the just-checked-out PR head or merge ref — content an attacker
++controls. `sdlc-test.yml` and `sdlc-deploy.yml` check out the PR's merge ref (no explicit
++`ref:`, so `actions/checkout`'s default) and run the same `pin` step before
++`run_phase.py`'s own actor-identity check executes later in the job, reachable once an
++`sdlc:c-approved`/`sdlc:d-approved` label is applied (needs triage/write access, unlike the
++other four).
++
++The fix extends `sdlc_pin.py`'s existing trust boundary from the data it reads to the code
++that runs: each of the six `pin` steps gains a preliminary
++`git fetch origin "$SDLC_DEFAULT_BRANCH"` (the ref is not necessarily present locally at
++this point in the job today — `sdlc_pin.py` currently fetches it lazily, from inside the
++untrusted copy, only when it reads `sdlc.yaml`), then extracts and runs the default
++branch's copy of the script instead of the working-tree path, e.g.
++`git show "origin/$SDLC_DEFAULT_BRANCH:.github/scripts/sdlc_pin.py" | python - --ref
++"origin/$SDLC_DEFAULT_BRANCH"` (exact invocation is a phase (c) implementation detail; the
++`id: pin` step and its `ref`/`claude_code` `GITHUB_OUTPUT` contract are unchanged so every
++downstream step in all twelve workflows keeps working). The primary checkout of the PR
++head/merge ref is untouched in all six files: later steps (pushing commits back to the PR
++branch in `sdlc-fix.yml`/`sdlc-abandon.yml`/`sdlc-runbook.yml`, reading the PR's own
++`changes/<id>-<slug>/` folder) legitimately need it; only the `sdlc_pin.py` invocation
++changes. There is no separate shared file or composite action: the same snippet is applied
++identically at all six call sites, because a shared action file living in this repository's
++own tree would face the identical trust problem if it were itself read from the PR-head
++checkout (see Open questions #2).
++
++The reproducing test (`tests/`, exact filename in plan.md) avoids adding a YAML-parsing
++dependency (see Flagged concerns): it locates the `pin` step's `run:` block in each of the
++six workflow files by plain text search (the step is identified by `id: pin`, no full YAML
++parse needed for one step), then executes the extracted shell snippet inside a throwaway
++git fixture whose `origin/<default>` and working-tree copies of `sdlc_pin.py` are rigged to
++print different sentinel values; the test asserts the sentinel that actually ran is the
++`origin/<default>` one. Run against the current files this fails (the working-tree sentinel
++runs); it passes once all six are fixed.
++
++The eval case (`evals/cases/0008-security-supply-chain-sdlc-fix-yml-sdlc/`, `evals/`
++is currently empty — this is the suite's first case) follows `evals/README.md`'s documented
++layout: `prompt.md` restates the vulnerability class (a workflow step executes a repository
++script straight out of an untrusted, unreviewed checkout before any review gate), and
++`checks.yaml` requires the diff to stay inside the six workflow files, `tests/` and
++`evals/`, and requires the reproducing test's command to exit 0.
++
++## Open questions from intent
++- "Where else does the supply-chain pattern occur, and does one fix cover every place?"
++  Answered from the codebase: beyond the four files the finding names, `sdlc-test.yml` and
++  `sdlc-deploy.yml` show a narrower instance of the same class — a checkout of the PR's
++  merge ref, then the `pin` step's `sdlc_pin.py` execution, before `run_phase.py`'s own
++  actor-identity check runs later in the job — reachable only once a triage/write-permission
++  label is applied. `sdlc-build.yml`/`sdlc-design.yml` are already safe (gated on
++  `pull_request.merged == true` before anything but the "find the change" step runs).
++  `sdlc-release.yml` already implements the correct pattern (checkout pinned to
++  `merge_commit_sha`, read-only permissions, no model secret) and is a template for the fix.
++  `sdlc-detect.yml`/`sdlc-digest.yml`/`sdlc-scan.yml` have no `pull_request` trigger. One
++  fix — execute the default branch's copy of `sdlc_pin.py`, never the checkout's
++  working-tree copy — covers every place with the pattern, applied identically at the six
++  sites named in Requirements.
++- "Is a shared guard (a helper, a middleware, a schema) better than local fixes?" Answered:
++  the guard is the same snippet repeated at all six call sites, not a shared file or
++  composite action — see Design, last paragraph of the first section.
++- "Which eval case captures the class so it does not return?" Answered: shape given in
++  Design's last paragraph, following `evals/README.md`'s documented layout; the exact
++  `checks.yaml` content is written in phase (c) (plan.md lists it under Files that change).
++
++## Flagged concerns
++- Risk-list item `production config` (sdlc.yaml) is touched: the six workflows hold a
++  write-scoped `GITHUB_TOKEN` and, in four of the six, both model secrets, and they directly
++  control the CI/CD pipeline that gates production actions (`sdlc.yaml: deploy.production:
++  true`), including `sdlc-deploy.yml` itself (phase e). Security-baseline rule 8. Open —
++  needs the owner's `state/cli.py accept-risk`.
++- Scope beyond the four files the finding names: including `sdlc-test.yml` and
++  `sdlc-deploy.yml` is this design's judgment call (Open questions #1); their exploitation
++  bar is higher than the other four (a triage/write-permission label must be applied first).
++  The owner may prefer to narrow the fix to the four named files and track the other two
++  separately. Open.
++- Step-ordering prerequisite: extracting the trusted copy via `git show
++  "origin/$SDLC_DEFAULT_BRANCH:.github/scripts/sdlc_pin.py"` needs that ref fetched locally
++  first; none of the six workflows fetch it before the `pin` step today (`sdlc_pin.py`
++  currently fetches it lazily, from inside the untrusted copy, only when it reads
++  `sdlc.yaml`). The fix adds an explicit `git fetch` ahead of an existing step every SDLC
++  workflow phase depends on. A guess made because the intent does not specify the mechanism.
++  Open.
++- Test approach is new territory for this project: nothing in `tests/` today exercises
++  `.github/workflows/*.yml`; the shape (extract a step's shell block by text search, execute
++  it against a rigged git fixture) is this design's proposal, not an established project
++  pattern. Open — the owner should confirm it before build.
++- [x] No new runtime dependency for the reproducing test: decided per coding-standards
++  rule 5 (no new dependency without a `plan.md` Risks line and the owner's merge) and
++  CLAUDE.md's "Keep the project minimal" convention — the test uses text extraction of the
++  `pin` step's `run:` block plus an executable shell-fixture check, not a YAML-parsing
++  library, even though `PyYAML` happens to be importable in this environment.
++
++## Acceptance
++- All six touched workflow files keep a step `id: pin` producing `ref=`/`claude_code=`
++  `GITHUB_OUTPUT` values in the same shape as today, now sourced only from the default
++  branch's copy of `.github/scripts/sdlc_pin.py`.
++- The new reproducing test fails against the pre-fix content of the six files and passes
++  once all six are fixed, run via `python -m pytest`.
++- `python -m compileall -q .` exits 0 with no output; `python -m pytest` reports all tests
++  passed (the existing 9 plus the new one(s)); `python -m ruff check .` reports
++  `All checks passed!`.
++- `evals/cases/0008-security-supply-chain-sdlc-fix-yml-sdlc/{prompt.md,checks.yaml}` exists,
++  matching `evals/README.md`'s documented layout.
++- The diff touches only the six named workflow files, `tests/`, `evals/cases/` and this
++  change's own `changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/` folder — no `.env`,
++  no other `changes/<id>-<slug>/`, no `.claude/**`, `CLAUDE.md`, `REVIEW.md` or `sdlc.yaml`.
+diff --git a/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/status.yaml b/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/status.yaml
+index 392cbf4..0ee687f 100644
+--- a/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/status.yaml
++++ b/changes/0008-security-supply-chain-sdlc-fix-yml-sdlc/status.yaml
+@@ -1,15 +1,15 @@
+ id: "0008"
+ slug: security-supply-chain-sdlc-fix-yml-sdlc
+ title: "security: supply-chain: sdlc-fix.yml, sdlc-abandon.yml, sdlc-runbook.yml and"
+-phase: f
++phase: b
+ entry_route: incident
+ change_type: feature
+ profile_override: null
+ review_override: null
+ gate:
+-  phase: f
++  phase: a
+   result: passed
+-  reason: waiting for the owner at gate (f)
++  reason: "merged by the owner: the incident intent PR's merge is gate (a) (decision 25)"
+   at: "2026-09-28T14:21:25Z"
+ parked_reason: null
+ iterations: 0
+@@ -24,5 +24,5 @@ tests_unlocked_by: null
+ runbook_authorized_by: null
+ abandoned_reason: null
+ created_at: "2026-09-28T14:21:23Z"
+-updated_at: "2026-09-28T14:21:25Z"
++updated_at: "2026-09-28T15:41:22Z"
+ schema_version: 1
