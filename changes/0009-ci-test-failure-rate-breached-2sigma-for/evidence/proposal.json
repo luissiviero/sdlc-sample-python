@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "tier": 2,
+  "route": "pull_request",
+  "args": {},
+  "rationale": "Tier 2 only permits pull_request (the intent PR is the diagnosis's whole output). The finding is also a forced/rehearsal event (rule: forced, mean/sigma null, latest day 0 failures, no failed_run_urls), so no runbook would be appropriate even if one were available at this tier: there is no real regression to quarantine or revert. Ruled out an organic breach (no baseline exists) and the one tail-window failed run (2026-09-26, run 36257154359) as its cause, since that run failed at the toolchain-install step, not in tests, and predates the breach date."
+}
