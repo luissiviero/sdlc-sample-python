@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "change_id": "0009",
+  "slug": "ci-test-failure-rate-breached-2sigma-for",
+  "phase": "f",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "wait",
+  "label": "sdlc:f-ready",
+  "head": "70b51baf4d1a393f0eeca08e44a9c6bcdfb3987b",
+  "at": "2026-09-29T15:46:59Z",
+  "dry_run": false,
+  "reason": "",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 0,
+        "cap": 3,
+        "classification": null,
+        "panel_calls": 0,
+        "panel_cap": 4,
+        "elapsed_minutes": 1.0,
+        "spend_usd": 0.40311460000000005,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "design_scope",
+      "ok": true,
+      "reason": "the committed diff stays inside changes/0009-ci-test-failure-rate-breached-2sigma-for/",
+      "need": "",
+      "details": {
+        "dirty": [
+          ".sdlc/detect-cache.json",
+          "detect-log.jsonl"
+        ]
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "detection",
+      "ok": true,
+      "reason": "ci_test_failure_rate at tier 2 (forced), signature dcfe764c7235cd9c, not dismissed",
+      "need": "",
+      "details": {
+        "tier": 2,
+        "rule": "forced",
+        "signature": "dcfe764c7235cd9c",
+        "forced": true
+      }
+    },
+    {
+      "name": "route",
+      "ok": true,
+      "reason": "pull_request: this intent PR is the route (p.44 step 5)",
+      "need": "",
+      "details": {
+        "proposal": {
+          "schema_version": 1,
+          "tier": 2,
+          "route": "pull_request",
+          "args": {},
+          "rationale": "Tier 2 only permits pull_request (the intent PR is the diagnosis's whole output). The finding is also a forced/rehearsal event (rule: forced, mean/sigma null, latest day 0 failures, no failed_run_urls), so no runbook would be appropriate even if one were available at this tier: there is no real regression to quarantine or revert. Ruled out an organic breach (no baseline exists) and the one tail-window failed run (2026-09-26, run 36257154359) as its cause, since that run failed at the toolchain-install step, not in tests, and predates the breach date."
+        },
+        "resolved": {
+          "route": "pull_request",
+          "authorization": "preapproved",
+          "source": "the incident intent PR (p.44 step 5)",
+          "runbook": null,
+          "builtin": false,
+          "supported": true,
+          "note": "",
+          "rehearsed_at": null
+        }
+      }
+    }
+  ],
+  "what_i_need": ""
+}
