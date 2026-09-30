@@ -7,8 +7,8 @@
   "human_gate": true,
   "result": "wait",
   "label": "sdlc:f-ready",
-  "head": "70b51baf4d1a393f0eeca08e44a9c6bcdfb3987b",
-  "at": "2026-09-29T15:46:59Z",
+  "head": "f46618c8db4f93e92a792bc2a75d63392e0f6ee2",
+  "at": "2026-09-30T08:39:46Z",
   "dry_run": false,
   "reason": "",
   "config_note": "",
@@ -19,13 +19,13 @@
       "reason": "within the run limits",
       "need": "",
       "details": {
-        "iterations": 0,
+        "iterations": 1,
         "cap": 3,
         "classification": null,
         "panel_calls": 0,
         "panel_cap": 4,
-        "elapsed_minutes": 1.0,
-        "spend_usd": 0.40311460000000005,
+        "elapsed_minutes": 0.2,
+        "spend_usd": null,
         "max_budget_usd": null
       }
     },
@@ -43,8 +43,8 @@
       "need": "",
       "details": {
         "dirty": [
-          ".sdlc/detect-cache.json",
-          "detect-log.jsonl"
+          ".env",
+          "changes/0009-ci-test-failure-rate-breached-2sigma-for/evidence/hook-log.jsonl"
         ]
       }
     },
