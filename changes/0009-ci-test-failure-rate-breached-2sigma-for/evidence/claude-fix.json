@@ -1,0 +1,97 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 47627,
+  "duration_ms": 58169,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 819,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 32601,
+      "cacheReadInputTokens": 814551,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 0.34303619999999996,
+      "inputTokens": 36,
+      "maxOutputTokens": 64000,
+      "outputTokens": 4965,
+      "provider": "firstParty",
+      "thinkingTokens": 1467,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 20,
+  "permission_denials": [],
+  "queued_turn_count": 0,
+  "result": "PR #51 \u2014 https://github.com/luissiviero/sdlc-sample-python/pull/51 \u2014 gate (f) result: wait (passed all checks, waiting on the owner), iterations 1 of 3, no requests left open.",
+  "result_index": 0,
+  "session_id": "4968d9fe-d51f-44cf-8709-7275cd3a339c",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {},
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 0,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "spawned": 0,
+    "spawned_by_subagents": 0,
+    "started_in_background": 0
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 115,
+  "total_cost_usd": 0.34303619999999996,
+  "ttft_ms": 1293,
+  "ttft_stream_ms": 819,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 32601,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 32601,
+    "cache_read_input_tokens": 814551,
+    "inference_geo": "not_available",
+    "input_tokens": 36,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 436,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 436,
+        "cache_read_input_tokens": 52789,
+        "input_tokens": 2,
+        "output_tokens": 76,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 4965,
+    "output_tokens_details": {
+      "thinking_tokens": 1467
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "973a2f56-f17d-498e-a099-39735cc0d697"
+}
