@@ -2,6 +2,9 @@
 Author: sdlc-maintain (automated diagnosis). Status: proposed. Change id: 0009. Entry route: incident dcfe764c7235cd9c.
 
 ## Problem
+Restated for the record: this finding was forced (a manual `workflow_dispatch` rehearsal of
+the detection loop, not an organic breach) and no code change follows from it.
+
 The detection loop's `ci_test_failure_rate` metric fired a tier 2 finding on 2026-09-28, but
 the finding record (`evidence/detection.json`) shows `"forced": true` and
 `"reason": "tier 2 forced by workflow_dispatch (a rehearsal of the loop)"` — this run was

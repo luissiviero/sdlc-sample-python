@@ -1,0 +1,26 @@
+{
+  "collected_at": "2026-09-30T08:38:55+00:00",
+  "head": "52ba145a621029117b33db0f4c487cfabb4f09e0",
+  "not_applied": [],
+  "ok": true,
+  "pr_number": 51,
+  "repo": "luissiviero/sdlc-sample-python",
+  "requests": [
+    {
+      "association": "OWNER",
+      "at": "2026-09-30T08:37:56Z",
+      "author": "luissiviero",
+      "body": "Rehearsal check: please restate in intent.md that this finding was forced and no code change follows.",
+      "id": 4142572507,
+      "kind": "review_comment",
+      "line": 29,
+      "outdated": false,
+      "path": "changes/0009-ci-test-failure-rate-breached-2sigma-for/status.yaml",
+      "thread": "PRRT_kwDOUigsls6nc58W",
+      "url": "https://github.com/luissiviero/sdlc-sample-python/pull/51#discussion_r4142572507"
+    }
+  ],
+  "route": "api",
+  "schema_version": 1,
+  "unavailable": null
+}
