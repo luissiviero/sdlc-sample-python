@@ -16,4 +16,3 @@ rule must keep out of the model's context.
 
 `main` is protected: every change, the owner's own guardrail edits (`CLAUDE.md`, `REVIEW.md`,
 `sdlc.yaml`, `.claude/**`) included, reaches it through a pull request.
-
