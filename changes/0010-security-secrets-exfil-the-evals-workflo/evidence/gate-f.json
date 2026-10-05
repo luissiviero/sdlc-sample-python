@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "change_id": "0010",
+  "slug": "security-secrets-exfil-the-evals-workflo",
+  "phase": "f",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "wait",
+  "label": "sdlc:f-ready",
+  "head": "2dfbf888bd87df03b12720ee906db1fa98334525",
+  "at": "2026-10-05T15:04:47Z",
+  "dry_run": false,
+  "reason": "",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 0,
+        "cap": 3,
+        "classification": null,
+        "panel_calls": 0,
+        "panel_cap": 4,
+        "elapsed_minutes": 0.0,
+        "spend_usd": null,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "design_scope",
+      "ok": true,
+      "reason": "the committed diff stays inside changes/0010-security-secrets-exfil-the-evals-workflo/",
+      "need": "",
+      "details": {
+        "dirty": [
+          "changes/0010-security-secrets-exfil-the-evals-workflo/evidence/run-f.json",
+          "framework/",
+          "scan-findings.json",
+          "scan-run.json",
+          "scan-run.stderr.txt"
+        ]
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "detection",
+      "ok": true,
+      "reason": "security: secrets-exfil at tier 3 (scan), signature 992cb085c9e477eb, not dismissed",
+      "need": "",
+      "details": {
+        "tier": 3,
+        "rule": "scan",
+        "signature": "992cb085c9e477eb",
+        "forced": false
+      }
+    },
+    {
+      "name": "route",
+      "ok": true,
+      "reason": "pull_request: this intent PR is the route (p.44 step 5)",
+      "need": "",
+      "details": {
+        "proposal": {
+          "schema_version": 1,
+          "tier": 3,
+          "route": "pull_request",
+          "args": {},
+          "rationale": "the weekly security review; the intent PR is the route"
+        },
+        "resolved": {
+          "route": "pull_request",
+          "authorization": "preapproved",
+          "source": "the incident intent PR (p.44 step 5)",
+          "runbook": null,
+          "builtin": false,
+          "supported": true,
+          "note": "",
+          "rehearsed_at": null
+        }
+      }
+    }
+  ],
+  "what_i_need": ""
+}
