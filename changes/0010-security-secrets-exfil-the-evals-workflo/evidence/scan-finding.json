@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-05T15:04:46Z",
+  "bounded": true,
+  "class": "secrets-exfil",
+  "file": ".github/workflows/sdlc-evals.yml",
+  "head": "94c013506f5d782870868bfb0d65ff43ba74ca95",
+  "kind": "scan",
+  "line": 28,
+  "schema_version": 1,
+  "severity": "important",
+  "signature": "992cb085c9e477eb",
+  "summary": "The evals workflow runs on a plain `pull_request` trigger (not `pull_request_target`) scoped only by a `paths` filter on CLAUDE.md/.claude/**/evals/**, so a pull request from any fork that touches one of those paths executes that fork's own copy of this workflow file and of sdlc.yaml's commands.setup, with ANTHROPIC_API_KEY and CLAUDE_CODE_OAUTH_TOKEN available in the job's environment - letting an attacker who opens such a PR add a step (or a setup command) that exfiltrates both secrets over the open internet, since GitHub Actions runners are not subject to the project's own Claude-sandbox network allowlist."
+}
