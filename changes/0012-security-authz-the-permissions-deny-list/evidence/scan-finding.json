@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-12T15:49:12Z",
+  "bounded": false,
+  "class": "authz",
+  "file": ".claude/settings.json",
+  "head": "94c013506f5d782870868bfb0d65ff43ba74ca95",
+  "kind": "scan",
+  "line": 14,
+  "schema_version": 1,
+  "severity": "important",
+  "signature": "d6f98f0dff40c7c4",
+  "summary": "The permissions.deny list only blocks the Edit tool from touching guardrail files (.claude/**, CLAUDE.md, REVIEW.md, sdlc.yaml), but permissions.allow grants unrestricted `Bash(git *)`, so any Claude session (build, test, fix, review) can overwrite those same files via git (e.g. `git checkout <ref> -- CLAUDE.md`, `git show <ref>:sdlc.yaml > sdlc.yaml`, or a direct commit+push) without ever invoking the denied Edit tool, defeating the 'owner changes guardrails only in a reviewed PR' policy stated in CLAUDE.md."
+}
