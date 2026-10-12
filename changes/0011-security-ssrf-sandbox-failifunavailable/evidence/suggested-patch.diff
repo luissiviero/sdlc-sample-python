@@ -1,0 +1,10 @@
+--- a/.claude/settings.json
++++ b/.claude/settings.json
+@@ -39,7 +39,7 @@
+   "sandbox": {
+     "enabled": true,
+-    "failIfUnavailable": false,
++    "failIfUnavailable": true,
+     "allowUnsandboxedCommands": false,
+     "network": {
+       "allowedDomains": [
