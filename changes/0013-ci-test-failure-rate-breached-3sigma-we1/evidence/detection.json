@@ -1,0 +1,154 @@
+{
+  "action": "propose",
+  "at": "2026-10-14T01:57:08Z",
+  "breach_start": "2026-10-13",
+  "commits": [
+    {
+      "at": "2026-10-13T04:26:39-03:00",
+      "sha": "78abbb0afbda79f8df143bbf5801d8fdc7dabaf2",
+      "subject": "Merge pull request #59 from luissiviero/revert-58-luissiviero-patch-16"
+    },
+    {
+      "at": "2026-10-13T04:19:43-03:00",
+      "sha": "7a7f73920e3b2acc96d11abe7bb596e66a566915",
+      "subject": "Revert \"Add initial provocation tests with assertions\""
+    },
+    {
+      "at": "2026-10-13T04:16:33-03:00",
+      "sha": "edc4f4be08fd30449c1a3c81e09cc10cadb498c4",
+      "subject": "Merge pull request #58 from luissiviero/luissiviero-patch-16"
+    },
+    {
+      "at": "2026-10-13T00:11:59-03:00",
+      "sha": "c61007baf9c5c9696645ca6ceb13efaf0926fc12",
+      "subject": "Add initial provocation tests with assertions"
+    }
+  ],
+  "direction": "above",
+  "failed_run_urls": [
+    "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361643987",
+    "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361544355"
+  ],
+  "forced": false,
+  "kind": "detect",
+  "latest": {
+    "at": "2026-10-13",
+    "meta": {
+      "failed": 2,
+      "failed_run_ids": [
+        38361643987,
+        38361544355
+      ],
+      "failed_run_urls": [
+        "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361643987",
+        "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361544355"
+      ],
+      "runs": 5
+    },
+    "value": 0.4
+  },
+  "mean": 0.006493506493506493,
+  "metric": "ci_test_failure_rate",
+  "n_baseline": 11,
+  "n_tail": 8,
+  "observations": [
+    {
+      "at": "2026-10-06",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-07",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-08",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-09",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-10",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-11",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-12",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-13",
+      "meta": {
+        "failed": 2,
+        "failed_run_ids": [
+          38361643987,
+          38361544355
+        ],
+        "failed_run_urls": [
+          "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361643987",
+          "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361544355"
+        ],
+        "runs": 5
+      },
+      "value": 0.4
+    }
+  ],
+  "reason": "tier 3 by we1 (rules hit: we1): latest value 0.4 is 18.27 sigma from the mean 0.006494 (sigma 0.02154, 11 baseline point(s) over 30d, above); breach since 2026-10-13",
+  "rule": "we1",
+  "rules_hit": [
+    "we1"
+  ],
+  "schema_version": 1,
+  "sigma": 0.021536524612697398,
+  "sigmas": 18.271587481412478,
+  "signature": "68b6897ece2328d6",
+  "source": "github-actions",
+  "tier": 3,
+  "window_days": 30
+}
