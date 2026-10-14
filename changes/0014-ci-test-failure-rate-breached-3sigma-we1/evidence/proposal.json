@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "tier": 3,
+  "route": "pull_request",
+  "args": {},
+  "rationale": "Both failed runs trace to the same commit (edc4f4b/c61007b, PR #58), which added tests/test_provocation.py with two constant-vs-constant assertions that ruff flags as PLR0133, failing the Lint step before Test ever ran. That commit was already reverted on main via PR #59 (7a7f739/78abbb0) about ten minutes later, on 2026-10-13 -- a full day before this diagnosis ran. Every CI run on main since the revert is green. runbook:revert-pr does not fit because the responsible commit is already gone from main; runbook:quarantine-flaky-test does not fit because this is a deterministic lint failure on specific (already-removed) content, not an intermittently-flaky test; runbook:rollback-deploy does not fit because this is not a deployment/production incident. No runbook action is needed or possible, so the route is pull_request: this intent documents that the incident is already resolved and lets the owner dismiss it (or capture a lesson) at gate (f)."
+}
