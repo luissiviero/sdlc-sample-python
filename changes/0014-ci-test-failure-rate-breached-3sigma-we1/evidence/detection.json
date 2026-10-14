@@ -1,0 +1,154 @@
+{
+  "action": "propose",
+  "at": "2026-10-14T13:54:18Z",
+  "breach_start": "2026-10-13",
+  "commits": [
+    {
+      "at": "2026-10-14T09:59:44-03:00",
+      "sha": "0beba954f07c3ac7e1f22afa74cfa0faae7e4b1d",
+      "subject": "Merge pull request #61 from luissiviero/ccr-4a548fe6-7cqzlo"
+    },
+    {
+      "at": "2026-10-14T09:58:58-03:00",
+      "sha": "a2a1d23915b6da8da7b4caf99eb6e40f7d93e22a",
+      "subject": "Update guidelines for CLAUDE.md entries"
+    },
+    {
+      "at": "2026-10-14T09:44:08-03:00",
+      "sha": "89194c82acbfc29512fa3fa977e4cb8b82c8dcab",
+      "subject": "Update SDLC plugin version to 1.0.0"
+    },
+    {
+      "at": "2026-10-14T11:52:41Z",
+      "sha": "943e560e3f0dd7d02d4613fa109cdda12d6dafad",
+      "subject": "Upgrade the SDLC workflow copies to plugin 1.0.0"
+    }
+  ],
+  "direction": "above",
+  "failed_run_urls": [
+    "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361643987",
+    "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361544355"
+  ],
+  "forced": false,
+  "kind": "detect",
+  "latest": {
+    "at": "2026-10-13",
+    "meta": {
+      "failed": 2,
+      "failed_run_ids": [
+        38361643987,
+        38361544355
+      ],
+      "failed_run_urls": [
+        "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361643987",
+        "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361544355"
+      ],
+      "runs": 5
+    },
+    "value": 0.4
+  },
+  "mean": 0.006493506493506493,
+  "metric": "ci_test_failure_rate",
+  "n_baseline": 11,
+  "n_tail": 8,
+  "observations": [
+    {
+      "at": "2026-10-06",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-07",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-08",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-09",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-10",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-11",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-12",
+      "meta": {
+        "failed": 0,
+        "failed_run_ids": [],
+        "failed_run_urls": [],
+        "runs": 1
+      },
+      "value": 0.0
+    },
+    {
+      "at": "2026-10-13",
+      "meta": {
+        "failed": 2,
+        "failed_run_ids": [
+          38361643987,
+          38361544355
+        ],
+        "failed_run_urls": [
+          "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361643987",
+          "https://github.com/luissiviero/sdlc-sample-python/actions/runs/38361544355"
+        ],
+        "runs": 5
+      },
+      "value": 0.4
+    }
+  ],
+  "reason": "tier 3 by we1 (rules hit: we1): latest value 0.4 is 18.27 sigma from the mean 0.006494 (sigma 0.02154, 11 baseline point(s) over 30d, above); breach since 2026-10-13",
+  "rule": "we1",
+  "rules_hit": [
+    "we1"
+  ],
+  "schema_version": 1,
+  "sigma": 0.021536524612697398,
+  "sigmas": 18.271587481412478,
+  "signature": "68b6897ece2328d6",
+  "source": "github-actions",
+  "tier": 3,
+  "window_days": 30
+}
