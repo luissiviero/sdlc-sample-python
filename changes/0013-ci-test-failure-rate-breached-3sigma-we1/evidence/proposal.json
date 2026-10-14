@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "tier": 3,
+  "route": "pull_request",
+  "args": {},
+  "rationale": "No listed runbook fits. runbook:quarantine-flaky-test is for a test failing intermittently with no code change behind it; this failure is 100% reproducible (ruff PLR0133 on tests/test_provocation.py's two always-false assertions) and the Test step never even ran, so it is not a flaky test. runbook:revert-pr is for one commit in the breach window that introduced the failures; the causing commit (c61007b, merged as edc4f4b) was already reverted on the default branch by a human 3 minutes after merging (7a7f739, merged as 78abbb0), before this diagnosis ran -- re-running a revert of c61007b now would be a no-op or conflict against a tree that no longer has its change, and main is already verified clean (python -m ruff check . passes). runbook:rollback-deploy does not apply: this incident has no deploy involved. The intent PR is therefore the diagnosis's whole output, for the owner to confirm the incident is already resolved and decide whether a lessons/ entry is worth writing."
+}
