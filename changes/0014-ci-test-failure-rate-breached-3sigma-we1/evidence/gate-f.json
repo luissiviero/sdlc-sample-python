@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "change_id": "0014",
+  "slug": "ci-test-failure-rate-breached-3sigma-we1",
+  "phase": "f",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "wait",
+  "label": "sdlc:f-ready",
+  "head": "261006cfa2e35d6d3be27f34fdb920e3317e9b15",
+  "at": "2026-10-14T13:59:53Z",
+  "dry_run": false,
+  "reason": "",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 0,
+        "cap": 3,
+        "classification": null,
+        "panel_calls": 0,
+        "panel_cap": 4,
+        "elapsed_minutes": 4.7,
+        "spend_usd": 0.8095464000000002,
+        "spend_usd_total": 0.809546,
+        "spend_entries": 1,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "design_scope",
+      "ok": true,
+      "reason": "the committed diff stays inside changes/0014-ci-test-failure-rate-breached-3sigma-we1/",
+      "need": "",
+      "details": {
+        "dirty": [
+          ".sdlc/detect-cache.json",
+          "detect-log.jsonl"
+        ]
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "detection",
+      "ok": true,
+      "reason": "ci_test_failure_rate at tier 3 (we1), signature 68b6897ece2328d6, not dismissed",
+      "need": "",
+      "details": {
+        "tier": 3,
+        "rule": "we1",
+        "signature": "68b6897ece2328d6",
+        "forced": false
+      }
+    },
+    {
+      "name": "route",
+      "ok": true,
+      "reason": "pull_request: this intent PR is the route (p.44 step 5)",
+      "need": "",
+      "details": {
+        "proposal": {
+          "schema_version": 1,
+          "tier": 3,
+          "route": "pull_request",
+          "args": {},
+          "rationale": "Both failed runs trace to the same commit (edc4f4b/c61007b, PR #58), which added tests/test_provocation.py with two constant-vs-constant assertions that ruff flags as PLR0133, failing the Lint step before Test ever ran. That commit was already reverted on main via PR #59 (7a7f739/78abbb0) about ten minutes later, on 2026-10-13 -- a full day before this diagnosis ran. Every CI run on main since the revert is green. runbook:revert-pr does not fit because the responsible commit is already gone from main; runbook:quarantine-flaky-test does not fit because this is a deterministic lint failure on specific (already-removed) content, not an intermittently-flaky test; runbook:rollback-deploy does not fit because this is not a deployment/production incident. No runbook action is needed or possible, so the route is pull_request: this intent documents that the incident is already resolved and lets the owner dismiss it (or capture a lesson) at gate (f)."
+        },
+        "resolved": {
+          "route": "pull_request",
+          "authorization": "preapproved",
+          "source": "the incident intent PR (p.44 step 5)",
+          "runbook": null,
+          "builtin": false,
+          "supported": true,
+          "note": "",
+          "rehearsed_at": null
+        }
+      }
+    }
+  ],
+  "what_i_need": ""
+}
