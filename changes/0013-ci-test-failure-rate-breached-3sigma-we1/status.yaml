@@ -1,7 +1,7 @@
 id: "0013"
 slug: ci-test-failure-rate-breached-3sigma-we1
 title: ci_test_failure_rate breached 3sigma (we1) on 2026-10-13
-phase: f
+phase: abandoned
 entry_route: incident
 change_type: fix
 profile_override: null
@@ -22,8 +22,8 @@ iterations_reset_by: null
 iterations_reset_at: null
 tests_unlocked_by: null
 runbook_authorized_by: null
-abandoned_reason: null
+abandoned_reason: pull request 60 closed without a merge
 build_pr: null
 created_at: "2026-10-14T01:57:09Z"
-updated_at: "2026-10-14T02:01:00Z"
+updated_at: "2026-10-14T12:09:19Z"
 schema_version: 1
