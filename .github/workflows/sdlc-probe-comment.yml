@@ -1,0 +1,99 @@
+# A throwaway probe for the framework's R17 (decision 34): what an `issue_comment` run uses
+# and holds, before the framework's comment dispatcher is designed. It runs no model, checks
+# nothing out and reads the comment's text only in the job's `if:`. It is removed by a second
+# pull request once its facts are recorded in the framework's docs/notes/.
+#
+# What it records, in the job log:
+# 1. which workflow file and commit an `issue_comment` run uses (the default branch's, or the
+#    pull request's head);
+# 2. the comment author's login, type and author_association, as the coarse `if:` sees them;
+# 3. the token's permissions (the "Set up job" section lists them);
+# 4. whether a workflow_dispatch sent with this run's token starts a run (the run dispatches
+#    this same file, and the dispatched run logs its input).
+#
+# Named "SDLC ..." so the detection metric excludes it (plugin/detect/source.py).
+name: SDLC probe (issue_comment)
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      from_run:
+        description: "The issue_comment run that dispatched this one"
+        required: false
+        type: string
+
+permissions:
+  actions: write
+  contents: read
+  pull-requests: read
+
+jobs:
+  probe:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.pull_request && startsWith(github.event.comment.body, '@claude probe'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Record the run's facts and dispatch once
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          FROM_RUN: ${{ inputs.from_run }}
+          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
+          COMMENT_AUTHOR_TYPE: ${{ github.event.comment.user.type }}
+          COMMENT_ASSOCIATION: ${{ github.event.comment.author_association }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        shell: python
+        run: |
+          import json, os, urllib.error, urllib.request
+
+          api = os.environ["GITHUB_API_URL"]
+          repo = os.environ["GITHUB_REPOSITORY"]
+          token = os.environ["GH_TOKEN"]
+
+          def call(method, path, body=None):
+              data = json.dumps(body).encode() if body is not None else None
+              req = urllib.request.Request(f"{api}{path}", data=data, method=method)
+              req.add_header("Authorization", f"Bearer {token}")
+              req.add_header("Accept", "application/vnd.github+json")
+              try:
+                  with urllib.request.urlopen(req) as resp:
+                      raw = resp.read()
+                      return resp.status, json.loads(raw) if raw else None
+              except urllib.error.HTTPError as err:
+                  return err.code, err.read().decode()[:300]
+
+          for key in ("EVENT_NAME", "FROM_RUN", "GITHUB_REF", "GITHUB_SHA",
+                      "GITHUB_WORKFLOW_REF", "GITHUB_WORKFLOW_SHA", "COMMENT_AUTHOR",
+                      "COMMENT_AUTHOR_TYPE", "COMMENT_ASSOCIATION", "ISSUE_NUMBER",
+                      "REPOSITORY_OWNER", "DEFAULT_BRANCH", "GITHUB_ACTOR",
+                      "GITHUB_TRIGGERING_ACTOR"):
+              print(f"{key}={os.environ.get(key, '')}")
+
+          if os.environ["EVENT_NAME"] != "issue_comment":
+              raise SystemExit(0)
+
+          branch = os.environ["DEFAULT_BRANCH"]
+          status, head = call("GET", f"/repos/{repo}/commits/{branch}")
+          print("default_branch_sha=", head["sha"] if status == 200 else (status, head))
+          status, pr = call("GET", f"/repos/{repo}/pulls/{os.environ['ISSUE_NUMBER']}")
+          if status == 200:
+              print("pr_head_ref=", pr["head"]["ref"])
+              print("pr_head_sha=", pr["head"]["sha"])
+              print("pr_head_repo=", (pr["head"].get("repo") or {}).get("full_name"))
+              print("pr_state=", pr["state"])
+          else:
+              print("pr_read=", status, pr)
+
+          run_id = os.environ["GITHUB_RUN_ID"]
+          status, body = call(
+              "POST",
+              f"/repos/{repo}/actions/workflows/sdlc-probe-comment.yml/dispatches",
+              {"ref": branch, "inputs": {"from_run": run_id}},
+          )
+          print("dispatch_status=", status, body or "")
