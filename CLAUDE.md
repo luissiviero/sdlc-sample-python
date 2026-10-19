@@ -21,7 +21,7 @@ demonstrates this on purpose via `tests/test_flag.py`; never set that variable i
 
 - `sample_pkg/calc.py`: `add`, `divide`, `percent` and `mean`. `divide` raises `ZeroDivisionError` on a zero divisor; `percent(part, whole)` is `part * 100 / whole` through `divide`, so it raises the same on a zero `whole`; `mean(values)` takes a `Collection[float]`, raises `ValueError` on an empty collection and averages through `divide` otherwise.
 - `sample_pkg/__init__.py`: re-exports `add`, `divide`, `percent` and `mean` (the public API).
-- `tests/test_calc.py`: behaviour tests for the package.
+- `tests/test_*.py` other than `test_flag.py`: behaviour tests for the package (`test_calc.py`; `test_messages.py` checks the error messages).
 - `tests/test_flag.py`: the intentional flag-gated failure. Leave it in place.
 - `pyproject.toml`: project metadata, pytest `testpaths = ["tests"]`, ruff `line-length = 100`.
 - `.env`: a fixture secret. It must never be read into the model's context; the framework's
