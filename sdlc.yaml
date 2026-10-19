@@ -119,7 +119,7 @@ test_paths:
 #           a run limit, an infrastructure failure, a merge to main, a deploy. Each panel call
 #           counts as one iteration against gate.max_iterations. Per-change override:
 #           status.yaml: review_override.
-review: parked
+review: deferred
 
 # the model alias of the devil's advocate (a panel reduces variance, not bias: three judges
 # on one model share its blind spots, so the advocate runs on another model than the
