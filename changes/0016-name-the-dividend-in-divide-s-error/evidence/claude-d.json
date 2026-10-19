@@ -1,0 +1,100 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 246280,
+  "duration_ms": 260066,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 1755,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 120663,
+      "cacheReadInputTokens": 1396625,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 0.8387020000000001,
+      "inputTokens": 70,
+      "maxOutputTokens": 64000,
+      "outputTokens": 20272,
+      "provider": "firstParty",
+      "thinkingTokens": 4220,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 27,
+  "permission_denials": [],
+  "queued_turn_count": 0,
+  "result": "Gate (d) passed. Phase (d) for change 0016 is complete:\n\n- Evidence collection deferred to the CI runner (test/build/lint) as expected in this environment; verifier confirmed the implementation matches spec/plan by reading gate (c)'s already-green logs and the code diff.\n- Adversarial review verdict: **continue** (routine).\n- No pending panel items.\n- Gate (d) check: **continue** \u2014 all checks passed.\n- Evidence and gate commits pushed to `sdlc/0016/c`; PR #79 updated with check run `sdlc/d` (success).\n\n**gate (d) passed \u2192 `/sdlc-deploy 0016`** (Standard profile: the workflow dispatches the review job itself; phase (e) is not run here).",
+  "result_index": 0,
+  "session_id": "53b9a1e3-a6ab-476f-9c53-8ddee68e66c3",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {
+      "sdlc:adversarial-reviewer": 1,
+      "sdlc:verifier": 1
+    },
+    "completed": 2,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 1,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 2
+    },
+    "spawned": 2,
+    "spawned_by_subagents": 0,
+    "started_in_background": 0
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 96,
+  "total_cost_usd": 0.8387020000000001,
+  "ttft_ms": 2955,
+  "ttft_stream_ms": 1755,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 36573,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 36573,
+    "cache_read_input_tokens": 925886,
+    "inference_geo": "global",
+    "input_tokens": 38,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 608,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 608,
+        "cache_read_input_tokens": 60933,
+        "input_tokens": 2,
+        "output_tokens": 804,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 6302,
+    "output_tokens_details": {
+      "thinking_tokens": 1246
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "3a091a6f-b69c-40e6-a254-4ad1fd7b0311"
+}
