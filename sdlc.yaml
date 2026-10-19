@@ -74,7 +74,7 @@ hooks:
 plugin:
   name: sdlc
   marketplace: sdlc-framework
-  version: 1.0.1
+  version: 1.0.10
   # Claude Code CLI version the SDLC workflows install (`npm install -g
   # @anthropic-ai/claude-code@<this>`). `--permission-prompts none` needs 2.1.259 or later;
   # 2.1.278 is the CLI the jobs install and the framework's minimum.
@@ -82,7 +82,7 @@ plugin:
 
 # --- confidence gate and run limits (build guide steps 16 and 19; decision 11) ---------------
 # A gate failure or a limit hit parks the change (label sdlc:needs-human, "What I need from
-# you" in the PR); nobody is notified. The owner accepts a risk-list hit per change with
+# you" in the PR) and requests the owner's review on the PR, the only notification (decision 31). The owner accepts a risk-list hit per change with
 # `state/cli.py accept-risk`. Setting `paused: true` stops every run before it starts.
 paused: false
 
