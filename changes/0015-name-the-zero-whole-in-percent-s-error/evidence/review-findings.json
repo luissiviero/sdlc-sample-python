@@ -1,6 +1,15 @@
 {
-  "at": "2026-10-19T14:37:01Z",
+  "at": "2026-10-19T17:16:17Z",
   "findings": [
+    {
+      "file": "CLAUDE.md",
+      "line": 14,
+      "pass": "compliance",
+      "rule": "CLAUDE.md outdated",
+      "severity": "important",
+      "signature": "374b057c258aa62f",
+      "summary": "The Commands table's healthy output for `test` still reads \"9 passed in 0.01s\", but this change raises the real count to 10 (confirmed by evidence/test.log and spec.md's own Acceptance section), so CLAUDE.md now states a false healthy-output string for anyone running the suite."
+    },
     {
       "file": "tests/test_calc.py",
       "line": 0,
@@ -10,13 +19,31 @@
       "signature": "5e7c81cfb5d139ff",
       "source": "framework",
       "summary": "pre-existing test file modified in a fix-type change (REVIEW.md framework rule; build guide step 25)"
+    },
+    {
+      "file": "tests/test_calc.py",
+      "line": 25,
+      "pass": "compliance",
+      "rule": "REVIEW.md: no test edits in a fix task",
+      "severity": "important",
+      "signature": "9d4210558116ce31",
+      "summary": "This is a fix-type change and the diff appends the reproducing test into the pre-existing tests/test_calc.py instead of a new file, so the framework's test-file check (which flags any diff touching a test file that existed before the fix, append-only or not, as its own fixtures demonstrate) is breached even though no existing test's code was changed."
+    },
+    {
+      "file": "CLAUDE.md",
+      "line": 22,
+      "pass": "compliance",
+      "rule": "CLAUDE.md outdated",
+      "severity": "nit",
+      "signature": "3daf103d53243618",
+      "summary": "The Layout line \"percent(part, whole) ... raises the same on a zero whole\" is ambiguous after this change: percent now raises a different message than divide, so a reader could take \"the same\" to mean the same error text, not just the same exception type (intent.md/spec.md address this and read it as type-only, which is a defensible but not certain reading)."
     }
   ],
-  "head": "730857beca3440df992c08dd3f73d3845cd1e3ad",
+  "head": "e90c09cc2e225ddc8f14daaae5c7c70d6bb9f5b5",
   "schema_version": 1,
   "tally": {
-    "important": 1,
-    "nit": 0,
+    "important": 3,
+    "nit": 1,
     "nits_omitted": 0
   }
 }
