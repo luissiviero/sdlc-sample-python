@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-19T14:37:01Z",
+  "findings": [
+    {
+      "file": "tests/test_calc.py",
+      "line": 0,
+      "pass": "compliance",
+      "rule": "REVIEW.md: no test edits in a fix task",
+      "severity": "important",
+      "signature": "5e7c81cfb5d139ff",
+      "source": "framework",
+      "summary": "pre-existing test file modified in a fix-type change (REVIEW.md framework rule; build guide step 25)"
+    }
+  ],
+  "head": "730857beca3440df992c08dd3f73d3845cd1e3ad",
+  "schema_version": 1,
+  "tally": {
+    "important": 1,
+    "nit": 0,
+    "nits_omitted": 0
+  }
+}

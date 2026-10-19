@@ -17,7 +17,13 @@
       "run": "d",
       "source": "claude-d.json",
       "usd": 1.2124354
+    },
+    {
+      "at": "2026-10-19T14:37:11Z",
+      "run": "review",
+      "source": "claude-review.json",
+      "usd": 0.3230492
     }
   ],
-  "total_usd": 3.771487
+  "total_usd": 4.094536
 }

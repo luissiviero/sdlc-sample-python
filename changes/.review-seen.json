@@ -15,6 +15,14 @@
     "last_seen": "2026-09-24T18:47:14Z",
     "summary": "CLAUDE.md's Layout entries for sample_pkg/calc.py (line 22) and sample_pkg/__init__.py (line 23) still list only add, divide and percent, so the guardrail file is now outdated about the package's public API now that mean ships; this is the same 'CLAUDE.md outdated' pattern already flagged in change 0001's review for percent, so this is a second occurrence and should produce a proposed one-line 'Things Claude gets wrong' entry for the owner (e.g. 'New public functions in sample_pkg/calc.py routinely leave CLAUDE.md's Layout section outdated until the owner applies the review's proposed line by hand')."
   },
+  "5e7c81cfb5d139ff": {
+    "count": 1,
+    "file": "tests/test_calc.py",
+    "first_change": "0015",
+    "last_change": "0015",
+    "last_seen": "2026-10-19T14:37:12Z",
+    "summary": "pre-existing test file modified in a fix-type change (REVIEW.md framework rule; build guide step 25)"
+  },
   "c469b35da19cfb19": {
     "count": 1,
     "file": "sample_pkg/calc.py",
