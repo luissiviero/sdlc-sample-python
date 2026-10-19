@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "change_id": "0015",
+  "slug": "name-the-zero-whole-in-percent-s-error",
+  "phase": "d",
+  "profile": "standard",
+  "human_gate": false,
+  "result": "continue",
+  "label": null,
+  "head": "c3cd0ba3526ec83131b27ca9b22bc1297dcbe670",
+  "at": "2026-10-19T14:34:27Z",
+  "dry_run": false,
+  "reason": "",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 0,
+        "cap": 3,
+        "classification": "routine",
+        "panel_calls": 0,
+        "panel_cap": 4,
+        "elapsed_minutes": 5.5,
+        "spend_usd": null,
+        "spend_usd_total": 2.559052,
+        "spend_entries": 2,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "clean_tree",
+      "ok": true,
+      "reason": "no uncommitted change outside the change folder",
+      "need": "",
+      "details": {
+        "ignored": [
+          ".env"
+        ]
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "open_concerns",
+      "ok": true,
+      "reason": "no open flagged concern",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "panel",
+      "ok": true,
+      "reason": "no panel decision at this gate",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "reason": "deferred to the runner: build, test and lint run after the model's session, outside its sandbox (issue #91); not yet run",
+      "need": "",
+      "details": {
+        "deferred": true
+      }
+    },
+    {
+      "name": "evidence",
+      "ok": true,
+      "reason": "deferred to the runner: the session wrote no command log, the runner writes test.log, build.log, lint.log from its build, test and lint after the model's session (issue #91); not yet written",
+      "need": "",
+      "details": {
+        "deferred": true,
+        "deferred_logs": [
+          "test.log",
+          "build.log",
+          "lint.log"
+        ]
+      }
+    },
+    {
+      "name": "findings",
+      "ok": true,
+      "reason": "no review findings yet (the review pass runs in phase e)",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "plan_sync",
+      "ok": true,
+      "reason": "every committed source file is in plan.md",
+      "need": "",
+      "details": {
+        "planned_but_unchanged": []
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "owner_actions",
+      "ok": true,
+      "reason": "risk acceptances, iteration and panel-call resets and test-lock lifts, if any, were committed by the owner or applied by the owner's label",
+      "need": "",
+      "details": {
+        "risk_accepted": [],
+        "label_actors": {}
+      }
+    },
+    {
+      "name": "test_lock",
+      "ok": true,
+      "reason": "no test file changed since the lock commit 82549de838",
+      "need": "",
+      "details": {
+        "lock_commit": "82549de8383e566f4234cbc1e066498278e7fb23"
+      }
+    },
+    {
+      "name": "ratchets",
+      "ok": true,
+      "reason": "no undeclared test file or eval case drop",
+      "need": "",
+      "details": {
+        "declared": [],
+        "skip_markers": [],
+        "accepted": []
+      }
+    },
+    {
+      "name": "adversarial_review",
+      "ok": true,
+      "reason": "adversarial reviewer says continue",
+      "need": "",
+      "details": {
+        "classification": "routine",
+        "reasons": []
+      }
+    }
+  ],
+  "what_i_need": ""
+}
