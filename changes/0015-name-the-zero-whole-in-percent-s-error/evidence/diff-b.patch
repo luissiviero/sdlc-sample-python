@@ -1,0 +1,149 @@
+ .../evidence/hook-log.jsonl                        | 26 ++++++++++++++++
+ .../evidence/run-b.json                            |  5 ++++
+ .../plan.md                                        | 31 +++++++++++++++++++
+ .../spec.md                                        | 35 ++++++++++++++++++++++
+ .../status.yaml                                    |  4 +--
+ 5 files changed, 99 insertions(+), 2 deletions(-)
+
+diff --git a/changes/0015-name-the-zero-whole-in-percent-s-error/evidence/hook-log.jsonl b/changes/0015-name-the-zero-whole-in-percent-s-error/evidence/hook-log.jsonl
+new file mode 100644
+index 0000000..2298684
+--- /dev/null
++++ b/changes/0015-name-the-zero-whole-in-percent-s-error/evidence/hook-log.jsonl
+@@ -0,0 +1,26 @@
++{"action": "none", "at": "2026-10-19T14:15:32Z", "command": "test -f \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/sdlc.yaml\" && echo \"sdlc.yaml exists\" || echo \"MISSING\"", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T14:15:33Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" show --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0015", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-19T14:15:37Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T14:15:37Z", "command": "git fetch origin 2>&1 | tail -20", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-19T14:15:37Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T14:15:37Z", "command": "git symbolic-ref --short refs/remotes/origin/HEAD 2>&1", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-19T14:15:41Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T14:15:41Z", "command": "git branch --show-current; echo \"---\"; git log --oneline -5; echo \"---\"; ls \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0015-name-the-zero-whole-in-percent-s-error/\"", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-19T14:15:46Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T14:15:46Z", "command": "git status; echo \"---remote branches---\"; git branch -r | grep \"0015\" ; echo \"---diff from main---\"; git log origin/main..HEAD --oneline", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-19T14:15:58Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T14:15:58Z", "command": "git diff --stat -- .env; echo \"---\"; cat \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0015-name-the-zero-whole-in-percent-s-error/evidence/hook-log.jsonl\" 2>&1 | head -50", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T14:16:05Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" start-run --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0015 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T14:16:08Z", "command": "cat \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/sdlc.yaml\"", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T14:16:16Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" spec-header --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0015", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-19T14:17:05Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0015-name-the-zero-whole-in-percent-s-error/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T14:17:05Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0015-name-the-zero-whole-in-percent-s-error/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T14:17:05Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0015-name-the-zero-whole-in-percent-s-error/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T14:17:05Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0015-name-the-zero-whole-in-percent-s-error/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T14:17:38Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0015-name-the-zero-whole-in-percent-s-error/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T14:17:38Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0015-name-the-zero-whole-in-percent-s-error/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T14:17:38Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0015-name-the-zero-whole-in-percent-s-error/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T14:17:38Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0015-name-the-zero-whole-in-percent-s-error/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T14:17:39Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T14:17:39Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T14:17:42Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0015 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+diff --git a/changes/0015-name-the-zero-whole-in-percent-s-error/evidence/run-b.json b/changes/0015-name-the-zero-whole-in-percent-s-error/evidence/run-b.json
+new file mode 100644
+index 0000000..f96d2d6
+--- /dev/null
++++ b/changes/0015-name-the-zero-whole-in-percent-s-error/evidence/run-b.json
+@@ -0,0 +1,5 @@
++{
++  "phase": "b",
++  "spend_usd": null,
++  "started_at": "2026-10-19T14:16:05Z"
++}
+\ No newline at end of file
+diff --git a/changes/0015-name-the-zero-whole-in-percent-s-error/plan.md b/changes/0015-name-the-zero-whole-in-percent-s-error/plan.md
+new file mode 100644
+index 0000000..9bf35b3
+--- /dev/null
++++ b/changes/0015-name-the-zero-whole-in-percent-s-error/plan.md
+@@ -0,0 +1,31 @@
++# Plan: name the zero whole in percent's error (from intent.md 2026-10-19, spec.md 2026-10-19)
++
++## Files that change
++- `tests/test_calc.py`: add a test asserting the exact message of `percent(1, 0)`'s `ZeroDivisionError`.
++- `sample_pkg/calc.py`: `percent` catches the `ZeroDivisionError` from `divide(part * 100, whole)` and re-raises `ZeroDivisionError("whole must not be zero") from None`.
++
++## Order of work
++1. Write the reproducing test in `tests/test_calc.py` (e.g. `test_percent_zero_whole_error_names_whole`, asserting `str(excinfo.value) == "whole must not be zero"` for `percent(1, 0)`); run `python -m pytest` and see it fail against the current code (change type `fix`, build guide step 25).
++2. Implement the fix in `sample_pkg/calc.py`: wrap the `divide(part * 100, whole)` call in `percent` with `try/except ZeroDivisionError: raise ZeroDivisionError("whole must not be zero") from None`. Leave `divide`, `add` and `mean` untouched.
++3. Run `python -m compileall -q .`, `python -m pytest` and `python -m ruff check .`; confirm all green, including the new test and the two existing tests that touch this path (`test_percent_zero_whole_raises`, `test_divide_by_zero_raises`).
++
++## Risks
++- **What this could break** (interrogation Q1): `percent`'s only caller in this repo is `tests/test_calc.py`; `sample_pkg/__init__.py` re-exports it but nothing in the package calls it internally. `divide` and `mean` are untouched, so `test_divide_by_zero_raises`, `test_mean_empty` and the other `mean` tests are unaffected — `mean`'s own zero case is guarded by its own `ValueError` check before it ever reaches `divide` with a zero divisor. A caller outside this repo that pattern-matches `percent`'s old message text (`"b must not be zero"`, inherited from `divide`) would see a different string after this change; the intent accepts this (it is the point of the fix) and keeps the exception type `ZeroDivisionError` so a `try/except ZeroDivisionError` caller keeps working.
++- **Riskiest step** (interrogation Q2): step 2. The only way to depart from the design is to omit `from None` (which still passes every test here, since none inspect `__cause__`/`__context__`, but departs from spec.md's Design) or to duplicate a `whole == 0` pre-check instead of catching `divide`'s exception (spec.md's Open questions already settles against this). Mitigation: implement exactly the catch-and-reraise `from None` form spec.md describes.
++- No public function is added or removed, so the two `CLAUDE.md` Layout entries (for `sample_pkg/calc.py` and `tests/test_calc.py`) stay accurate as written; this plan does not touch them (per "Things Claude gets wrong" in `CLAUDE.md`, flagged here to say explicitly that no Layout update is needed).
++
++## Options not taken
++- **Pre-check `whole == 0` inside `percent` before calling `divide`** — not chosen: it would duplicate the zero-check condition `divide` already owns in a second place, instead of catching the exception `divide` already raises (spec.md Design/Open questions; coding-standards rule 2, match the existing idiom).
++- **Changing `divide`'s own message** — not chosen: the intent requires `divide(1, 0)` to keep raising `ZeroDivisionError("b must not be zero")` unchanged.
++- **A custom exception subclass of `ZeroDivisionError`** (e.g. carrying the parameter name as a field) — not chosen: the intent requires the exception type to stay exactly `ZeroDivisionError`, and `CLAUDE.md` says to keep the project minimal; a subclass is unneeded machinery for a one-line message change.
++
++## Proof
++- `tests/test_calc.py::test_percent_zero_whole_error_names_whole` (new, written in step 1) — asserts the exact message text.
++- `tests/test_calc.py::test_percent_zero_whole_raises` (existing) — still passes: exception type unchanged.
++- `tests/test_calc.py::test_divide_by_zero_raises` (existing) — still passes: `divide` unchanged.
++- `python -m pytest` — all tests pass (10: the 9 current plus the new one), exit code 0.
++- `python -m compileall -q .` — no output, exit code 0.
++- `python -m ruff check .` — `All checks passed!`, exit code 0.
++- (interrogation Q5: every item above is a named, runnable test; only the first is still to be written, in step 1, and it is named as the file that proves this change — build guide step 25.)
++
++Interrogation Q4 (could an engineer who never saw this conversation implement the change from this plan alone?): yes — the exact message text, the exception type, the file and function, the catch-and-reraise shape with `from None`, and the test's exact assertion are all stated above; no further context is needed.
+diff --git a/changes/0015-name-the-zero-whole-in-percent-s-error/spec.md b/changes/0015-name-the-zero-whole-in-percent-s-error/spec.md
+new file mode 100644
+index 0000000..14ed252
+--- /dev/null
++++ b/changes/0015-name-the-zero-whole-in-percent-s-error/spec.md
+@@ -0,0 +1,35 @@
++# Spec: name the zero whole in percent's error
++Change id: 0015. Status: proposed. Produced by: sdlc plugin 1.0.10, /sdlc-design prompt v1 (article p.14). Skills: coding-standards, security-baseline, ux-conventions, data-conventions, definition-of-done (plugin 1.0.10); overrides: none
++
++## Requirements
++- `percent(part, 0)` raises `ZeroDivisionError` whose message is exactly `"whole must not be zero"`, naming the parameter the caller passed.
++- `divide(a, 0)` is unchanged: it still raises `ZeroDivisionError("b must not be zero")`.
++- The exception type raised by `percent` on a zero `whole` stays `ZeroDivisionError` (coding-standards rule 2: match the existing error-handling idiom; callers catching `ZeroDivisionError` today keep working).
++- Signatures and return values of `add`, `divide`, `percent` and `mean` are unchanged.
++- A new test in `tests/test_calc.py` asserts the exact message of `percent(1, 0)`'s `ZeroDivisionError`; written before the fix and failing against the current code (change type `fix`; coding-standards rule 4, "every behavior change ships with a test that fails without it").
++- No new dependency (coding-standards rule 5; security-baseline rule 6).
++- `python -m compileall -q .`, `python -m pytest` and `python -m ruff check .` stay green (CLAUDE.md "Verifying your work").
++- `tests/test_flag.py` and every guardrail file (`.claude/**`, `CLAUDE.md`, `REVIEW.md`, `sdlc.yaml`) stay untouched.
++- `ux-conventions` does not apply: this change raises a library exception, not a user interface, screen or CLI surface.
++- `data-conventions` does not apply: no stored field, schema, migration, pipeline or personal data is touched.
++- `security-baseline` applies only through "no new dependency" (above): there is no endpoint, authentication, secret or external input in this change.
++- No `sdlc.yaml: risk_list` item (auth, data migrations, money movement, production config) is touched.
++
++## Design
++- In `sample_pkg/calc.py`, `percent(part, whole)` catches the `ZeroDivisionError` that `divide(part * 100, whole)` raises when `whole == 0`, and re-raises `ZeroDivisionError("whole must not be zero") from None`. The `from None` suppresses chaining onto `divide`'s exception, so a caller's traceback shows only `percent`'s own error, not `divide`'s internal one.
++- `divide()` itself is not changed: it keeps raising `ZeroDivisionError("b must not be zero")` on `b == 0`, so `tests/test_divide_by_zero_raises` and `mean`'s behavior (which also goes through `divide`) are unaffected.
++- No change to `add`, `mean`, `sample_pkg/__init__.py`'s re-exports, or any call site: `percent` has no other callers in this package.
++- No public function is added or removed, so the two `CLAUDE.md` Layout entries for `sample_pkg/calc.py` and `tests/test_calc.py` stay accurate as written (the intent already notes this).
++
++## Open questions from intent
++- "Should `percent` check `whole` itself before calling `divide`, or catch the `ZeroDivisionError` from `divide` and raise a new one with the right message?" — Answered: catch the `ZeroDivisionError` from `divide` and re-raise with the new message (see Design). A pre-check (`if whole == 0: raise ...` inside `percent`, before calling `divide`) would duplicate the zero-check condition `divide` already owns in a second place; catching keeps that condition in one place and only changes the message `percent` presents (coding-standards rule 2, match the existing idiom rather than introduce a parallel one). The intent notes the proposed outcome holds either way, so this is a design choice, not an open requirement.
++
++## Flagged concerns
++- none
++
++## Acceptance
++- `tests/test_calc.py` has a test (e.g. `test_percent_zero_whole_error_names_whole`) asserting the exact string `"whole must not be zero"` from `percent(1, 0)`'s `ZeroDivisionError`; it fails against the current code and passes after the fix.
++- The existing `test_percent_zero_whole_raises` and `test_divide_by_zero_raises` keep passing unchanged.
++- `python -m pytest` reports all tests passed (10: the 9 current plus the new one), exit code 0.
++- `python -m compileall -q .` finishes with no output, exit code 0.
++- `python -m ruff check .` reports `All checks passed!`, exit code 0.
+diff --git a/changes/0015-name-the-zero-whole-in-percent-s-error/status.yaml b/changes/0015-name-the-zero-whole-in-percent-s-error/status.yaml
+index 0087222..b9f05b6 100644
+--- a/changes/0015-name-the-zero-whole-in-percent-s-error/status.yaml
++++ b/changes/0015-name-the-zero-whole-in-percent-s-error/status.yaml
+@@ -1,7 +1,7 @@
+ id: "0015"
+ slug: name-the-zero-whole-in-percent-s-error
+ title: "Name the zero whole in percent's error"
+-phase: a
++phase: b
+ entry_route: idea
+ change_type: fix
+ profile_override: null
+@@ -28,5 +28,5 @@ released_at: null
+ released_sha: null
+ released_pr: null
+ created_at: "2026-10-19T13:53:34Z"
+-updated_at: "2026-10-19T13:53:34Z"
++updated_at: "2026-10-19T14:17:42Z"
+ schema_version: 1

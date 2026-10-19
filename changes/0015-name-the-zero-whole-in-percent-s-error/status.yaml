@@ -1,32 +1,37 @@
 id: "0015"
 slug: name-the-zero-whole-in-percent-s-error
 title: "Name the zero whole in percent's error"
-phase: a
+phase: e
 entry_route: idea
 change_type: fix
 profile_override: null
 review_override: null
 gate:
-  phase: null
-  result: null
-  reason: null
-  at: null
-parked_reason: null
-iterations: 0
+  phase: e
+  result: parked
+  reason: "limits: iteration cap reached: 4 fix iterations, cap 3"
+  at: "2026-10-19T17:32:46Z"
+parked_reason: "limits: iteration cap reached: 4 fix iterations, cap 3"
+iterations: 4
 panel_calls: 0
 external_ref: null
 risk_accepted: []
-tests_locked: false
+tests_locked: true
 risk_accepted_by: []
 iterations_reset_by: null
 iterations_reset_at: null
 tests_unlocked_by: null
 runbook_authorized_by: null
 abandoned_reason: null
-build_pr: null
+build_pr: 71
 released_at: null
 released_sha: null
 released_pr: null
+fast_lane:
+  b:
+    sha: "0e4fed526e8d7ec6e145d86446c8e9671a8bebdb"
+    classification: routine
+    pr: 70
 created_at: "2026-10-19T13:53:34Z"
-updated_at: "2026-10-19T13:53:34Z"
+updated_at: "2026-10-19T17:32:46Z"
 schema_version: 1

@@ -1,0 +1,49 @@
+{
+  "at": "2026-10-19T17:45:00Z",
+  "findings": [
+    {
+      "file": "CLAUDE.md",
+      "line": 14,
+      "pass": "compliance",
+      "rule": "REVIEW.md Framework rules: \"Flag when the change has made CLAUDE.md outdated.\"",
+      "severity": "important",
+      "signature": "4c6f2a7b79dee2c8",
+      "summary": "The Commands table's healthy test output still reads \"9 passed in 0.01s\", but the new test brings the suite to 10 passing tests, so CLAUDE.md is now outdated and the diff does not update it (it cannot, as a guardrail file) or flag the discrepancy in plan.md."
+    },
+    {
+      "file": "tests/test_calc.py",
+      "line": 0,
+      "pass": "compliance",
+      "rule": "REVIEW.md: no test edits in a fix task",
+      "severity": "important",
+      "signature": "5e7c81cfb5d139ff",
+      "source": "framework",
+      "summary": "pre-existing test file modified in a fix-type change (REVIEW.md framework rule; build guide step 25)"
+    },
+    {
+      "file": "tests/test_calc.py",
+      "line": 25,
+      "pass": "compliance",
+      "rule": "REVIEW.md Framework rules: \"In a fix-type change ... the diff must not modify test files that existed before the fix; the failing test written first is the proof.\"",
+      "severity": "important",
+      "signature": "6226409f2242c1ce",
+      "summary": "This is a fix-type change (status.yaml: change_type: fix) and the diff appends test_percent_zero_whole_error_names_whole to tests/test_calc.py, a test file that existed before the fix, instead of putting the reproducing test in a new file, breaching the framework rule that the pre-existing test file stay untouched so the failing test written first is the proof."
+    },
+    {
+      "file": "CLAUDE.md",
+      "line": 22,
+      "pass": "compliance",
+      "rule": "CLAUDE.md outdated",
+      "severity": "nit",
+      "signature": "8faf342b4d192bed",
+      "summary": "The Layout line \"percent(part, whole) is part * 100 / whole through divide, so it raises the same on a zero whole\" is ambiguous now that percent's message text differs from divide's, even though the exception type is still the same; not clearly false, just worth a clarifying rewrite."
+    }
+  ],
+  "head": "e1ee0dba2abb5f8ac9ac073ae72dbb5a7e875130",
+  "schema_version": 1,
+  "tally": {
+    "important": 3,
+    "nit": 1,
+    "nits_omitted": 0
+  }
+}

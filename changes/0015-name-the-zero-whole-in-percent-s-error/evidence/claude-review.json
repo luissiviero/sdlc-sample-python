@@ -1,0 +1,106 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 75488,
+  "duration_ms": 76410,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 2161,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 39606,
+      "cacheReadInputTokens": 521706,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 0.3230492,
+      "inputTokens": 22,
+      "maxOutputTokens": 64000,
+      "outputTokens": 6024,
+      "provider": "firstParty",
+      "thinkingTokens": 2841,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 27,
+  "permission_denials": [
+    {
+      "tool_input": {
+        "command": "for f in build.log test.log lint.log verifier.md adversarial-review-b.json adversarial-review-c.json adversarial-review-d.json gate-d.json; do echo \"=== $f ===\"; cat \"changes/0015-name-the-zero-whole-in-percent-s-error/evidence/$f\" 2>/dev/null; echo; done",
+        "description": "Print evidence logs and verdicts"
+      },
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_018fkQTM2suFwngwFj6YrSr8"
+    }
+  ],
+  "queued_turn_count": 0,
+  "result": "## Review summary \u2014 change 0015\n\n**Tally:** 0 important, 0 nit (0 omitted)\n\n**Important findings:** none.\n\n**Nits:** none.\n\n**Plan conformance:** The diff matches `spec.md`/`plan.md` exactly \u2014 `percent` catches `ZeroDivisionError` and re-raises `ZeroDivisionError(\"whole must not be zero\") from None`, `divide` is byte-for-byte untouched, the new test `test_percent_zero_whole_error_names_whole` asserts the literal message and was added (not substituted) alongside the two pre-existing tests in `tests/test_calc.py`, no guardrail file or `tests/test_flag.py` was touched, and `CLAUDE.md`'s Layout entries correctly stay as-is since no public function was added or removed. Evidence (`build.log`, `test.log`, `lint.log`, `verifier.md`, gate-d.json) shows real green output (10 passed, compileall clean, ruff clean), not a deferred placeholder.\n\nWrote `changes/0015-name-the-zero-whole-in-percent-s-error/evidence/review-findings.json` with an empty findings array \u2014 this is a clean, minimal, fully spec-conformant fix.",
+  "result_index": 0,
+  "session_id": "865ba359-1cac-4ad8-b76c-466a99e36972",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {},
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 0,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "spawned": 0,
+    "spawned_by_subagents": 0,
+    "started_in_background": 0
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 62,
+  "total_cost_usd": 0.3230492,
+  "ttft_ms": 2548,
+  "ttft_stream_ms": 2160,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 39606,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 39606,
+    "cache_read_input_tokens": 521706,
+    "inference_geo": "global",
+    "input_tokens": 22,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 405,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 405,
+        "cache_read_input_tokens": 63590,
+        "input_tokens": 2,
+        "output_tokens": 412,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 6024,
+    "output_tokens_details": {
+      "thinking_tokens": 2841
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "ae2238f7-40ab-4e97-a245-7d43e6754434"
+}

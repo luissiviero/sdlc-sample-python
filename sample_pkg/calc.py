@@ -12,7 +12,10 @@ def divide(a: float, b: float) -> float:
 
 
 def percent(part: float, whole: float) -> float:
-    return divide(part * 100, whole)
+    try:
+        return divide(part * 100, whole)
+    except ZeroDivisionError:
+        raise ZeroDivisionError("whole must not be zero") from None
 
 
 def mean(values: Collection[float]) -> float:

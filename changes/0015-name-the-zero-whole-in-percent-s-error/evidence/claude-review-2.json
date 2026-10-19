@@ -1,0 +1,97 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 216309,
+  "duration_ms": 217912,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 1615,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 88812,
+      "cacheReadInputTokens": 729563,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 0.6926326,
+      "inputTokens": 26,
+      "maxOutputTokens": 64000,
+      "outputTokens": 19142,
+      "provider": "firstParty",
+      "thinkingTokens": 15123,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 28,
+  "permission_denials": [],
+  "queued_turn_count": 0,
+  "result": "## Review summary \u2014 change 0015 at `e90c09c`\n\n**Tally: 2 Important, 1 nit, 0 omitted**\n\n**Important**\n- `tests/test_calc.py:25` \u2014 the fix's reproducing test is appended into the pre-existing `tests/test_calc.py` rather than a new test file; the framework's test-file-edit check (confirmed by its own fixtures) flags any diff touching a test file that existed before the fix, append-only or not, in a `change_type: fix` change. Breaches REVIEW.md's \"no test edits in a fix task\" framework rule.\n- `CLAUDE.md:14` \u2014 the Commands table's healthy output for `test` still says `9 passed in 0.01s`; this change grows the real count to 10 (test.log confirms `10 passed`), so that line is now false. Breaches REVIEW.md's \"CLAUDE.md outdated\" framework rule.\n\n**Nit**\n- `CLAUDE.md:22` \u2014 the Layout line \"so it raises the same on a zero whole\" is ambiguous now that `percent`'s message differs from `divide`'s; a reader could take \"the same\" to mean identical text rather than just the same exception type. intent.md/spec.md's type-only reading is defensible but not certain.\n\n**Plan conformance**: the diff matches `plan.md` and `spec.md` exactly (catch-and-reraise with `from None`, `divide`/`mean`/`add` untouched, exact message text, test named and placed as planned) \u2014 the only departure is that the plan's own choice of file for the new test is what trips the framework's test-edit rule above.\n\nFindings written to `changes/0015-name-the-zero-whole-in-percent-s-error/evidence/review-findings.json`.",
+  "result_index": 0,
+  "session_id": "d96f2d1c-b720-4df0-aa70-2b5b7b0771fb",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {},
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 0,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "spawned": 0,
+    "spawned_by_subagents": 0,
+    "started_in_background": 0
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 78,
+  "total_cost_usd": 0.6926326,
+  "ttft_ms": 2247,
+  "ttft_stream_ms": 1615,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 88812,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 88812,
+    "cache_read_input_tokens": 729563,
+    "inference_geo": "global",
+    "input_tokens": 26,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 943,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 943,
+        "cache_read_input_tokens": 87869,
+        "input_tokens": 2,
+        "output_tokens": 570,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 19142,
+    "output_tokens_details": {
+      "thinking_tokens": 15123
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "8be763da-3358-497e-8b97-c8fcd8217dca"
+}

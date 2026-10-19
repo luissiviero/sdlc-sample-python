@@ -1,0 +1,33 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /usr/bin/python
+cachedir: .pytest_cache
+rootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python
+configfile: pyproject.toml
+plugins: platformdirs-4.13.0
+collecting ... collected 1 item
+
+tests/test_calc.py::test_percent_zero_whole_error_names_whole FAILED     [100%]
+
+=================================== FAILURES ===================================
+__________________ test_percent_zero_whole_error_names_whole ___________________
+
+    def test_percent_zero_whole_error_names_whole():
+        with pytest.raises(ZeroDivisionError) as excinfo:
+            percent(1, 0)
+>       assert str(excinfo.value) == "whole must not be zero"
+E       AssertionError: assert 'b must not be zero' == 'whole must not be zero'
+E         
+E         - whole must not be zero
+E         ? ^^^^^
+E         + b must not be zero
+E         ? ^
+
+tests/test_calc.py:28: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_calc.py::test_percent_zero_whole_error_names_whole - AssertionError: assert 'b must not be zero' == 'whole must not be zero'
+  
+  - whole must not be zero
+  ? ^^^^^
+  + b must not be zero
+  ? ^
+============================== 1 failed in 0.02s ===============================
