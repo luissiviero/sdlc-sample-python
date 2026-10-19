@@ -1,0 +1,99 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 397531,
+  "duration_ms": 420395,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 1543,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 150471,
+      "cacheReadInputTokens": 3681416,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 1.5087597,
+      "inputTokens": 132,
+      "maxOutputTokens": 64000,
+      "outputTokens": 29744,
+      "provider": "firstParty",
+      "thinkingTokens": 11692,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 46,
+  "permission_denials": [],
+  "queued_turn_count": 0,
+  "result": "Phase (e) is complete. Summary:\n\n- **Review**: re-reviewed fresh (findings were stale twice due to HEAD moving \u2014 re-ran until the findings matched HEAD exactly) \u2192 0 Important, 0 nits.\n- **Deferred-review panel**: no pending items, skipped straight to the gate.\n- **Gate (e)**: all checks passed, result `wait` (the expected human-gate outcome).\n- **Release artifact**: none needed (`deploy.action: none`); release notes generated and committed.\n- **Review check-run**: published to GitHub (success, 0 Important/0 nits).\n- **PR #79**: marked ready, labeled `sdlc:e-ready`.\n\n**PR:** https://github.com/luissiviero/sdlc-sample-python/pull/79\n\nGate (e): merge = approve; a review comment is the change request (`/sdlc-fix 0016`). Since `sdlc.yaml` declares `deploy.production: true`: the release label `sdlc:release-approved` is the second act \u2014 apply it on this PR after merging; the release workflow waits for it.",
+  "result_index": 0,
+  "session_id": "fd4e35ed-03e6-4e0c-b52d-b018c273ab7f",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {
+      "general-purpose": 2
+    },
+    "completed": 2,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 1,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 2
+    },
+    "spawned": 2,
+    "spawned_by_subagents": 0,
+    "started_in_background": 0
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 95,
+  "total_cost_usd": 1.5087597,
+  "ttft_ms": 3306,
+  "ttft_stream_ms": 1543,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 65730,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 65730,
+    "cache_read_input_tokens": 2954369,
+    "inference_geo": "global",
+    "input_tokens": 92,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 331,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 331,
+        "cache_read_input_tokens": 90367,
+        "input_tokens": 2,
+        "output_tokens": 548,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 21270,
+    "output_tokens_details": {
+      "thinking_tokens": 9531
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "1e56e538-d477-4bf1-9b22-545e3e49a763"
+}

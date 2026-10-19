@@ -1,0 +1,40 @@
+id: "0016"
+slug: name-the-dividend-in-divide-s-error
+title: "Name the dividend in divide's error"
+phase: e
+entry_route: idea
+change_type: feature
+profile_override: null
+review_override: null
+gate:
+  phase: e
+  result: passed
+  reason: waiting for the owner at gate (e)
+  at: "2026-10-19T19:49:28Z"
+parked_reason: null
+iterations: 0
+panel_calls: 0
+external_ref: null
+risk_accepted: []
+tests_locked: false
+risk_accepted_by: []
+iterations_reset_by: null
+iterations_reset_at: null
+tests_unlocked_by: null
+runbook_authorized_by: null
+abandoned_reason: null
+build_pr: 79
+released_at: null
+released_sha: null
+released_pr: null
+fast_lane:
+  a:
+    sha: "614594e11b1e14a02400756aff5e572d223c5033"
+    pr: 77
+  b:
+    sha: "9433cc6f3e21cffdb218b11b9da26ce70aa7889f"
+    classification: routine
+    pr: 78
+created_at: "2026-10-19T19:04:17Z"
+updated_at: "2026-10-19T19:49:28Z"
+schema_version: 1

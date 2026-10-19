@@ -7,7 +7,7 @@ def add(a: float, b: float) -> float:
 
 def divide(a: float, b: float) -> float:
     if b == 0:
-        raise ZeroDivisionError("b must not be zero")
+        raise ZeroDivisionError(f"cannot divide {a} by zero")
     return a / b
 
 

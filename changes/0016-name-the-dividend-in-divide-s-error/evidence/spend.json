@@ -1,0 +1,35 @@
+{
+  "entries": [
+    {
+      "at": "2026-10-19T19:26:30Z",
+      "run": "b",
+      "source": "claude-b.json",
+      "usd": 1.2944725999999993
+    },
+    {
+      "at": "2026-10-19T19:34:25Z",
+      "run": "c",
+      "source": "claude-c.json",
+      "usd": 1.5202212000000004
+    },
+    {
+      "at": "2026-10-19T19:39:47Z",
+      "run": "d",
+      "source": "claude-d.json",
+      "usd": 0.8387020000000001
+    },
+    {
+      "at": "2026-10-19T19:42:09Z",
+      "run": "review",
+      "source": "claude-review.json",
+      "usd": 0.35452940000000005
+    },
+    {
+      "at": "2026-10-19T19:49:27Z",
+      "run": "e",
+      "source": "claude-e.json",
+      "usd": 1.5087597
+    }
+  ],
+  "total_usd": 5.516685
+}
