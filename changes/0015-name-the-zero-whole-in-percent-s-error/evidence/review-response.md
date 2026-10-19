@@ -38,3 +38,9 @@ session; they are expected to still be open when gate (e) parks.
   additionally reported a line-level duplicate of finding 2, `tests/test_calc.py:25`, which
   is the same underlying issue — the test file was touched at all in a fix-type change —
   not a third distinct problem). No code change made; nothing further to fix.
+- Round 3 (iteration cap for this routine-classified change): re-reviewed again; the same
+  two root causes stand, independently re-verified by the reviewer against the current
+  HEAD each time, not copied forward. No further fix is possible without editing a
+  guardrail file (`CLAUDE.md`) or a locked test path (`tests/test_calc.py`, locked since
+  commit `82549de8`). This is the last fix round the iteration cap (3, routine
+  classification) allows; gate (e) is expected to park on these two findings.

@@ -1,3 +1,2 @@
 <!-- Proposed CLAUDE.md lines under "Things Claude gets wrong" (article p.34 step 5). The PR description quotes this file; only the owner edits CLAUDE.md. -->
-- The Commands table's healthy output for `test` still reads "9 passed in 0.01s" but the suite now reports 10 passed (confirmed by gate-d.json's literal pytest output), so CLAUDE.md states a false healthy-output string for anyone running the suite (change 0015; the owner edits CLAUDE.md)
-- The Layout line's "raises the same on a zero `whole`" wording is now ambiguous: percent raises a different message than divide, so "the same" could be misread as the same text rather than just the same exception type (change 0015; the owner edits CLAUDE.md)
+- The Commands table's healthy output for test still reads "9 passed in 0.01s" but the suite now reports 10 passed, so CLAUDE.md states a false healthy-output string (change 0015; the owner edits CLAUDE.md)
