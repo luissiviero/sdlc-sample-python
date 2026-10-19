@@ -1,0 +1,322 @@
+ .../evidence/.gitkeep                              |  0
+ .../evidence/hook-log.jsonl                        | 20 +++++
+ .../evidence/run-b.json                            |  5 ++
+ .../intent.md                                      | 44 ++++++++++
+ .../plan.md                                        | 74 +++++++++++++++++
+ .../spec.md                                        | 94 ++++++++++++++++++++++
+ .../status.yaml                                    | 36 +++++++++
+ 7 files changed, 273 insertions(+)
+
+diff --git a/changes/0016-name-the-dividend-in-divide-s-error/evidence/.gitkeep b/changes/0016-name-the-dividend-in-divide-s-error/evidence/.gitkeep
+new file mode 100644
+index 0000000..e69de29
+diff --git a/changes/0016-name-the-dividend-in-divide-s-error/evidence/hook-log.jsonl b/changes/0016-name-the-dividend-in-divide-s-error/evidence/hook-log.jsonl
+new file mode 100644
+index 0000000..6247799
+--- /dev/null
++++ b/changes/0016-name-the-dividend-in-divide-s-error/evidence/hook-log.jsonl
+@@ -0,0 +1,20 @@
++{"action": "none", "at": "2026-10-19T19:18:31Z", "command": "test -f \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/sdlc.yaml\" && echo \"sdlc.yaml exists\"", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T19:18:32Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" show --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0016", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-19T19:18:37Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T19:18:37Z", "command": "cd \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" && git fetch origin && git symbolic-ref --short refs/remotes/origin/HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-19T19:18:42Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T19:18:42Z", "command": "cd \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" && git branch --show-current && git status && echo \"---\" && ls changes/0016-name-the-dividend-in-divide-s-error/ 2>/dev/null", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-19T19:18:59Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T19:18:59Z", "command": "cd \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" && git log --oneline -1 -- .env && git diff --stat .env", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T19:19:12Z", "command": "cd \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" && gh pr list --head sdlc/0016/b --state all --json number,state,title 2>&1 || echo \"gh not available or no PR\"", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T19:19:15Z", "command": "cd \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" && python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" start-run --root \"/home/runner/work/sdlc-s", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T19:19:19Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" spec-header --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0016", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-19T19:21:04Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0016-name-the-dividend-in-divide-s-error/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T19:21:04Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0016-name-the-dividend-in-divide-s-error/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T19:21:04Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0016-name-the-dividend-in-divide-s-error/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T19:21:04Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0016-name-the-dividend-in-divide-s-error/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T19:21:37Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0016-name-the-dividend-in-divide-s-error/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T19:21:37Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0016-name-the-dividend-in-divide-s-error/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T19:21:37Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0016-name-the-dividend-in-divide-s-error/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-19T19:21:38Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0016-name-the-dividend-in-divide-s-error/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"action": "none", "at": "2026-10-19T19:21:40Z", "command": "cd \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" && python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sd", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+diff --git a/changes/0016-name-the-dividend-in-divide-s-error/evidence/run-b.json b/changes/0016-name-the-dividend-in-divide-s-error/evidence/run-b.json
+new file mode 100644
+index 0000000..49a4de9
+--- /dev/null
++++ b/changes/0016-name-the-dividend-in-divide-s-error/evidence/run-b.json
+@@ -0,0 +1,5 @@
++{
++  "phase": "b",
++  "spend_usd": null,
++  "started_at": "2026-10-19T19:19:15Z"
++}
+\ No newline at end of file
+diff --git a/changes/0016-name-the-dividend-in-divide-s-error/intent.md b/changes/0016-name-the-dividend-in-divide-s-error/intent.md
+new file mode 100644
+index 0000000..5c234a9
+--- /dev/null
++++ b/changes/0016-name-the-dividend-in-divide-s-error/intent.md
+@@ -0,0 +1,44 @@
++# Intent: name the dividend in divide's error
++Author: Luis Siviero (owner). Status: proposed. Change id: 0016. Entry route: idea.
++
++## Problem
++`divide(1, 0)` raises `ZeroDivisionError("b must not be zero")`. The message names a
++parameter, not the call: whoever reads the traceback learns that some divisor was zero but
++not what was being divided, and has to go back to the calling code to find out.
++
++This is also the sample's next change on plugin 1.0.12. Its runs are the live checks the
++framework still owes (framework NOTES §49, "Still not verified"): the fast lane on an
++intent PR the owner opens, not as a draft; the review request reaching the owner's phone at
++gate (e); and, if the runs meet them, the 1.0.10 paths. The code change is kept small on
++purpose.
++
++## Proposed outcome
++- `divide(1, 0)` raises `ZeroDivisionError` with the message `"cannot divide 1 by zero"`:
++  the message names the dividend that was being divided.
++- The exception type stays `ZeroDivisionError`, so callers that catch it are not affected.
++- `percent`'s message on a zero `whole` stays `"whole must not be zero"`, and `mean`'s
++  behaviour does not change (its divisor is never zero).
++- A new test file, `tests/test_messages.py`, checks the message of `divide(1, 0)`.
++- Build, test and lint stay green: `python -m compileall -q .`, `python -m pytest`,
++  `python -m ruff check .`.
++
++## Affected users and systems
++- The owner and anyone importing `sample_pkg` who reads the error of a zero divisor.
++- Files: `sample_pkg/calc.py` (the message in `divide`) and the new
++  `tests/test_messages.py`.
++- No public function is added or removed, and the Layout section of `CLAUDE.md` already
++  covers `tests/test_messages.py` (the owner's PR #76), so it stays correct.
++- No services, data stores or external parties.
++
++## Constraints
++- No new dependencies; plain Python 3.10+ with type hints, line length 100 (ruff).
++- `add`, `divide`, `percent` and `mean` keep their signatures and return values; only the
++  message of `divide`'s zero-divisor error changes.
++- `tests/test_calc.py` and `tests/test_flag.py` are not touched.
++- The guardrail files (`.claude/**`, `CLAUDE.md`, `REVIEW.md`, `sdlc.yaml`, `bands.yaml`)
++  are not edited.
++
++## Open questions
++- How is a non-integer dividend written in the message, for example `divide(1.5, 0)` or
++  `divide(1.0, 0)`? The default is Python's own text for the value (`"cannot divide 1.5 by
++  zero"`, `"cannot divide 1.0 by zero"`); to be settled in design.
+diff --git a/changes/0016-name-the-dividend-in-divide-s-error/plan.md b/changes/0016-name-the-dividend-in-divide-s-error/plan.md
+new file mode 100644
+index 0000000..0003dd0
+--- /dev/null
++++ b/changes/0016-name-the-dividend-in-divide-s-error/plan.md
+@@ -0,0 +1,74 @@
++# Plan: name the dividend in divide's error (from intent.md 2026-10-19, spec.md 2026-10-19)
++
++## Files that change
++- `sample_pkg/calc.py` — in `divide`, change the raised message from the fixed string
++  `"b must not be zero"` to `f"cannot divide {a} by zero"`; no other line in the file moves.
++- `tests/test_messages.py` (new) — asserts `divide(1, 0)` raises `ZeroDivisionError` whose
++  `str(...)` is exactly `"cannot divide 1 by zero"`.
++
++## Order of work
++1. In `sample_pkg/calc.py`, change `divide`'s raise from
++   `raise ZeroDivisionError("b must not be zero")` to
++   `raise ZeroDivisionError(f"cannot divide {a} by zero")`. One line, one commit.
++2. Add `tests/test_messages.py`, importing `divide` from `sample_pkg` (matching the import
++   style of `tests/test_calc.py`), with a test that calls `divide(1, 0)` inside
++   `pytest.raises(ZeroDivisionError)` and asserts `str(excinfo.value) == "cannot divide 1 by
++   zero"`.
++3. Run `python -m compileall -q .`, `python -m pytest`, `python -m ruff check .`; all three
++   must exit 0 with the healthy output `CLAUDE.md` describes.
++
++## Risks
++- Lowest-risk change in the project: a single string literal inside one `raise`, in a
++  function whose signature, condition and return value are untouched. The riskiest step is
++  step 1, only because it is the one line that changes behaviour at all — a typo in the
++  f-string (e.g. formatting `b` instead of `a`) would silently name the wrong operand and
++  only show up by reading the new test's assertion carefully.
++- Callers that match on the exact exception message, not just the type, would break. Checked:
++  `tests/test_calc.py`'s `test_divide_by_zero_raises` only checks the type
++  (`pytest.raises(ZeroDivisionError)`, no message assertion), and
++  `test_percent_zero_whole_error_names_whole` asserts `percent`'s own literal message
++  (`"whole must not be zero"`), which `percent` raises itself and never derives from
++  `divide`'s text (`sample_pkg/calc.py:17-18`). No other file in the repository matches the
++  string `"b must not be zero"` or otherwise depends on `divide`'s message text. No external
++  caller exists inside this repository to check.
++- `mean` calls `divide` but only after its own empty-collection check, so it can never
++  trigger `divide`'s zero-divisor branch at all; this plan does not touch `mean`.
++- No new dependency, no schema, no migration, no risk-list item (auth, data migrations,
++  money movement, production config) is touched — nothing to mitigate there.
++
++## Options not taken
++- Formatting the dividend with `repr(a)` instead of an f-string's default `str(a)`: rejected
++  because the intent's own examples (`"cannot divide 1.5 by zero"`, `"cannot divide 1.0 by
++  zero"`) match `str()`'s output, not `repr()`'s (identical for `float` and `int` here, but
++  `str()` is the conventional choice for a user-facing message and what the spec's Design
++  section specifies).
++- Also updating `percent` to build its message from `whole`: rejected — out of scope. The
++  intent's Proposed outcome explicitly keeps `percent`'s message fixed at `"whole must not
++  be zero"`, and `percent` already raises that message independently of `divide`'s text, so
++  no change to `percent` is needed to satisfy the intent.
++- Writing the new test inside `tests/test_calc.py` instead of a new `tests/test_messages.py`:
++  rejected — the intent names `tests/test_messages.py` specifically, and `CLAUDE.md`'s
++  Layout section already documents that file as the one that "checks the error messages"
++  (added in PR #76), so creating it keeps the codebase matching its own documentation.
++- Adding a test for `divide(1.5, 0)` / `divide(1.0, 0)` message formatting: not added as a
++  new test — the intent's acceptance target is `divide(1, 0)` specifically, and
++  `tests/test_calc.py`'s existing `test_divide_by_zero_raises` already exercises the
++  zero-divisor path with an integer dividend. The non-integer cases are the answered open
++  question's justification for the f-string's default formatting, not a stated requirement
++  to test; adding them would be scope beyond what intent.md and spec.md's Acceptance ask
++  for.
++
++## Proof
++- `tests/test_messages.py::test_divide_by_zero_names_dividend` (name indicative; the test to
++  be written in step 2) — asserts `str(excinfo.value) == "cannot divide 1 by zero"` for
++  `divide(1, 0)`. Still to be written; this plan is what requires it.
++- `tests/test_calc.py::test_divide_by_zero_raises` — existing test, must keep passing
++  unchanged (type-only check, unaffected by the message change).
++- `tests/test_calc.py::test_percent_zero_whole_error_names_whole` — existing test, must keep
++  passing unchanged (asserts `percent`'s own message, `"whole must not be zero"`).
++- `tests/test_calc.py::test_mean*` and `test_percent`, `test_add` — existing tests, must keep
++  passing unchanged; untouched by this plan.
++- `tests/test_flag.py` — existing test, untouched, must keep passing (`SAMPLE_FAIL=1` is
++  never set in this run).
++- `python -m compileall -q .`, `python -m pytest`, `python -m ruff check .` — all three must
++  exit 0 with the healthy output `CLAUDE.md`'s Commands table describes.
+diff --git a/changes/0016-name-the-dividend-in-divide-s-error/spec.md b/changes/0016-name-the-dividend-in-divide-s-error/spec.md
+new file mode 100644
+index 0000000..cf29172
+--- /dev/null
++++ b/changes/0016-name-the-dividend-in-divide-s-error/spec.md
+@@ -0,0 +1,94 @@
++# Spec: name the dividend in divide's error
++Change id: 0016. Status: proposed. Produced by: sdlc plugin 1.0.12, /sdlc-design prompt v1 (article p.14). Skills: coding-standards, security-baseline, ux-conventions, data-conventions, definition-of-done (plugin 1.0.12); overrides: none
++
++## Requirements
++- `divide(1, 0)` raises `ZeroDivisionError` with the message `"cannot divide 1 by zero"` (intent Proposed outcome).
++- The message names the dividend `a` using Python's own text for the value (`str`/f-string
++  conversion), so `divide(1.5, 0)` raises `"cannot divide 1.5 by zero"` and `divide(1.0, 0)`
++  raises `"cannot divide 1.0 by zero"` (intent open question, answered below).
++- The exception type stays `ZeroDivisionError`; no caller that catches it is affected
++  (intent Proposed outcome).
++- `percent`'s message on a zero `whole` stays exactly `"whole must not be zero"`, unchanged
++  (intent Proposed outcome). `percent` already raises its own literal message in its
++  `except ZeroDivisionError` clause (`sample_pkg/calc.py:17-18`), independent of the text
++  `divide` raises, so this requirement needs no code change in `percent` — only in `divide`.
++- `mean`'s behaviour does not change: its divisor is `len(values)`, which is never zero once
++  the empty-collection check (`if not values: raise ValueError(...)`) has passed, so it never
++  observes `divide`'s `ZeroDivisionError` at all (intent Proposed outcome).
++- `add`, `divide`, `percent` and `mean` keep their signatures and return values; only the
++  message text of `divide`'s zero-divisor error changes (intent Constraints).
++- A new test module verifies the exact message of `divide(1, 0)`; `tests/test_calc.py` and
++  `tests/test_flag.py` are not touched (intent Constraints; coding-standards rule 4: every
++  behaviour change ships with a test that fails without it).
++- No new dependency; Python 3.10+, type hints on public functions, ruff line length 100
++  (CLAUDE.md Conventions; coding-standards rules 5 and 8).
++- Guardrail files (`.claude/**`, `CLAUDE.md`, `REVIEW.md`, `sdlc.yaml`, `bands.yaml`) are not
++  edited (intent Constraints; definition-of-done "Always").
++- No public function is added or removed, so the Layout section of `CLAUDE.md` stays
++  correct as-is: it already names `tests/test_messages.py` as the file that "checks the
++  error messages" (CLAUDE.md Layout, added in PR #76) and its one-line description of
++  `divide` does not quote the exact message text (intent Affected users and systems).
++- None of `sdlc.yaml`'s risk-list items (auth, data migrations, money movement, production
++  config) apply to this change: it touches no authentication, no stored data, no money
++  value and no deployment configuration — security-baseline rule 8 and data-conventions
++  rule 3 therefore do not apply.
++- security-baseline otherwise does not apply beyond the risk-list check above: no endpoint,
++  no external input parsing beyond the existing numeric parameters, no secret, no new
++  dependency, no shell/SQL construction, no outbound network call is touched.
++- ux-conventions does not apply: `sample_pkg` is a library with no user interface (the skill
++  itself exempts "projects without a user interface"); the only user-facing surface is the
++  exception message text read by a caller or developer. The change is consistent with rule
++  4's intent even though the rule targets UI copy: it drops the internal parameter name `b`
++  in favour of the caller's own value, so the message still "says what happened" without
++  exposing an internal name any more than the current message's `b` already does.
++- data-conventions does not apply: no schema, storage, migration, log statement or classified
++  field is touched. The message echoes only the value of `a`, which the caller already
++  supplied as an argument to the same call — the message creates no new exposure of data
++  the caller does not already hold.
++
++## Design
++- `sample_pkg/calc.py`, function `divide`: change the raised message from the fixed string
++  `"b must not be zero"` to one built from the dividend, `a`, using an f-string, so the
++  message is `f"cannot divide {a} by zero"`. The condition that raises (`if b == 0`), the
++  exception type (`ZeroDivisionError`), and the return value on the non-zero path are
++  unchanged.
++- `sample_pkg/__init__.py`: unchanged — it re-exports `add`, `divide`, `percent`, `mean`,
++  none of whose signatures move.
++- `percent`: unchanged. It already catches `divide`'s `ZeroDivisionError` and re-raises its
++  own `"whole must not be zero"` via `raise ... from None`, so it never surfaces `divide`'s
++  message text to its own callers.
++- `mean`: unchanged. It calls `divide(sum(values), len(values))` only after `values` is
++  known non-empty, so `b` (`len(values)`) is never zero and `divide`'s new message is never
++  constructed on that path.
++- New test module under `tests/`: asserts `divide(1, 0)` raises `ZeroDivisionError` whose
++  `str(...)` is exactly `"cannot divide 1 by zero"`. (File name, placement among other test
++  modules, and whether it also re-asserts `percent`'s unchanged message are implementation
++  order-of-work, for `plan.md`.)
++
++## Open questions from intent
++- "How is a non-integer dividend written in the message, for example `divide(1.5, 0)` or
++  `divide(1.0, 0)`? The default is Python's own text for the value (`"cannot divide 1.5 by
++  zero"`, `"cannot divide 1.0 by zero"`); to be settled in design." — Answered: adopt the
++  intent's own stated default. The message is built with an f-string, `f"cannot divide {a}
++  by zero"`, which renders a value the same way `str()` does — exactly the two examples the
++  intent gives. No codebase convention conflicts with this (no other message in
++  `sample_pkg/calc.py` formats a value today), so there is nothing to choose between.
++
++## Flagged concerns
++none
++
++## Acceptance
++- `divide(1, 0)` raises `ZeroDivisionError` and `str(exception) == "cannot divide 1 by zero"`.
++- `divide(1.5, 0)` raises with `str(exception) == "cannot divide 1.5 by zero"` and
++  `divide(1.0, 0)` raises with `str(exception) == "cannot divide 1.0 by zero"` (message
++  formatting, not required by an existing test but consistent with the requirement above).
++- Existing behaviour tests keep passing unchanged: `test_divide_by_zero_raises`,
++  `test_percent`, `test_percent_zero_whole_raises`,
++  `test_percent_zero_whole_error_names_whole` (asserts `"whole must not be zero"`),
++  `test_mean`, `test_mean_single_element`, `test_mean_empty`,
++  `test_mean_accepts_non_sequence_collection`, `test_add` — all in `tests/test_calc.py`,
++  untouched.
++- `tests/test_flag.py` is untouched and its `SAMPLE_FAIL=1`-gated behaviour is unaffected.
++- `python -m compileall -q .` exits 0 with no output.
++- `python -m pytest` exits 0, every test passing, including the new message test.
++- `python -m ruff check .` exits 0 with `All checks passed!`.
+diff --git a/changes/0016-name-the-dividend-in-divide-s-error/status.yaml b/changes/0016-name-the-dividend-in-divide-s-error/status.yaml
+new file mode 100644
+index 0000000..18ac324
+--- /dev/null
++++ b/changes/0016-name-the-dividend-in-divide-s-error/status.yaml
+@@ -0,0 +1,36 @@
++id: "0016"
++slug: name-the-dividend-in-divide-s-error
++title: "Name the dividend in divide's error"
++phase: b
++entry_route: idea
++change_type: feature
++profile_override: null
++review_override: null
++gate:
++  phase: null
++  result: null
++  reason: null
++  at: null
++parked_reason: null
++iterations: 0
++panel_calls: 0
++external_ref: null
++risk_accepted: []
++tests_locked: false
++risk_accepted_by: []
++iterations_reset_by: null
++iterations_reset_at: null
++tests_unlocked_by: null
++runbook_authorized_by: null
++abandoned_reason: null
++build_pr: null
++released_at: null
++released_sha: null
++released_pr: null
++fast_lane:
++  a:
++    sha: "614594e11b1e14a02400756aff5e572d223c5033"
++    pr: 77
++created_at: "2026-10-19T19:04:17Z"
++updated_at: "2026-10-19T19:21:41Z"
++schema_version: 1

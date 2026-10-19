@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "change_id": "0016",
+  "slug": "name-the-dividend-in-divide-s-error",
+  "phase": "b",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "continue",
+  "label": null,
+  "head": "9433cc6f3e21cffdb218b11b9da26ce70aa7889f",
+  "at": "2026-10-19T19:25:55Z",
+  "dry_run": false,
+  "reason": "",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 0,
+        "cap": 3,
+        "classification": "routine",
+        "panel_calls": 0,
+        "panel_cap": 4,
+        "elapsed_minutes": 6.7,
+        "spend_usd": null,
+        "spend_usd_total": null,
+        "spend_entries": 0,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "design_scope",
+      "ok": true,
+      "reason": "the committed diff stays inside changes/0016-name-the-dividend-in-divide-s-error/",
+      "need": "",
+      "details": {
+        "dirty": [
+          ".env",
+          "changes/0016-name-the-dividend-in-divide-s-error/evidence/adversarial-review-b.json",
+          "changes/0016-name-the-dividend-in-divide-s-error/evidence/diff-b.patch",
+          "changes/0016-name-the-dividend-in-divide-s-error/evidence/hook-log.jsonl",
+          "changes/0016-name-the-dividend-in-divide-s-error/evidence/panel/b-items.json"
+        ]
+      }
+    },
+    {
+      "name": "open_concerns",
+      "ok": true,
+      "reason": "no open flagged concern",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "panel",
+      "ok": true,
+      "reason": "no panel decision at this gate",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "reason": "deferred to the runner: build, test and lint run after the model's session, outside its sandbox (issue #91); not yet run",
+      "need": "",
+      "details": {
+        "deferred": true
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "owner_actions",
+      "ok": true,
+      "reason": "risk acceptances, iteration and panel-call resets and test-lock lifts, if any, were committed by the owner or applied by the owner's label",
+      "need": "",
+      "details": {
+        "risk_accepted": [],
+        "label_actors": {}
+      }
+    },
+    {
+      "name": "adversarial_review",
+      "ok": true,
+      "reason": "adversarial reviewer says continue",
+      "need": "",
+      "details": {
+        "classification": "routine",
+        "reasons": []
+      }
+    }
+  ],
+  "what_i_need": "",
+  "fast_lane": true
+}
