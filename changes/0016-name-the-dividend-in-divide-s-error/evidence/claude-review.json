@@ -1,0 +1,105 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 80726,
+  "duration_ms": 81596,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 1899,
+  "is_error": false,
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "cacheCreationInputTokens": 44472,
+      "cacheReadInputTokens": 561487,
+      "canonicalModel": "claude-sonnet-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 0.35452940000000005,
+      "inputTokens": 22,
+      "maxOutputTokens": 64000,
+      "outputTokens": 6430,
+      "provider": "firstParty",
+      "thinkingTokens": 3102,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 28,
+  "permission_denials": [
+    {
+      "tool_input": {
+        "command": "cd /home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0016-name-the-dividend-in-divide-s-error/evidence && cat gate-c.json | python3 -c \"import json,sys; d=json.load(sys.stdin); print(json.dumps([c for c in d['checks'] if c['name']=='ratchets'], indent=2))\" 2>/dev/null || grep -A15 '\"ratchets\"' gate-c.json gate-d.json"
+      },
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01MKNUuRbvizG1VNDWF2CW1M"
+    }
+  ],
+  "queued_turn_count": 0,
+  "result": "## Review summary \u2014 change 0016\n\n**Tally**: 0 important, 0 nits (0 omitted)\n\nNo Important findings and no nits. The non-evidence diff is exactly the two files `plan.md` names:\n- `sample_pkg/calc.py`: `divide`'s raise changes from `\"b must not be zero\"` to `f\"cannot divide {a} by zero\"` \u2014 matches `spec.md`'s Design and intent's examples verbatim; `percent` and `mean` are byte-for-byte unchanged, and `percent` still raises its own literal message independently via `raise ... from None`, so it's unaffected.\n- `tests/test_messages.py` (new): asserts `str(excinfo.value) == \"cannot divide 1 by zero\"` for `divide(1, 0)` \u2014 false against the pre-change code, so it's a real regression guard, not vacuous.\n\nNo guardrail file touched, no pre-existing test edited, `change_type` is `feature` (not `fix`, so the test-lock rule doesn't apply), no skip markers added, `plan.md` reflects the diff with no undeclared departure, and `CLAUDE.md`'s Layout section stays correct as-is (no new public function was added, so the \"update Layout\" rule doesn't trigger \u2014 `test_messages.py` is already documented there from PR #76). `build.log`/`test.log`/`lint.log` show real green output (11 passed, ruff clean, compileall clean), consistent with both adversarial verdicts (`continue`, routine) and gate (d)'s checks.\n\n**Plan conformance**: the diff matches `plan.md`'s files, order of work, and proof exactly \u2014 one of the tightest-scoped changes in this project's history, with no mismatches found.\n\nWrote `changes/0016-name-the-dividend-in-divide-s-error/evidence/review-findings.json`.",
+  "result_index": 0,
+  "session_id": "e3e2809d-1fde-4895-8bb0-9bc6e4c5b3a2",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {},
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 0,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "spawned": 0,
+    "spawned_by_subagents": 0,
+    "started_in_background": 0
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 68,
+  "total_cost_usd": 0.35452940000000005,
+  "ttft_ms": 2919,
+  "ttft_stream_ms": 1899,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 44472,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 44472,
+    "cache_read_input_tokens": 561487,
+    "inference_geo": "global",
+    "input_tokens": 22,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 373,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 373,
+        "cache_read_input_tokens": 68488,
+        "input_tokens": 2,
+        "output_tokens": 609,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 6430,
+    "output_tokens_details": {
+      "thinking_tokens": 3102
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "2d2be39f-9e9e-475f-85ae-7e1047041c20"
+}
