@@ -39,13 +39,37 @@
     "last_seen": "2026-10-19T17:21:58Z",
     "summary": "The Layout line \"percent(part, whole) ... raises the same on a zero whole\" is ambiguous after this change: percent now raises a different message than divide, so a reader could take \"the same\" to mean the same error text rather than just the same exception type."
   },
+  "4c6f2a7b79dee2c8": {
+    "count": 1,
+    "file": "CLAUDE.md",
+    "first_change": "0015",
+    "last_change": "0015",
+    "last_seen": "2026-10-19T17:32:35Z",
+    "summary": "The Commands table's healthy test output still reads \"9 passed in 0.01s\", but the new test brings the suite to 10 passing tests, so CLAUDE.md is now outdated and the diff does not update it (it cannot, as a guardrail file) or flag the discrepancy in plan.md."
+  },
   "5e7c81cfb5d139ff": {
-    "count": 5,
+    "count": 6,
     "file": "tests/test_calc.py",
     "first_change": "0015",
     "last_change": "0015",
-    "last_seen": "2026-10-19T17:30:51Z",
+    "last_seen": "2026-10-19T17:32:35Z",
     "summary": "pre-existing test file modified in a fix-type change (REVIEW.md framework rule; build guide step 25)"
+  },
+  "6226409f2242c1ce": {
+    "count": 1,
+    "file": "tests/test_calc.py",
+    "first_change": "0015",
+    "last_change": "0015",
+    "last_seen": "2026-10-19T17:32:35Z",
+    "summary": "This is a fix-type change (status.yaml: change_type: fix) and the diff appends test_percent_zero_whole_error_names_whole to tests/test_calc.py, a test file that existed before the fix, instead of putting the reproducing test in a new file, breaching the framework rule that the pre-existing test file stay untouched so the failing test written first is the proof."
+  },
+  "8faf342b4d192bed": {
+    "count": 1,
+    "file": "CLAUDE.md",
+    "first_change": "0015",
+    "last_change": "0015",
+    "last_seen": "2026-10-19T17:32:35Z",
+    "summary": "The Layout line \"percent(part, whole) is part * 100 / whole through divide, so it raises the same on a zero whole\" is ambiguous now that percent's message text differs from divide's, even though the exception type is still the same; not clearly false, just worth a clarifying rewrite."
   },
   "99fbee6f3ddeb611": {
     "count": 1,

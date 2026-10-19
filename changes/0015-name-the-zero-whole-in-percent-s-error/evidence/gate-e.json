@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "change_id": "0015",
+  "slug": "name-the-zero-whole-in-percent-s-error",
+  "phase": "e",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "park",
+  "label": "sdlc:needs-human",
+  "head": "e1ee0dba2abb5f8ac9ac073ae72dbb5a7e875130",
+  "at": "2026-10-19T17:32:46Z",
+  "dry_run": false,
+  "reason": "limits: iteration cap reached: 4 fix iterations, cap 3",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": false,
+      "reason": "iteration cap reached: 4 fix iterations, cap 3",
+      "need": "Look at the partial evidence, then either fix by hand, or reset the count with `cli.py set-iterations --root . --id 0015 --count 0` to allow another round.",
+      "details": {
+        "iterations": 4,
+        "cap": 3,
+        "classification": "routine",
+        "stop": true
+      }
+    }
+  ],
+  "what_i_need": "## What I need from you\nGate (e) parked change 0015 (name-the-zero-whole-in-percent-s-error) on 2026-10-19T17:32:46Z.\n- **limits**: iteration cap reached: 4 fix iterations, cap 3\n  - what I need: Look at the partial evidence, then either fix by hand, or reset the count with `cli.py set-iterations --root . --id 0015 --count 0` to allow another round.\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0015 --phase e` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
+}
