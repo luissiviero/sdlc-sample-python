@@ -10,7 +10,7 @@ gate:
   phase: b
   result: passed
   reason: "passed on the fast lane (decision 30): the adversarial reviewer classed the plan routine, so the build starts without a merge of the design PR"
-  at: "2026-10-19T14:19:30Z"
+  at: "2026-10-19T14:19:46Z"
 parked_reason: null
 iterations: 0
 panel_calls: 0
@@ -27,6 +27,11 @@ build_pr: null
 released_at: null
 released_sha: null
 released_pr: null
+fast_lane:
+  b:
+    sha: "0e4fed526e8d7ec6e145d86446c8e9671a8bebdb"
+    classification: routine
+    pr: 70
 created_at: "2026-10-19T13:53:34Z"
-updated_at: "2026-10-19T14:19:30Z"
+updated_at: "2026-10-19T14:19:47Z"
 schema_version: 1
