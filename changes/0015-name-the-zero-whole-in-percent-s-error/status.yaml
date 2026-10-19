@@ -1,7 +1,7 @@
 id: "0015"
 slug: name-the-zero-whole-in-percent-s-error
 title: "Name the zero whole in percent's error"
-phase: b
+phase: c
 entry_route: idea
 change_type: fix
 profile_override: null
@@ -33,5 +33,5 @@ fast_lane:
     classification: routine
     pr: 70
 created_at: "2026-10-19T13:53:34Z"
-updated_at: "2026-10-19T14:19:47Z"
+updated_at: "2026-10-19T14:21:00Z"
 schema_version: 1
