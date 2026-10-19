@@ -30,3 +30,11 @@ change's reproducing test belongs in a new file from the first commit.
 
 Both findings recur unchanged across fix rounds because neither is fixable from this
 session; they are expected to still be open when gate (e) parks.
+
+## Fix-round log
+- Round 1 (commit `86ea6d39`): both findings confirmed still present and unfixable from
+  this session; no code change made.
+- Round 2: re-reviewed at the new HEAD; same two root causes stand (the second review pass
+  additionally reported a line-level duplicate of finding 2, `tests/test_calc.py:25`, which
+  is the same underlying issue — the test file was touched at all in a fix-type change —
+  not a third distinct problem). No code change made; nothing further to fix.

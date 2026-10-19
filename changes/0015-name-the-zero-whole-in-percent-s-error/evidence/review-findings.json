@@ -1,14 +1,14 @@
 {
-  "at": "2026-10-19T17:25:00Z",
+  "at": "2026-10-19T17:27:33Z",
   "findings": [
     {
       "file": "CLAUDE.md",
       "line": 14,
       "pass": "compliance",
-      "rule": "CLAUDE.md outdated",
+      "rule": "REVIEW.md framework rule: flag when the change has made CLAUDE.md outdated",
       "severity": "important",
       "signature": "374b057c258aa62f",
-      "summary": "The Commands table's healthy output for `test` still reads \"9 passed in 0.01s\", but this change adds a tenth test (confirmed by evidence/test.log's \"10 passed in 0.01s\"), so CLAUDE.md now states a false healthy-output string for anyone running the suite."
+      "summary": "The Commands table's healthy output for `test` still reads \"9 passed in 0.01s\" but the suite now reports 10 passed (confirmed by gate-d.json's literal pytest output), so CLAUDE.md states a false healthy-output string for anyone running the suite."
     },
     {
       "file": "tests/test_calc.py",
@@ -21,19 +21,28 @@
       "summary": "pre-existing test file modified in a fix-type change (REVIEW.md framework rule; build guide step 25)"
     },
     {
+      "file": "tests/test_calc.py",
+      "line": 25,
+      "pass": "compliance",
+      "rule": "REVIEW.md framework rule: in a fix-type change the diff must not modify test files that existed before the fix",
+      "severity": "important",
+      "signature": "c1d5d6445bf43fdf",
+      "summary": "This is a fix-type change (status.yaml change_type: fix) and the diff adds the reproducing test by appending to the pre-existing tests/test_calc.py rather than a new test file, which the framework rule reads as modifying a test file that existed before the fix."
+    },
+    {
       "file": "CLAUDE.md",
       "line": 22,
       "pass": "compliance",
-      "rule": "CLAUDE.md outdated",
+      "rule": "REVIEW.md framework rule: flag when the change has made CLAUDE.md outdated",
       "severity": "nit",
-      "signature": "3daf103d53243618",
-      "summary": "The Layout line \"percent(part, whole) ... raises the same on a zero whole\" is ambiguous after this change: percent now raises a different message than divide, so a reader could take \"the same\" to mean the same error text rather than just the same exception type."
+      "signature": "db52ff96e0d468f7",
+      "summary": "The Layout line's \"raises the same on a zero `whole`\" wording is now ambiguous: percent raises a different message than divide, so \"the same\" could be misread as the same text rather than just the same exception type."
     }
   ],
-  "head": "9d6110b51afdf8feb1e46a427f78aea405670dea",
+  "head": "86ea6d3960512848876deed9f3688b354aceafe8",
   "schema_version": 1,
   "tally": {
-    "important": 2,
+    "important": 3,
     "nit": 1,
     "nits_omitted": 0
   }

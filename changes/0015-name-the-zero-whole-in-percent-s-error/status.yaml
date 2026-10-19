@@ -12,7 +12,7 @@ gate:
   reason: null
   at: "2026-10-19T14:35:01Z"
 parked_reason: null
-iterations: 1
+iterations: 2
 panel_calls: 0
 external_ref: null
 risk_accepted: []
@@ -33,5 +33,5 @@ fast_lane:
     classification: routine
     pr: 70
 created_at: "2026-10-19T13:53:34Z"
-updated_at: "2026-10-19T17:25:26Z"
+updated_at: "2026-10-19T17:27:57Z"
 schema_version: 1
