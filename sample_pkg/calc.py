@@ -15,7 +15,7 @@ def percent(part: float, whole: float) -> float:
     try:
         return divide(part * 100, whole)
     except ZeroDivisionError:
-        raise ZeroDivisionError("whole must not be zero") from None
+        raise ZeroDivisionError(f"cannot express {part} as a percent of zero") from None
 
 
 def mean(values: Collection[float]) -> float:

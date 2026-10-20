@@ -25,7 +25,7 @@ def test_percent_zero_whole_raises():
 def test_percent_zero_whole_error_names_whole():
     with pytest.raises(ZeroDivisionError) as excinfo:
         percent(1, 0)
-    assert str(excinfo.value) == "whole must not be zero"
+    assert str(excinfo.value) == "cannot express 1 as a percent of zero"
 
 
 def test_mean():
