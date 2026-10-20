@@ -1,0 +1,410 @@
+ .../evidence/.gitkeep                              |   0
+ .../evidence/hook-log.jsonl                        |  25 ++++
+ .../evidence/run-b.json                            |   5 +
+ .../intent.md                                      |  51 ++++++++
+ .../plan.md                                        | 108 ++++++++++++++++
+ .../spec.md                                        | 136 +++++++++++++++++++++
+ .../status.yaml                                    |  36 ++++++
+ 7 files changed, 361 insertions(+)
+
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep
+new file mode 100644
+index 0000000..e69de29
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
+new file mode 100644
+index 0000000..5a298e5
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
+@@ -0,0 +1,25 @@
++{"action": "none", "at": "2026-10-20T06:14:42Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" show --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T06:14:44Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T06:14:44Z", "command": "git fetch origin", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T06:14:46Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T06:14:46Z", "command": "git status --short --branch", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T06:14:51Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" start-run --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T06:14:57Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" spec-header --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T06:14:58Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" models --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T06:16:09Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:16:09Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:16:09Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:16:09Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:16:42Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:16:42Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:16:42Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:16:42Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:17:14Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:17:14Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:17:14Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:17:14Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T06:17:14Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T06:17:14Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T06:17:28Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T06:17:28Z", "command": "git diff --stat -- .env", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T06:17:32Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json
+new file mode 100644
+index 0000000..ad4880e
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json
+@@ -0,0 +1,5 @@
++{
++  "phase": "b",
++  "spend_usd": null,
++  "started_at": "2026-10-20T06:14:51Z"
++}
+\ No newline at end of file
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/intent.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/intent.md
+new file mode 100644
+index 0000000..cd7309c
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/intent.md
+@@ -0,0 +1,51 @@
++# Intent: name the part in percent's zero-whole error
++Author: Luis Siviero (owner). Status: proposed. Change id: 0017. Entry route: idea.
++
++## Problem
++`percent(5, 0)` raises `ZeroDivisionError("whole must not be zero")`. Since change 0016,
++`divide(1, 0)` says which number was being divided (`"cannot divide 1 by zero"`), but
++`percent` still names only its parameter: whoever reads the traceback learns that some whole
++was zero, not which part was being expressed as a percent of it, and has to go back to the
++calling code to find out. The two messages now follow different rules.
++
++This is also the sample's first change on plugin 1.0.14. Its runs are the first live reading
++of R7 (framework NOTES §51): whether CI reaches `claude-opus-5-5` and `claude-fable-5-1` as
++the sample's `sdlc.yaml` model rows ask, whether CLI 2.1.278 honours the Fable pin, and
++where the in-run reviewer and the panel advocate run. It is also the sample change that
++framework R56 waits for. The code change is kept small on purpose.
++
++## Proposed outcome
++- `percent(5, 0)` raises `ZeroDivisionError` with the message
++  `"cannot express 5 as a percent of zero"`: the message names the part.
++- The exception type stays `ZeroDivisionError`, so callers that catch it are not affected.
++- `percent`'s result for a non-zero `whole` does not change, and neither do `divide`'s
++  message (`"cannot divide 1 by zero"`), `mean`'s or `add`'s behaviour.
++- `tests/test_messages.py` gains a test that checks the message of `percent(5, 0)`.
++- Build, test and lint stay green: `python -m compileall -q .`, `python -m pytest`,
++  `python -m ruff check .`.
++
++## Affected users and systems
++- The owner and anyone importing `sample_pkg` who reads the error of a zero `whole`.
++- Files: `sample_pkg/calc.py` (the message in `percent`) and `tests/test_messages.py`
++  (one added test).
++- No public function is added or removed, so the Layout section of `CLAUDE.md` stays
++  correct; its sentence on `percent` ("it raises the same on a zero `whole`") describes the
++  exception type, which does not change.
++- No services, data stores or external parties.
++
++## Constraints
++- No new dependencies; plain Python 3.10+ with type hints, line length 100 (ruff).
++- `add`, `divide`, `percent` and `mean` keep their signatures and return values; only the
++  message of `percent`'s zero-whole error changes.
++- The existing test in `tests/test_messages.py`, `tests/test_calc.py` and
++  `tests/test_flag.py` are not changed.
++- The guardrail files (`.claude/**`, `CLAUDE.md`, `REVIEW.md`, `sdlc.yaml`, `bands.yaml`)
++  are not edited.
++
++## Open questions
++- How is a non-integer part written in the message, for example `percent(1.5, 0)`? The
++  default is Python's own text for the value (`"cannot express 1.5 as a percent of zero"`),
++  as change 0016 settled for `divide`; to be confirmed in design.
++- Does `percent` keep raising its own message (today it re-raises with `from None`), or let
++  `divide`'s message through? The default is its own message, so the reader sees the part,
++  not `part * 100`.
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md
+new file mode 100644
+index 0000000..530868e
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md
+@@ -0,0 +1,108 @@
++# Plan: name the part in percent's zero-whole error (from intent.md 2026-10-20, spec.md 2026-10-20)
++
++## Files that change
++- `sample_pkg/calc.py` — in `percent`, change the re-raised message from the fixed string
++  `"whole must not be zero"` to `f"cannot express {part} as a percent of zero"`; the `try`,
++  the `except ZeroDivisionError`, the `from None` and every other line in the file stay as
++  they are.
++- `tests/test_messages.py` — import `percent` beside `divide` from `sample_pkg`; add one test
++  asserting `percent(5, 0)` raises `ZeroDivisionError` whose `str(...)` is exactly
++  `"cannot express 5 as a percent of zero"`. The existing test is not touched.
++- `tests/test_calc.py` — in `test_percent_zero_whole_error_names_whole`, change the asserted
++  message from `"whole must not be zero"` to `"cannot express 1 as a percent of zero"`
++  (the test calls `percent(1, 0)`). Nothing else in the module moves. This edit is the open
++  flagged concern in `spec.md`; if the owner or the panel decides the other way (keep the
++  old message and leave `tests/test_calc.py` alone), drop this file and step 3 and the
++  change reduces to no source edit at all, which abandons the intent's Proposed outcome.
++
++## Order of work
++1. In `sample_pkg/calc.py`, line 18, change
++   `raise ZeroDivisionError("whole must not be zero") from None` to
++   `raise ZeroDivisionError(f"cannot express {part} as a percent of zero") from None`.
++   One line.
++2. In `tests/test_messages.py`, change the import to `from sample_pkg import divide, percent`
++   and append a test `test_percent_zero_whole_names_part` that calls `percent(5, 0)` inside
++   `with pytest.raises(ZeroDivisionError) as excinfo:` and asserts
++   `str(excinfo.value) == "cannot express 5 as a percent of zero"`, in the same shape as the
++   existing `test_divide_by_zero_names_dividend`.
++3. In `tests/test_calc.py`, line 28, change the assertion to
++   `assert str(excinfo.value) == "cannot express 1 as a percent of zero"`. Keep the test's
++   name and the rest of the module unchanged.
++4. Run `python -m compileall -q .`, `python -m pytest` and `python -m ruff check .` from the
++   repository root; all three must exit 0 with the healthy output `CLAUDE.md`'s Commands
++   table describes (no output; `11 passed`; `All checks passed!`). Paste the output.
++Steps 1 to 3 can land in one commit: the plan-sync hook requires the commit that touches
++source to carry `plan.md` only when it departs from this list, and it does not.
++
++## Risks
++- A single string literal inside one `raise` changes; the function's signature, condition,
++  exception type and return value are untouched. The riskiest step is step 1, only because it
++  is the one line that changes behaviour: formatting `part * 100` or `whole` instead of
++  `part` would name the wrong value and would show up only in the new test's assertion
++  (`5`, not `500` or `0`). Dropping `from None` by accident would re-attach `divide`'s
++  exception as the cause and show `"cannot divide 500 by zero"` in the traceback, which no
++  test catches; the implementer must keep the clause as it is.
++- Callers matching the exact old message break by design. Checked with Grep: the string
++  `"whole must not be zero"` occurs in source only in `sample_pkg/calc.py:18` and in
++  `tests/test_calc.py:28` (step 3 updates it); every other occurrence is inside the change
++  folders of changes 0015, 0016 and 0017 (historical records and this plan, not edited by
++  the build). No other caller exists inside this repository.
++- Step 3 edits a test file the intent's Constraints say is not changed; this is the open
++  flagged concern in `spec.md`. The change is `feature`-typed, so `sdlc.yaml: test_paths`
++  does not lock the file (the lock is for `fix`-type changes). If the decision at the gate
++  goes the other way, the build must not run steps 1 to 3 as written; see the note in Files
++  that change.
++- `test_percent_zero_whole_error_names_whole` keeps a name that says "names whole" while
++  asserting a message that names the part. Renaming it was considered (Options not taken)
++  and rejected to keep the edit to the one assertion line the concern covers.
++- `divide` and `mean` are not touched; `mean` never reaches a zero divisor because it rejects
++  an empty collection first. `tests/test_flag.py` is not touched and `SAMPLE_FAIL` is never
++  set.
++- No new dependency, no schema, no migration, no risk-list item (auth, data migrations,
++  money movement, production config) and no guardrail file is touched. `CLAUDE.md`'s Layout
++  section stays correct: no public function is added or removed, and its sentence on
++  `percent` describes the exception type, not the message text.
++
++## Options not taken
++- Keeping the old message to leave `tests/test_calc.py` untouched: rejected as the default,
++  because the intent's Problem and Proposed outcome are the new message and the test is the
++  old behaviour written down. Recorded as the alternative under the flagged concern, for the
++  owner or the panel.
++- Letting `divide`'s message through (dropping the `except` clause in `percent`): rejected,
++  because `percent` calls `divide(part * 100, whole)` and the message would read
++  `"cannot divide 500 by zero"` for `percent(5, 0)`, a value the caller never passed. The
++  intent's open question 2 prefers the own message for this reason.
++- Checking `whole == 0` in `percent` before calling `divide`, instead of catching
++  `ZeroDivisionError`: rejected; it would change the function's shape for no gain and the
++  intent asks for a message change only.
++- Formatting `part` with `repr()` or a fixed number format: rejected; the intent's example
++  `"cannot express 1.5 as a percent of zero"` is `str()`'s output, and `divide` already uses
++  the f-string default (change 0016).
++- Renaming `test_percent_zero_whole_error_names_whole` to say "names part": rejected to keep
++  the edit to the one assertion line; a rename is a second departure from the intent's
++  constraint for a cosmetic gain. The new test in `tests/test_messages.py` carries the
++  descriptive name.
++- Deleting `test_percent_zero_whole_error_names_whole` instead of updating it (the new test
++  in `tests/test_messages.py` covers the message): rejected; coding-standards rule 4 forbids
++  deleting a failing test, and updating the assertion keeps the coverage of `percent(1, 0)`.
++- Adding tests for `percent(1.5, 0)` and `percent(1.0, 0)`: not added; the intent's
++  acceptance target is `percent(5, 0)` and the formatting rule is the same f-string default
++  `divide` uses, which change 0016 settled without a dedicated test.
++
++## Proof
++- `tests/test_messages.py::test_percent_zero_whole_names_part` — still to be written in step
++  2; asserts `str(excinfo.value) == "cannot express 5 as a percent of zero"` for
++  `percent(5, 0)`. It fails on the current code and passes after step 1.
++- `tests/test_calc.py::test_percent_zero_whole_error_names_whole` — existing test, updated in
++  step 3 to assert `"cannot express 1 as a percent of zero"` for `percent(1, 0)`.
++- `tests/test_messages.py::test_divide_by_zero_names_dividend` — existing test, unchanged,
++  must keep passing (`"cannot divide 1 by zero"`).
++- `tests/test_calc.py::test_add`, `test_divide_by_zero_raises`, `test_percent`,
++  `test_percent_zero_whole_raises`, `test_mean`, `test_mean_single_element`,
++  `test_mean_empty`, `test_mean_accepts_non_sequence_collection` — existing tests, unchanged,
++  must keep passing.
++- `tests/test_flag.py::test_intentional_failure_behind_flag` — existing test, untouched,
++  passes because `SAMPLE_FAIL` is never set.
++- `python -m compileall -q .` (no output, exit 0), `python -m pytest` (`11 passed`, exit 0),
++  `python -m ruff check .` (`All checks passed!`, exit 0), as `CLAUDE.md`'s Commands table
++  describes.
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md
+new file mode 100644
+index 0000000..e412725
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md
+@@ -0,0 +1,136 @@
++# Spec: name the part in percent's zero-whole error
++Change id: 0017. Status: proposed. Produced by: sdlc plugin 1.0.14, /sdlc-design prompt v1 (article p.14). Skills: coding-standards, security-baseline, ux-conventions, data-conventions, definition-of-done (plugin 1.0.14); overrides: none
++
++## Requirements
++- `percent(5, 0)` raises `ZeroDivisionError` with the message exactly
++  `"cannot express 5 as a percent of zero"` (intent Proposed outcome).
++- The message names the `part` argument as the caller passed it, rendered with Python's own
++  text for the value (`str`, the f-string default), so `percent(1.5, 0)` raises
++  `"cannot express 1.5 as a percent of zero"` and `percent(1.0, 0)` raises
++  `"cannot express 1.0 as a percent of zero"` (intent open question 1, answered below; the
++  same rule change 0016 settled for `divide`).
++- The message names `part`, never `part * 100`: `percent` keeps raising its own message in
++  its `except ZeroDivisionError` clause with `from None`, as today, and does not let
++  `divide`'s `"cannot divide 500 by zero"` through (intent open question 2, answered below).
++- The exception type stays `ZeroDivisionError`; a caller that catches it is not affected
++  (intent Proposed outcome).
++- `percent`'s return value for a non-zero `whole` does not change (`percent(1, 4) == 25.0`,
++  `percent(7, 100) == 7.0`, per `tests/test_calc.py::test_percent`).
++- `divide`'s message stays exactly `"cannot divide 1 by zero"` for `divide(1, 0)`; `add` and
++  `mean` do not change at all (intent Proposed outcome). `mean` divides by `len(values)` only
++  after rejecting an empty collection, so it never reaches a zero divisor.
++- `add`, `divide`, `percent` and `mean` keep their signatures and return values; the only
++  behaviour change is the message text of `percent`'s zero-whole error (intent Constraints).
++- `tests/test_messages.py` gains one test asserting the exact message of `percent(5, 0)`; its
++  existing test `test_divide_by_zero_names_dividend` is not changed (intent Proposed outcome
++  and Constraints; coding-standards rule 4: every behaviour change ships with a test that
++  fails without it).
++- `tests/test_flag.py` is not changed (intent Constraints; CLAUDE.md Layout).
++- `tests/test_calc.py`: see the flagged concern. Its test
++  `test_percent_zero_whole_error_names_whole` (lines 25–28) asserts the old message
++  `"whole must not be zero"` and cannot pass once the first requirement is met. The design
++  below updates that one assertion to the new message; the concern records that this departs
++  from the intent's constraint that `tests/test_calc.py` is not changed.
++- No new dependency; Python 3.10+, type hints on public functions, ruff line length 100
++  (CLAUDE.md Conventions; coding-standards rules 5 and 8).
++- The guardrail files (`.claude/**`, `CLAUDE.md`, `REVIEW.md`, `sdlc.yaml`, `bands.yaml`) are
++  not edited (intent Constraints; definition-of-done "Always").
++- No public function is added or removed, so the Layout section of `CLAUDE.md` stays correct
++  as it is: its sentence on `percent` ("it raises the same on a zero `whole`") describes the
++  exception type, which does not change, and it already names `tests/test_messages.py` as
++  the module that "checks the error messages" (intent Affected users and systems; CLAUDE.md
++  "Things Claude gets wrong" is about a new public function, which this change does not add).
++- None of `sdlc.yaml`'s risk-list items (auth, data migrations, money movement, production
++  config) apply: the change touches no authentication, no stored data, no money value and no
++  deployment configuration. Security-baseline rule 8 and data-conventions rule 3 therefore
++  do not apply.
++- security-baseline does not otherwise apply: no endpoint, no new external input (the numeric
++  parameters already exist), no secret, no new dependency, no shell or SQL construction, no
++  outbound call. The `.env` fixture is not read or touched.
++- ux-conventions does not apply: `sample_pkg` is a library with no user interface, and the
++  skill exempts such projects. The exception message is the only text a person reads; the
++  new wording follows the spirit of rule 4 (it says what happened in terms of the caller's
++  own value and drops the internal parameter name `whole`), exactly as change 0016 did for
++  `divide`.
++- data-conventions does not apply: no schema, storage, migration, log statement or classified
++  field is touched. The message echoes only the value of `part`, which the caller supplied to
++  the same call, so it creates no new exposure of data the caller does not already hold.
++- definition-of-done for phase (b): this spec, `plan.md`, the adversarial verdict and the
++  gate (b) evidence are the deliverables; build, test and lint stay green in phase (c)
++  (intent Proposed outcome; CLAUDE.md "Verifying your work").
++
++## Design
++- `sample_pkg/calc.py`, function `percent`: keep the `try: return divide(part * 100, whole)`
++  shape and the `except ZeroDivisionError: raise ZeroDivisionError(...) from None` clause.
++  Replace the fixed string `"whole must not be zero"` with an f-string built from `part`,
++  `f"cannot express {part} as a percent of zero"`. The condition that raises (a zero `whole`
++  detected inside `divide`), the exception type, the suppressed chaining (`from None`) and the
++  return value on the non-zero path are unchanged. `part` is rendered as the caller passed it
++  (an `int` prints as `5`, a `float` as `1.5` or `1.0`), matching `divide`'s rule.
++- `divide`, `add`, `mean` and `sample_pkg/__init__.py`: unchanged. `divide` keeps
++  `f"cannot divide {a} by zero"`; `percent` still never surfaces that text.
++- `tests/test_messages.py`: gains a second test, beside `test_divide_by_zero_names_dividend`,
++  that calls `percent(5, 0)` under `pytest.raises(ZeroDivisionError)` and asserts
++  `str(excinfo.value) == "cannot express 5 as a percent of zero"`. The import line widens to
++  bring in `percent` from `sample_pkg`, matching the module's existing import style.
++- `tests/test_calc.py`, test `test_percent_zero_whole_error_names_whole`: the one assertion
++  on the message text changes from `"whole must not be zero"` to
++  `"cannot express 1 as a percent of zero"` (that test calls `percent(1, 0)`). Nothing else in
++  the module moves. This is the departure recorded under Flagged concerns; if the owner or
++  the panel decides otherwise, the alternative is recorded there.
++- Error behaviour summary after the change: `percent(x, 0)` raises
++  `ZeroDivisionError("cannot express <x> as a percent of zero")` with no chained cause;
++  `divide(x, 0)` raises `ZeroDivisionError("cannot divide <x> by zero")`; `mean([])` raises
++  `ValueError("mean() requires at least one value")`.
++
++## Open questions from intent
++- "How is a non-integer part written in the message, for example `percent(1.5, 0)`? The
++  default is Python's own text for the value (`"cannot express 1.5 as a percent of zero"`),
++  as change 0016 settled for `divide`; to be confirmed in design." — Answered: confirmed.
++  The message is an f-string, `f"cannot express {part} as a percent of zero"`, which renders
++  `part` the way `str()` does: `1.5` for `percent(1.5, 0)`, `1.0` for `percent(1.0, 0)`,
++  `5` for `percent(5, 0)`. This is the rule `divide` already follows
++  (`sample_pkg/calc.py:10`, decided in `changes/0016-.../spec.md` Open questions), so the two
++  messages follow one rule, which is the intent's stated problem.
++- "Does `percent` keep raising its own message (today it re-raises with `from None`), or let
++  `divide`'s message through? The default is its own message, so the reader sees the part,
++  not `part * 100`." — Answered: its own message, as the intent prefers. The codebase shows
++  why: `percent` calls `divide(part * 100, whole)` (`sample_pkg/calc.py:16`), so letting
++  `divide`'s text through would print `"cannot divide 500 by zero"` for `percent(5, 0)`, a
++  value the caller never passed. The `except ... raise ... from None` shape stays, so the
++  traceback shows one exception with the part the caller passed.
++
++## Flagged concerns
++- The intent's Proposed outcome and its Constraints contradict each other on
++  `tests/test_calc.py`. The Constraints say `tests/test_calc.py` is not changed, but its
++  existing test `test_percent_zero_whole_error_names_whole` (`tests/test_calc.py:25-28`)
++  asserts `str(excinfo.value) == "whole must not be zero"` for `percent(1, 0)`, which fails
++  as soon as the message becomes `"cannot express 1 as a percent of zero"`. Both cannot hold.
++  The design chooses the Proposed outcome (the message changes) and updates that one
++  assertion in `tests/test_calc.py` to the new text, because the intent's Problem statement
++  is the message, the test is the old behaviour written down, and the change is a `feature`
++  (`status.yaml: change_type`), so the test lock of fix-type changes does not apply. This is
++  not closed by a policy: coding-standards rule 4 and CLAUDE.md ("fix the code, not the
++  test") address a test that regresses, not a test that pins a behaviour the owner asked to
++  change, and neither says which of the intent's two statements wins. The alternative, if the
++  owner wants `tests/test_calc.py` untouched, is to keep the old message, which abandons the
++  intent's Proposed outcome. The owner (or the panel under deferred review) decides which
++  statement of the intent gives way.
++
++## Acceptance
++- `percent(5, 0)` raises `ZeroDivisionError` and
++  `str(exception) == "cannot express 5 as a percent of zero"`, asserted by the new test in
++  `tests/test_messages.py`.
++- `percent(1, 0)` raises with `str(exception) == "cannot express 1 as a percent of zero"`,
++  asserted by the updated `tests/test_calc.py::test_percent_zero_whole_error_names_whole`.
++- `percent(1.5, 0)` raises with `str(exception) == "cannot express 1.5 as a percent of zero"`
++  (message formatting; consistent with the requirement, not required by a test).
++- Existing tests keep passing unchanged: `tests/test_messages.py::test_divide_by_zero_names_dividend`
++  (`"cannot divide 1 by zero"`), and in `tests/test_calc.py`: `test_add`,
++  `test_divide_by_zero_raises`, `test_percent`, `test_percent_zero_whole_raises`,
++  `test_mean`, `test_mean_single_element`, `test_mean_empty`,
++  `test_mean_accepts_non_sequence_collection`.
++- `tests/test_flag.py` is untouched and `SAMPLE_FAIL` is never set.
++- `python -m compileall -q .` exits 0 with no output.
++- `python -m pytest` exits 0 with every test passing (11 tests once the new one is added).
++- `python -m ruff check .` exits 0 with `All checks passed!`.
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
+new file mode 100644
+index 0000000..52940d2
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
+@@ -0,0 +1,36 @@
++id: "0017"
++slug: name-the-part-in-percent-s-zero-whole-er
++title: "Name the part in percent's zero-whole error"
++phase: b
++entry_route: idea
++change_type: feature
++profile_override: null
++review_override: null
++gate:
++  phase: null
++  result: null
++  reason: null
++  at: null
++parked_reason: null
++iterations: 0
++panel_calls: 0
++external_ref: null
++risk_accepted: []
++tests_locked: false
++risk_accepted_by: []
++iterations_reset_by: null
++iterations_reset_at: null
++tests_unlocked_by: null
++runbook_authorized_by: null
++abandoned_reason: null
++build_pr: null
++released_at: null
++released_sha: null
++released_pr: null
++fast_lane:
++  a:
++    sha: "81adec3becca71711fd496f4a67b49b4cf1bccb5"
++    pr: 85
++created_at: "2026-10-20T06:00:31Z"
++updated_at: "2026-10-20T06:17:33Z"
++schema_version: 1

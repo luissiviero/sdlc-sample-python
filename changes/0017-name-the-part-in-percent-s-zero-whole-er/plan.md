@@ -62,6 +62,18 @@ source to carry `plan.md` only when it departs from this list, and it does not.
   money movement, production config) and no guardrail file is touched. `CLAUDE.md`'s Layout
   section stays correct: no public function is added or removed, and its sentence on
   `percent` describes the exception type, not the message text.
+- Run infrastructure, read in this phase (b) run on 2026-10-20 (the R7 reading the intent
+  asks for): the adversarial reviewer could not start on `sdlc.yaml: adversarial_model`
+  (`claude-opus-5-5`, pinned through `ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-5-5`, which
+  the runner did set). The Agent tool with the `opus` alias returned
+  `API Error: 400 Claude Code 2.1.278 does not support this model; version 2.1.280 or newer
+  is required`. The phase (b) reviewer was therefore run on the session's own model
+  (`claude-fable-5-1`), which the gate's `reviewer_model` check rejects by design; the
+  panel's devil's advocate uses the same `opus` alias and cannot start either, so the open
+  concern above stays with the owner. The build and test runs start the same reviewer, so
+  phase (c) hits the same error until the owner raises `sdlc.yaml: plugin.claude_code` to
+  `2.1.280` or later (a guardrail file, not this change's to edit). The design and the steps
+  above do not depend on this.
 
 ## Options not taken
 - Keeping the old message to leave `tests/test_calc.py` untouched: rejected as the default,
