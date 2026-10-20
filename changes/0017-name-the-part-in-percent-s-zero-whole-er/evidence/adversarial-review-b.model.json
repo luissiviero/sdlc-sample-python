@@ -1,14 +1,14 @@
 {
-  "agent_id": "af3f5379b7b832ad1",
+  "agent_id": "abdc247ad827c53fc",
   "agent_type": "sdlc:adversarial-reviewer",
-  "at": "2026-10-20T06:28:33Z",
-  "head": "85ad366a27c48e88d16381cc542e8074b5d5d461",
+  "at": "2026-10-20T10:29:19Z",
+  "head": "e4248e7d2810aaa481c1a8e85d65ec9bddf6a996",
   "member": "reviewer",
   "models": [
-    "claude-fable-5-1"
+    "claude-opus-5-5"
   ],
   "phase": "b",
   "reason": null,
   "schema_version": 1,
-  "transcript": "/home/runner/.claude/projects/-home-runner-work-sdlc-sample-python-sdlc-sample-python/80bac103-2023-4bdd-9fac-12c13d363b1d/subagents/agent-af3f5379b7b832ad1.jsonl"
+  "transcript": "/home/runner/.claude/projects/-home-runner-work-sdlc-sample-python-sdlc-sample-python/423a84c9-b546-4c27-a303-804fe043140e/subagents/agent-abdc247ad827c53fc.jsonl"
 }

@@ -101,7 +101,7 @@ Change id: 0017. Status: proposed. Produced by: sdlc plugin 1.0.14, /sdlc-design
   traceback shows one exception with the part the caller passed.
 
 ## Flagged concerns
-- The intent's Proposed outcome and its Constraints contradict each other on
+- decided (by panel #1): The Proposed outcome wins: the one assertion in tests/test_calc.py::test_percent_zero_whole_error_names_whole changes to "cannot express 1 as a percent of zero", nothing else in that file moves, and this supersedes change 0015's outcome that the message names `whole`; the stale test name stays as a known nit. — The intent's Proposed outcome and its Constraints contradict each other on
   `tests/test_calc.py`. The Constraints say `tests/test_calc.py` is not changed, but its
   existing test `test_percent_zero_whole_error_names_whole` (`tests/test_calc.py:25-28`)
   asserts `str(excinfo.value) == "whole must not be zero"` for `percent(1, 0)`, which fails

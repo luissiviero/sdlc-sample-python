@@ -12,8 +12,8 @@
   ],
   "iterations": {
     "cap": 2,
-    "left": 2,
-    "used": 0
+    "left": 1,
+    "used": 1
   },
   "mode": "deferred",
   "panel_calls": {
@@ -22,6 +22,10 @@
     "used": 0
   },
   "parks": [
+    {
+      "check": "adversarial_review",
+      "reason": "verdict is for commit 85ad366a27, HEAD is e4248e7d28"
+    },
     {
       "check": "reviewer_model",
       "reason": "evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)"
