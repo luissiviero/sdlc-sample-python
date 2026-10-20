@@ -30,7 +30,8 @@
    name and the rest of the module unchanged.
 4. Run `python -m compileall -q .`, `python -m pytest` and `python -m ruff check .` from the
    repository root; all three must exit 0 with the healthy output `CLAUDE.md`'s Commands
-   table describes (no output; `11 passed`; `All checks passed!`). Paste the output.
+   table describes (no output; `12 passed`, today's 11 plus the test of step 2;
+   `All checks passed!`). Paste the output.
 Steps 1 to 3 can land in one commit: the plan-sync hook requires the commit that touches
 source to carry `plan.md` only when it departs from this list, and it does not.
 
@@ -65,15 +66,16 @@ source to carry `plan.md` only when it departs from this list, and it does not.
 - Run infrastructure, read in this phase (b) run on 2026-10-20 (the R7 reading the intent
   asks for): the adversarial reviewer could not start on `sdlc.yaml: adversarial_model`
   (`claude-opus-5-5`, pinned through `ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-5-5`, which
-  the runner did set). The Agent tool with the `opus` alias returned
+  the runner did set). The Agent tool returned, with the `opus` alias and again with no
+  alias (the agent's own frontmatter resolves to the same pin),
   `API Error: 400 Claude Code 2.1.278 does not support this model; version 2.1.280 or newer
   is required`. The phase (b) reviewer was therefore run on the session's own model
-  (`claude-fable-5-1`), which the gate's `reviewer_model` check rejects by design; the
-  panel's devil's advocate uses the same `opus` alias and cannot start either, so the open
-  concern above stays with the owner. The build and test runs start the same reviewer, so
-  phase (c) hits the same error until the owner raises `sdlc.yaml: plugin.claude_code` to
-  `2.1.280` or later (a guardrail file, not this change's to edit). The design and the steps
-  above do not depend on this.
+  (`claude-fable-5-1`, passed explicitly), which the gate's `reviewer_model` check rejects
+  by design; the panel's devil's advocate is the same agent type on the same `opus` alias,
+  so the panel was not started and the open concern above stays with the owner. The build
+  and test runs start the same reviewer, so phase (c) hits the same error until the owner
+  raises `sdlc.yaml: plugin.claude_code` to `2.1.280` or later (a guardrail file, not this
+  change's to edit). The design and the steps above do not depend on this.
 
 ## Options not taken
 - Keeping the old message to leave `tests/test_calc.py` untouched: rejected as the default,
@@ -100,6 +102,9 @@ source to carry `plan.md` only when it departs from this list, and it does not.
 - Adding tests for `percent(1.5, 0)` and `percent(1.0, 0)`: not added; the intent's
   acceptance target is `percent(5, 0)` and the formatting rule is the same f-string default
   `divide` uses, which change 0016 settled without a dedicated test.
+- Asserting `excinfo.value.__cause__ is None` in the new test, to guard the `from None`
+  clause: not added; the intent asks for a test of the message, and the clause is unchanged
+  today. The risk is recorded above for the implementer instead.
 
 ## Proof
 - `tests/test_messages.py::test_percent_zero_whole_names_part` — still to be written in step
@@ -115,6 +120,6 @@ source to carry `plan.md` only when it departs from this list, and it does not.
   must keep passing.
 - `tests/test_flag.py::test_intentional_failure_behind_flag` — existing test, untouched,
   passes because `SAMPLE_FAIL` is never set.
-- `python -m compileall -q .` (no output, exit 0), `python -m pytest` (`11 passed`, exit 0),
-  `python -m ruff check .` (`All checks passed!`, exit 0), as `CLAUDE.md`'s Commands table
-  describes.
+- `python -m compileall -q .` (no output, exit 0), `python -m pytest` (`12 passed`, exit 0:
+  today's 11 tests plus the one of step 2), `python -m ruff check .` (`All checks passed!`,
+  exit 0), as `CLAUDE.md`'s Commands table describes.

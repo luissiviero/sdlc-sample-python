@@ -132,5 +132,7 @@ Change id: 0017. Status: proposed. Produced by: sdlc plugin 1.0.14, /sdlc-design
   `test_mean_accepts_non_sequence_collection`.
 - `tests/test_flag.py` is untouched and `SAMPLE_FAIL` is never set.
 - `python -m compileall -q .` exits 0 with no output.
-- `python -m pytest` exits 0 with every test passing (11 tests once the new one is added).
+- `python -m pytest` exits 0 with every test passing: 12 tests once the new one is added
+  (today's suite is 11: nine in `tests/test_calc.py`, one in `tests/test_messages.py`, one
+  in `tests/test_flag.py`).
 - `python -m ruff check .` exits 0 with `All checks passed!`.

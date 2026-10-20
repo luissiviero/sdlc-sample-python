@@ -1,0 +1,34 @@
+{
+  "decided": 0,
+  "gate": "park",
+  "items": [
+    {
+      "decided": false,
+      "item": "The intent's Proposed outcome and its Constraints contradict each other on",
+      "key": "concern:01e8405844a2ad84",
+      "kind": "concern",
+      "n": 1
+    }
+  ],
+  "iterations": {
+    "cap": 3,
+    "left": 3,
+    "used": 0
+  },
+  "mode": "deferred",
+  "panel_calls": {
+    "cap": 4,
+    "left": 4,
+    "used": 0
+  },
+  "parks": [
+    {
+      "check": "adversarial_review",
+      "reason": "evidence/adversarial-review-b.json missing"
+    }
+  ],
+  "pending": [
+    1
+  ],
+  "phase": "b"
+}
