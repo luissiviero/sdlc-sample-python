@@ -1,0 +1,1014 @@
+ .../evidence/adversarial-review-c.json             |  25 +++
+ .../evidence/adversarial-review-c.model.json       |  14 ++
+ .../evidence/build.log                             |   2 +
+ .../evidence/claude-c.json                         | 120 +++++++++++
+ .../evidence/claude-c.stderr.txt                   |   1 +
+ .../evidence/diff-c.patch                          | 240 +++++++++++++++++++++
+ .../evidence/gate-c.json                           | 183 ++++++++++++++++
+ .../evidence/hook-log.jsonl                        |  88 ++++++++
+ .../evidence/lint.log                              |   2 +
+ .../evidence/panel/c-items.json                    |  19 ++
+ .../evidence/run-c.json                            |  11 +
+ .../evidence/run-d.json                            |   5 +
+ .../evidence/screenshots/.gitkeep                  |   0
+ .../evidence/spend.json                            |   8 +-
+ .../evidence/test.log                              |   2 +
+ .../evidence/verifier.md                           |  81 +++++++
+ .../status.yaml                                    |  12 +-
+ sample_pkg/calc.py                                 |   2 +-
+ tests/test_calc.py                                 |   2 +-
+ tests/test_messages.py                             |   8 +-
+ 20 files changed, 815 insertions(+), 10 deletions(-)
+
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-c.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-c.json
+new file mode 100644
+index 0000000..cb5023f
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-c.json
+@@ -0,0 +1,25 @@
++{
++  "schema_version": 1,
++  "phase": "c",
++  "head": "64818838d7f6c3d7245b063507311912872df6e3",
++  "verdict": "continue",
++  "reasons": [],
++  "classification": "non-routine",
++  "classification_reasons": [
++    "Spec is tight and measurable (exact message strings, 12 tests), and its one flagged concern is closed by panel decision 1, but that decision overrides the letter of an intent Constraint (tests/test_calc.py not changed) and the owner can still overturn it at the gate.",
++    "Blast radius is small: one string literal in sample_pkg/calc.py plus two test files, no risk-list item, no schema, no guardrail file; the exception message is a caller-visible contract that changes by design.",
++    "Existing tests already cover percent's zero-whole path (test_percent_zero_whole_raises, test_percent_zero_whole_error_names_whole), and a new exact-message test is added."
++  ],
++  "attempted": [
++    "Intent: the diff makes percent(5, 0) raise ZeroDivisionError('cannot express 5 as a percent of zero'), which is the intent's Proposed outcome; the type is still ZeroDivisionError, so callers that catch it are unaffected; divide, add and mean are byte-identical in the working tree.",
++    "Spec and plan: the diff touches exactly the three files plan.md lists (calc.py line 18, test_messages.py import plus one test, test_calc.py line 28) in the steps it gives; the f-string uses `part`, not `part * 100` or `whole`; `from None` is kept; the test name is unchanged, as the plan says; no file outside the plan apart from change-folder evidence and status.yaml.",
++    "Flagged concern: spec's only concern (the intent's Outcome contradicts its Constraint on tests/test_calc.py) is closed 'decided (by panel #1)'; the build applies exactly the one-line assertion change that decision allows, and nothing else in test_calc.py moves.",
++    "Proof: test.log, build.log and lint.log are not committed yet, and verifier.md says 'read, not run' because SDLC_GATE_COMMANDS=runner; that is the deferred-to-runner case, so I left it to the runner. The verifier's direct calls exercise the changed behaviour (5, 1, 1.5, 1.0, -2, 0 parts; cause None; suppress_context True) and the neighbouring flows, all matching spec Acceptance.",
++    "Tests: the new test_percent_zero_whole_names_part and the updated assertion both use exact equality, so they would fail on the old message and on a part*100 or whole interpolation. Nothing catches a dropped `from None` (the plan records this as a known risk, and the code keeps the clause). The edit to the pre-existing test is not weakened (exact equality replaced by exact equality), and change_type is feature, so the fix-type test lock does not apply.",
++    "Blast radius: searched for 'whole must not be zero' outside changes/ and found no remaining occurrence, so no stale caller or doc. sample_pkg/__init__.py is unchanged; no guardrail file (.claude/**, CLAUDE.md, REVIEW.md, sdlc.yaml) is in the diff; no risk-list item is touched.",
++    "CLAUDE.md freshness: no public function is added; the Layout line 'raises the same on a zero whole' describes the exception type, which still holds; test_messages.py is already described as checking error messages. Not outdated.",
++    "Policies: security-baseline: no input, secret, dependency or outbound call (the message echoes only the caller's own argument); data-conventions: no data touched; coding-standards: type hints kept, the behaviour change ships with a test; .env does not appear in the diff.",
++    "Skip markers: the diff adds none (no pytest.mark.skip/xfail in any changed test file).",
++    "Claims against today's code: checked plan's 'line 18' raise in calc.py (the diff's removed line confirms the old literal there); 'line 28' assertion in test_calc.py (confirmed); test_messages.py imported only divide before (confirmed by the removed line); percent calls divide(part * 100, whole) (confirmed, line 16); divide uses f'cannot divide {a} by zero' (confirmed, line 10); the existing suite has 9+1+1=11 tests, so 12 after the change (confirmed by counting functions); the old message occurred in source only at those two lines (confirmed by Grep)."
++  ]
++}
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-c.model.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-c.model.json
+new file mode 100644
+index 0000000..e82348c
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-c.model.json
+@@ -0,0 +1,14 @@
++{
++  "agent_id": "a5c42f4e697876051",
++  "agent_type": "sdlc:adversarial-reviewer",
++  "at": "2026-10-20T13:51:53Z",
++  "head": "64818838d7f6c3d7245b063507311912872df6e3",
++  "member": "reviewer",
++  "models": [
++    "claude-opus-5-5"
++  ],
++  "phase": "c",
++  "reason": null,
++  "schema_version": 1,
++  "transcript": "/home/runner/.claude/projects/-home-runner-work-sdlc-sample-python-sdlc-sample-python/6083d5e6-06ab-4b15-aab4-9a25f876b036/subagents/agent-a5c42f4e697876051.jsonl"
++}
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/build.log b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/build.log
+new file mode 100644
+index 0000000..80312bb
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/build.log
+@@ -0,0 +1,2 @@
++# python -m compileall -q . — deferred to the runner — 2026-10-20T13:53:47Z
++The target did not run inside the model's session: build, test and lint run after the session, outside its sandbox (issue #91), and the runner replaces this file with the target's own output. A file still reading this line was never replaced: the targets did not run, and the gate does not pass on it.
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-c.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-c.json
+new file mode 100644
+index 0000000..16b0052
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-c.json
+@@ -0,0 +1,120 @@
++{
++  "api_error_status": null,
++  "duration_api_ms": 240567,
++  "duration_ms": 253302,
++  "fast_mode_disabled_reason": "sdk_opt_in_required",
++  "fast_mode_state": "off",
++  "first_content_frame_ms": 1636,
++  "is_error": false,
++  "modelUsage": {
++    "claude-opus-5-5": {
++      "cacheCreationInputTokens": 147020,
++      "cacheReadInputTokens": 1577270,
++      "canonicalModel": "claude-opus-5-5",
++      "contextWindow": 1000000,
++      "costBasis": "list",
++      "costUSD": 1.703751,
++      "inputTokens": 80,
++      "maxOutputTokens": 128000,
++      "outputTokens": 21946,
++      "provider": "firstParty",
++      "thinkingTokens": 1174,
++      "webSearchRequests": 0
++    }
++  },
++  "num_turns": 48,
++  "permission_denials": [
++    {
++      "tool_input": {
++        "command": "python3 -c \"\nimport json;d=json.load(open('changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json'))\nprint([(c.get('name'),c.get('ok'),c.get('details',{}).get('deferred') if isinstance(c.get('details'),dict) else None) for c in d['checks']])\"\ncat > $TMPDIR/v.py <<'EOF'\nfrom sample_pkg import add, divide, percent, mean\nfor args in [(5, 0), (1, 0), (1.5, 0), (1.0, 0), (5, 0.0), (-2, 0), (0, 0)]:\n    try:\n        percent(*args); print(\"percent\", args, \"NO RAISE\")\n    except ZeroDivisionError as e:\n        print(\"percent\", args, type(e).__name__, repr(str(e)), \"cause=\", e.__cause__, \"suppress=\", e.__suppress_context__)\nprint(\"percent(1,4) =\", percent(1, 4), \"percent(7,100) =\", percent(7, 100), \"percent(5,1e-9) =\", percent(5, 1e-9))\nfor args in [(1, 0), (1.5, 0)]:\n    try: divide(*args)\n    except ZeroDivisionError as e: print(\"divide\", args, repr(str(e)), \"cause=\", e.__cause__)\nprint(\"divide(6,3) =\", divide(6, 3), \"add(2,3) =\", add(2, 3))\nprint(\"mean([1,2,3]) =\", mean([1, 2, 3]), \"mean({4.0}) =\", mean({4.0}))\ntry: mean([])\nexcept ValueError as e: print(\"mean([])\", type(e).__name__, repr(str(e)))\nEOF\npython -I -c \"import sys; sys.path.insert(0, '.'); exec(open('$TMPDIR/v.py').read())\"; echo \"exit=$?\"",
++        "description": "List gate-b checks; exercise percent, divide, mean"
++      },
++      "tool_name": "Bash",
++      "tool_use_id": "toolu_01TfWZwVDS68B4hmXZD4iiAD"
++    },
++    {
++      "tool_input": {
++        "command": "python3 -c \"\nimport json;d=json.load(open('changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json'))\nprint([(c.get('name'),c.get('ok'),c.get('details',{}).get('deferred') if isinstance(c.get('details'),dict) else None) for c in d['checks']])\"\npython -I -c \"\nimport sys; sys.path.insert(0, '/home/runner/work/sdlc-sample-python/sdlc-sample-python')\nfrom sample_pkg import add, divide, percent, mean\nimport sample_pkg; print('module:', sample_pkg.__file__)\nfor args in [(5, 0), (1, 0), (1.5, 0), (1.0, 0), (5, 0.0), (-2, 0), (0, 0)]:\n    try:\n        percent(*args); print('percent', args, 'NO RAISE')\n    except ZeroDivisionError as e:\n        print('percent', args, type(e).__name__, repr(str(e)), 'cause=', e.__cause__, 'suppress_context=', e.__suppress_context__)\nprint('percent(1,4) =', percent(1, 4), 'percent(7,100) =', percent(7, 100), 'percent(5,1e-9) =', percent(5, 1e-9))\nfor args in [(1, 0), (1.5, 0)]:\n    try: divide(*args)\n    except ZeroDivisionError as e: print('divide', args, repr(str(e)), 'cause=', e.__cause__)\nprint('divide(6,3) =', divide(6, 3), 'add(2,3) =', add(2, 3))\nprint('mean([1,2,3]) =', mean([1, 2, 3]), 'mean({4.0}) =', mean({4.0}))\ntry: mean([])\nexcept ValueError as e: print('mean([])', type(e).__name__, repr(str(e)))\n\"; echo \"exit=$?\"",
++        "description": "List gate-b checks; exercise percent, divide, mean"
++      },
++      "tool_name": "Bash",
++      "tool_use_id": "toolu_011qAALH2GmaneN2CTkZkY1A"
++    }
++  ],
++  "queued_turn_count": 0,
++  "result": "Gate (c) passed, so the next step is `/sdlc-test 0017`.\n\nDraft build PR: https://github.com/luissiviero/sdlc-sample-python/pull/88\n\n**What changed** (the three steps in `plan.md`, in one commit):\n- **`sample_pkg/calc.py:18`:** `percent` now raises `ZeroDivisionError(f\"cannot express {part} as a percent of zero\") from None`. So `percent(5, 0)` names the part, and there's still no chained cause.\n- **`tests/test_messages.py`:** imports `percent` and adds `test_percent_zero_whole_names_part`, which checks the exact message for `percent(5, 0)`.\n- **`tests/test_calc.py:28`:** the one assertion now expects `\"cannot express 1 as a percent of zero\"`. Panel decision #1 approved this departure from the intent's \"test_calc.py is not changed\" rule. You can overturn it with a review comment.\n\n**Command output in this session:**\n- `python -m pytest`: `12 passed in 0.01s`\n- `python -m ruff check .`: `All checks passed!`\n- `python -m compileall -q .`: **exit 1 here**, from the sandbox rather than the code. `framework/` is read-only in this sandbox, so every file under it failed with `OSError: [Errno 30] Read-only file system: ...__pycache__`. `python -m compileall -q sample_pkg tests` gave no output and exit 0. The gate marks the commands check \"deferred to the runner\", which runs build, test and lint after this session, outside the sandbox. Its result is the one that counts.\n\n**Reviews:**\n- **Simplifier:** suggested nothing, so there was no simplify commit.\n- **Verifier:** says the change matches the plan; its report is saved word for word in `evidence/verifier.md`. It ran the changed messages, the empty cause and the nearby functions. It did not run the test suite.\n- **Adversarial reviewer:** ran on `claude-opus-5-5` and said **continue**, classing the change as non-routine. It raised two minor points:\n  - No test would catch it if `from None` were dropped later; `plan.md` already lists this as a risk.\n  - `test_percent_zero_whole_error_names_whole` keeps a name that no longer fits; the panel left that to you.\n- **Panel:** no items were pending.\n\n**Gate (c):** `continue`, with every check passing.\n\n**Left uncommitted:**\n- **`status.yaml` and `evidence/hook-log.jsonl`:** opening the PR recorded `build_pr: 88` in `status.yaml` after the gate evidence commit. I didn't commit it, because adding a commit after the gate would move HEAD past the commit the gate checked.\n- **`.env`:** `git status` shows it as modified, most likely because the sandbox hides it from me. I didn't read, stage or commit it, and the gate's clean-tree check ignored it.",
++  "result_index": 0,
++  "safety_stops": 0,
++  "session_id": "6083d5e6-06ab-4b15-aab4-9a25f876b036",
++  "stop_reason": "end_turn",
++  "subagent_stats": {
++    "by_type": {
++      "sdlc:adversarial-reviewer": 1,
++      "sdlc:code-simplifier": 1,
++      "sdlc:verifier": 1
++    },
++    "completed": 3,
++    "failed": 0,
++    "killed": {
++      "parent": 0,
++      "system": 0,
++      "user": 0
++    },
++    "max_depth": 1,
++    "refused": {
++      "budget": 0,
++      "concurrency_limit": 0,
++      "depth_limit": 0
++    },
++    "requested": {
++      "background": 0,
++      "foreground": 0,
++      "unset": 3
++    },
++    "spawned": 3,
++    "spawned_by_subagents": 0,
++    "started_in_background": 0
++  },
++  "subtype": "success",
++  "terminal_reason": "completed",
++  "time_to_request_ms": 70,
++  "total_cost_usd": 1.703751,
++  "ttft_ms": 2074,
++  "ttft_stream_ms": 1635,
++  "type": "result",
++  "usage": {
++    "cache_creation": {
++      "ephemeral_1h_input_tokens": 71319,
++      "ephemeral_5m_input_tokens": 0
++    },
++    "cache_creation_input_tokens": 71319,
++    "cache_read_input_tokens": 1364824,
++    "fallback_credit": null,
++    "inference_geo": "global",
++    "input_tokens": 52,
++    "iterations": [
++      {
++        "cache_creation": {
++          "ephemeral_1h_input_tokens": 217,
++          "ephemeral_5m_input_tokens": 0
++        },
++        "cache_creation_input_tokens": 217,
++        "cache_read_input_tokens": 71102,
++        "input_tokens": 2,
++        "output_tokens": 1100,
++        "type": "message"
++      }
++    ],
++    "output_tokens": 10260,
++    "output_tokens_details": {
++      "thinking_tokens": 480
++    },
++    "server_tool_use": {
++      "web_fetch_requests": 0,
++      "web_search_requests": 0
++    },
++    "service_tier": "standard",
++    "speed": "standard"
++  },
++  "uuid": "ca79f0a2-8dd6-4f31-abfd-f76aa333512a"
++}
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-c.stderr.txt b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-c.stderr.txt
+new file mode 100644
+index 0000000..6e30b16
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-c.stderr.txt
+@@ -0,0 +1 @@
++Ignoring 4 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects["/home/runner/work/sdlc-sample-python/sdlc-sample-python"].hasTrustDialogAccepted: true in /home/runner/.claude.json.
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-c.patch b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-c.patch
+new file mode 100644
+index 0000000..1ffd644
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-c.patch
+@@ -0,0 +1,240 @@
++ .../evidence/hook-log.jsonl                        | 49 ++++++++++++
++ .../evidence/run-c.json                            |  6 ++
++ .../evidence/verifier.md                           | 88 ++++++++++++++++++++++
++ .../status.yaml                                    |  4 +-
++ sample_pkg/calc.py                                 |  2 +-
++ tests/test_calc.py                                 |  2 +-
++ tests/test_messages.py                             |  8 +-
++ 7 files changed, 154 insertions(+), 5 deletions(-)
++
++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
++index d1000ed..f2e25a1 100644
++--- a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
+++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
++@@ -147,3 +147,52 @@
++ {"at": "2026-10-20T10:33:55Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++ {"action": "none", "at": "2026-10-20T10:33:55Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++ {"action": "none", "at": "2026-10-20T10:33:56Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/pr/cli.py\" upsert --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:27Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/preflight.py\" --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:29Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:29Z", "command": "git fetch origin", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:31Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:31Z", "command": "git log --oneline -3 origin/main HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:31Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:31Z", "command": "git ls-remote origin sdlc/0017/c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:35Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" start-run --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:36Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" set-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:45Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:45Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:45Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:46Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:48Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_messages.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:48Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_messages.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:48Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_messages.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:48Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_messages.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:51Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:51Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:51Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"at": "2026-10-20T13:48:51Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:52Z", "command": "python -m pytest tests/test_messages.py tests/test_calc.py", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:54Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:56Z", "command": "python -m compileall -q .", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:56Z", "command": "python -m pytest", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:57Z", "command": "python -m ruff check .", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:48:59Z", "command": "python -m compileall -q sample_pkg tests", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:49:23Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:49:23Z", "command": "echo \"SDLC_GATE_COMMANDS=$SDLC_GATE_COMMANDS\"; cat sdlc.yaml | sed -n '/commands:/,/^[a-z]/p'; ls changes/0017-name-the-part-in-percent-s-zero-whole-er/ changes/0017-name-the-part-in-percent-s-zero-wh", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:49:26Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:49:26Z", "command": "C=changes/0017-name-the-part-in-percent-s-zero-whole-er; cat $C/spec.md; echo ======; cat $C/plan.md; echo ======; git show HEAD -- sample_pkg tests; echo =====; cat sample_pkg/calc.py", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:49:29Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:49:29Z", "command": "cd /home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence && python3 -c \"\nimport json;d=json.load(open('gate-b.json'))\nprint({k:v for k,", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:49:37Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:49:37Z", "command": "python3 -c \"\nimport json;d=json.load(open('changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json'))\nprint([(c.get('name'),c.get('ok'),c.get('details',{}).get('deferred') if isinst", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:49:37Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "shell_guard", "reason": "Shell guard: the write target `$TMPDIR/v.py` is not a literal path (a variable, command substitution, backtick, `~`, a glob, a brace expansion or a git pathspec-magic prefix), or the working directory it would resolve against is not tracked (`cd -`, a bare `cd`, `popd`/`Pop-Location`); write the literal path, from a tracked directory, so the guard can check it.", "tool": "Bash", "verdict": "block"}
+++{"action": "none", "at": "2026-10-20T13:49:47Z", "command": "python3 -c \"\nimport json;d=json.load(open('changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json'))\nprint([(c.get('name'),c.get('ok'),c.get('details',{}).get('deferred') if isinst", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:49:53Z", "command": "python -I -c \"\nimport sys; sys.path.insert(0, '/home/runner/work/sdlc-sample-python/sdlc-sample-python')\nfrom sample_pkg import add, divide, percent, mean\nimport sample_pkg; print('module:', sample_pk", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:49:54Z", "command": "python3 -c \"\nimport json;d=json.load(open('/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json'))\nprint([(c.get('name'),c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:49:55Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:49:55Z", "command": "git -C /home/runner/work/sdlc-sample-python/sdlc-sample-python diff --stat 543b434 HEAD -- tests/test_flag.py sample_pkg/__init__.py CLAUDE.md sdlc.yaml .claude REVIEW.md", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:49:59Z", "command": "grep -n \"^def test_\" /home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py /home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_messages.py /home/runner/work/sdlc-sa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:50:27Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:50:27Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T13:50:47Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
+++{"at": "2026-10-20T13:50:47Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
+++{"at": "2026-10-20T13:50:47Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
+++{"at": "2026-10-20T13:50:48Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T13:50:52Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-c.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-c.json
++new file mode 100644
++index 0000000..fe6a364
++--- /dev/null
+++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-c.json
++@@ -0,0 +1,6 @@
+++{
+++  "phase": "c",
+++  "run": "build",
+++  "spend_usd": null,
+++  "started_at": "2026-10-20T13:48:35Z"
+++}
++\ No newline at end of file
++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md
++new file mode 100644
++index 0000000..0de343f
++--- /dev/null
+++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md
++@@ -0,0 +1,88 @@
+++# Verifier report: change 0017 (phase c build, branch `sdlc/0017/c`, HEAD `25c5e03`)
+++
+++The changed behaviour matches plan.md and spec.md: every message, the empty cause and all three neighbouring flows came back as the plan describes. One limit: this is a CI session, so I did not run build, test or lint. The runner's result on the final tree is what counts, and it appears in the check run `sdlc/d`.
+++
+++## Commands run
+++
+++`SDLC_GATE_COMMANDS=runner` is set, so I ran none of the three targets. Everything below was **read, not run**.
+++
+++**Which tree:** I read `evidence/gate-b.json`, the runner's run on commit `66f5edfe233e1dee8702970ff6445037fc3ad1c5` of `2026-10-20T10:33:20Z`. That is the tree this phase started from, not the final one. The final tree's result comes from the runner, which runs the three targets once after this session. It shows that result in the check run `sdlc/d` and in this phase's own gate record. A red target there starts the next fix round by itself, and nothing in this report stands in for it. As instructed, I did not open `gate-c.json`.
+++
+++The record's `commands` check reads `"ok": true`, `"reason": "build, test and lint exit 0"`, `"ran_by": "runner"`, and it has no `deferred` flag:
+++- **build:** `python -m compileall -q .`, exit code 0, output `""`.
+++- **test:** `python -m pytest`, exit code 0. Output tail:
+++  ```
+++  collected 11 items
+++  tests/test_calc.py .........                                             [ 81%]
+++  tests/test_flag.py .                                                     [ 90%]
+++  tests/test_messages.py .                                                 [100%]
+++  ============================== 11 passed in 0.02s ==============================
+++  ```
+++- **lint:** `python -m ruff check .`, exit code 0, output `All checks passed!`.
+++
+++Other gate (b) checks: `limits`, `artifacts`, `design_scope`, `open_concerns`, `panel`, `commands`, `guardrails`, `risk_list`, `owner_actions`, `adversarial_review` and `reviewer_model` all read `ok: true` with no `deferred` flag. There is no separate `evidence` check in that record. The gate result itself is `wait` (label `sdlc:b-ready`).
+++
+++Logs: `evidence/test.log`, `build.log` and `lint.log` do not exist yet (`ls: cannot access ...`). That is expected in phase (c), since the runner writes them at (d) and (e).
+++
+++## Behavior exercised
+++
+++I called the package directly with `python -I -c` and `sys.path` pointed at the repo root. Import resolved to `.../sample_pkg/__init__.py`.
+++
+++Changed behaviour, from the spec's Acceptance plus inputs just outside it:
+++```
+++percent (5, 0) ZeroDivisionError 'cannot express 5 as a percent of zero' cause= None suppress_context= True
+++percent (1, 0) ZeroDivisionError 'cannot express 1 as a percent of zero' cause= None suppress_context= True
+++percent (1.5, 0) ZeroDivisionError 'cannot express 1.5 as a percent of zero' cause= None suppress_context= True
+++percent (1.0, 0) ZeroDivisionError 'cannot express 1.0 as a percent of zero' cause= None suppress_context= True
+++percent (5, 0.0) ZeroDivisionError 'cannot express 5 as a percent of zero' cause= None suppress_context= True
+++percent (-2, 0) ZeroDivisionError 'cannot express -2 as a percent of zero' cause= None suppress_context= True
+++percent (0, 0) ZeroDivisionError 'cannot express 0 as a percent of zero' cause= None suppress_context= True
+++```
+++- There is no chained cause, and the `from None` suppression is kept.
+++- The message names `part`, never `part * 100` (no `500`).
+++
+++Neighbouring flow 1, `percent` with a non-zero `whole`:
+++```
+++percent(1,4) = 25.0 percent(7,100) = 7.0 percent(5,1e-9) = 499999999999.99994
+++```
+++
+++Neighbouring flow 2, `divide`, `add` and `mean`:
+++```
+++divide (1, 0) 'cannot divide 1 by zero' cause= None
+++divide (1.5, 0) 'cannot divide 1.5 by zero' cause= None
+++divide(6,3) = 2.0 add(2,3) = 5
+++mean([1,2,3]) = 2.0 mean({4.0}) = 4.0
+++mean([]) ValueError 'mean() requires at least one value'
+++```
+++
+++Static checks against the plan:
+++- `git show HEAD` touches only line 18 of `sample_pkg/calc.py` (the plan's step 1).
+++- In `tests/test_messages.py` the import widened to `divide, percent` and `test_percent_zero_whole_names_part` was added (step 2).
+++- In `tests/test_calc.py` only line 28's assertion changed, and the test name was kept (step 3).
+++- `git diff --stat 543b434 HEAD -- tests/test_flag.py sample_pkg/__init__.py CLAUDE.md sdlc.yaml .claude REVIEW.md` printed nothing.
+++- `grep "^def test_"` lists 12 test functions (9 in calc, 2 in messages, 1 in flag), which matches the expected `12 passed`.
+++
+++## Not exercised
+++
+++- **Targets on the final tree:** build, test and lint were not run on HEAD `25c5e03`. That result belongs to the runner (check run `sdlc/d`). The gate (b) record covers `66f5edf`, which comes before the source edit.
+++- **Test runner:** I did not start pytest, not even with `-k`, so the two new or updated test assertions were not executed here.
+++- **Platforms:** Linux with Python 3 only. Windows, macOS and other Python versions were not run.
+++- **Inputs not tried:** `bool`, `Decimal`, `Fraction`, NaN/inf, numpy scalars and non-numeric `part`, and negative zero as `whole`.
+++- **Blocked command:** a variant that appended `echo "exit=$?"` was denied by the permission system (no approval surface in this session). I re-ran it without the echo, so exit codes of my direct calls were not captured separately. The output above is complete and has no traceback.
+++- **`.env` in `git status`:** it shows as ` M .env` in the working tree. I did not read it or inspect its diff. This is most likely the sandbox masking the denied file, not a change by this phase, but I did not confirm that.
+++
+++## Mismatches with plan.md / spec.md
+++
+++None.
+++
+++## Verdict
+++
+++`matches the plan`
+++
+++Relevant files:
+++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py`
+++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_messages.py`
+++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py`
+++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md`
+++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md`
+++- `/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json`
++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
++index a806394..8805557 100644
++--- a/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
+++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
++@@ -1,7 +1,7 @@
++ id: "0017"
++ slug: name-the-part-in-percent-s-zero-whole-er
++ title: "Name the part in percent's zero-whole error"
++-phase: b
+++phase: c
++ entry_route: idea
++ change_type: feature
++ profile_override: null
++@@ -32,5 +32,5 @@ fast_lane:
++     sha: "81adec3becca71711fd496f4a67b49b4cf1bccb5"
++     pr: 85
++ created_at: "2026-10-20T06:00:31Z"
++-updated_at: "2026-10-20T10:34:08Z"
+++updated_at: "2026-10-20T13:48:36Z"
++ schema_version: 1
++diff --git a/sample_pkg/calc.py b/sample_pkg/calc.py
++index 2539fc6..ab64bea 100644
++--- a/sample_pkg/calc.py
+++++ b/sample_pkg/calc.py
++@@ -15,7 +15,7 @@ def percent(part: float, whole: float) -> float:
++     try:
++         return divide(part * 100, whole)
++     except ZeroDivisionError:
++-        raise ZeroDivisionError("whole must not be zero") from None
+++        raise ZeroDivisionError(f"cannot express {part} as a percent of zero") from None
++ 
++ 
++ def mean(values: Collection[float]) -> float:
++diff --git a/tests/test_calc.py b/tests/test_calc.py
++index 635027c..3fe7226 100644
++--- a/tests/test_calc.py
+++++ b/tests/test_calc.py
++@@ -25,7 +25,7 @@ def test_percent_zero_whole_raises():
++ def test_percent_zero_whole_error_names_whole():
++     with pytest.raises(ZeroDivisionError) as excinfo:
++         percent(1, 0)
++-    assert str(excinfo.value) == "whole must not be zero"
+++    assert str(excinfo.value) == "cannot express 1 as a percent of zero"
++ 
++ 
++ def test_mean():
++diff --git a/tests/test_messages.py b/tests/test_messages.py
++index f69fe16..d5b6e2c 100644
++--- a/tests/test_messages.py
+++++ b/tests/test_messages.py
++@@ -1,9 +1,15 @@
++ import pytest
++ 
++-from sample_pkg import divide
+++from sample_pkg import divide, percent
++ 
++ 
++ def test_divide_by_zero_names_dividend():
++     with pytest.raises(ZeroDivisionError) as excinfo:
++         divide(1, 0)
++     assert str(excinfo.value) == "cannot divide 1 by zero"
+++
+++
+++def test_percent_zero_whole_names_part():
+++    with pytest.raises(ZeroDivisionError) as excinfo:
+++        percent(5, 0)
+++    assert str(excinfo.value) == "cannot express 5 as a percent of zero"
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-c.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-c.json
+new file mode 100644
+index 0000000..db66ce5
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-c.json
+@@ -0,0 +1,183 @@
++{
++  "schema_version": 1,
++  "change_id": "0017",
++  "slug": "name-the-part-in-percent-s-zero-whole-er",
++  "phase": "c",
++  "profile": "standard",
++  "human_gate": false,
++  "result": "continue",
++  "label": null,
++  "head": "64818838d7f6c3d7245b063507311912872df6e3",
++  "at": "2026-10-20T13:52:11Z",
++  "dry_run": false,
++  "reason": "",
++  "config_note": "",
++  "checks": [
++    {
++      "name": "limits",
++      "ok": true,
++      "reason": "within the run limits",
++      "need": "",
++      "details": {
++        "iterations": 1,
++        "cap": 2,
++        "classification": "non-routine",
++        "panel_calls": 1,
++        "panel_cap": 4,
++        "elapsed_minutes": 3.6,
++        "spend_usd": null,
++        "spend_usd_total": 15.252294,
++        "spend_entries": 2,
++        "max_budget_usd": null
++      }
++    },
++    {
++      "name": "clean_tree",
++      "ok": true,
++      "reason": "no uncommitted change outside the change folder",
++      "need": "",
++      "details": {
++        "ignored": [
++          ".env"
++        ]
++      }
++    },
++    {
++      "name": "artifacts",
++      "ok": true,
++      "reason": "every required artifact exists and has its template sections",
++      "need": "",
++      "details": {}
++    },
++    {
++      "name": "open_concerns",
++      "ok": true,
++      "reason": "no open flagged concern",
++      "need": "",
++      "details": {}
++    },
++    {
++      "name": "panel",
++      "ok": true,
++      "reason": "0 panel decision(s) recorded",
++      "need": "",
++      "details": {
++        "decisions": [],
++        "cost_usd": 0.0
++      }
++    },
++    {
++      "name": "commands",
++      "ok": true,
++      "reason": "build, test and lint exit 0",
++      "need": "",
++      "details": {
++        "runs": {
++          "build": {
++            "command": "python -m compileall -q .",
++            "exit_code": 0,
++            "output": ""
++          },
++          "test": {
++            "command": "python -m pytest",
++            "exit_code": 0,
++            "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0\nrootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\nplugins: platformdirs-4.13.4\ncollected 12 items\n\ntests/test_calc.py .........                                             [ 75%]\ntests/test_flag.py .                                                     [ 83%]\ntests/test_messages.py ..                                                [100%]\n\n============================== 12 passed in 0.01s ==============================\n"
++          },
++          "lint": {
++            "command": "python -m ruff check .",
++            "exit_code": 0,
++            "output": "All checks passed!\n"
++          }
++        },
++        "ran_by": "runner"
++      }
++    },
++    {
++      "name": "evidence",
++      "ok": true,
++      "reason": "evidence present: verifier.md",
++      "need": "",
++      "details": {}
++    },
++    {
++      "name": "findings",
++      "ok": true,
++      "reason": "no review findings yet (the review pass runs in phase e)",
++      "need": "",
++      "details": {}
++    },
++    {
++      "name": "plan_sync",
++      "ok": true,
++      "reason": "every committed source file is in plan.md",
++      "need": "",
++      "details": {
++        "planned_but_unchanged": []
++      }
++    },
++    {
++      "name": "guardrails",
++      "ok": true,
++      "reason": "the diff does not touch a guardrail file",
++      "need": "",
++      "details": {}
++    },
++    {
++      "name": "risk_list",
++      "ok": true,
++      "reason": "no risk-list item touched",
++      "need": "",
++      "details": {
++        "accepted": []
++      }
++    },
++    {
++      "name": "owner_actions",
++      "ok": true,
++      "reason": "risk acceptances, iteration and panel-call resets and test-lock lifts, if any, were committed by the owner or applied by the owner's label",
++      "need": "",
++      "details": {
++        "risk_accepted": [],
++        "label_actors": {}
++      }
++    },
++    {
++      "name": "test_lock",
++      "ok": true,
++      "reason": "not a fix-type change: no test-file lock",
++      "need": "",
++      "details": {}
++    },
++    {
++      "name": "ratchets",
++      "ok": true,
++      "reason": "no undeclared test file or eval case drop",
++      "need": "",
++      "details": {
++        "declared": [],
++        "skip_markers": [],
++        "accepted": []
++      }
++    },
++    {
++      "name": "adversarial_review",
++      "ok": true,
++      "reason": "adversarial reviewer says continue",
++      "need": "",
++      "details": {
++        "classification": "non-routine",
++        "reasons": []
++      }
++    },
++    {
++      "name": "reviewer_model",
++      "ok": true,
++      "reason": "the adversarial reviewer ran on claude-opus-5-5",
++      "need": "",
++      "details": {
++        "wanted": "claude-opus-5-5"
++      }
++    }
++  ],
++  "what_i_need": ""
++}
+\ No newline at end of file
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
+index d1000ed..fd52769 100644
+--- a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
+@@ -147,3 +147,91 @@
+ {"at": "2026-10-20T10:33:55Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+ {"action": "none", "at": "2026-10-20T10:33:55Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+ {"action": "none", "at": "2026-10-20T10:33:56Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/pr/cli.py\" upsert --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:27Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/preflight.py\" --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:48:29Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:29Z", "command": "git fetch origin", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:48:31Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:31Z", "command": "git log --oneline -3 origin/main HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:48:31Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:31Z", "command": "git ls-remote origin sdlc/0017/c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:35Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" start-run --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:36Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" set-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:48:45Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T13:48:45Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T13:48:45Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T13:48:46Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/sample_pkg/calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T13:48:48Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_messages.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T13:48:48Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_messages.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T13:48:48Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_messages.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T13:48:48Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_messages.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T13:48:51Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T13:48:51Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T13:48:51Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T13:48:51Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:52Z", "command": "python -m pytest tests/test_messages.py tests/test_calc.py", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:54Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:56Z", "command": "python -m compileall -q .", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:56Z", "command": "python -m pytest", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:57Z", "command": "python -m ruff check .", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:48:59Z", "command": "python -m compileall -q sample_pkg tests", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:49:23Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:49:23Z", "command": "echo \"SDLC_GATE_COMMANDS=$SDLC_GATE_COMMANDS\"; cat sdlc.yaml | sed -n '/commands:/,/^[a-z]/p'; ls changes/0017-name-the-part-in-percent-s-zero-whole-er/ changes/0017-name-the-part-in-percent-s-zero-wh", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:49:26Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:49:26Z", "command": "C=changes/0017-name-the-part-in-percent-s-zero-whole-er; cat $C/spec.md; echo ======; cat $C/plan.md; echo ======; git show HEAD -- sample_pkg tests; echo =====; cat sample_pkg/calc.py", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:49:29Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:49:29Z", "command": "cd /home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence && python3 -c \"\nimport json;d=json.load(open('gate-b.json'))\nprint({k:v for k,", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:49:37Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:49:37Z", "command": "python3 -c \"\nimport json;d=json.load(open('changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json'))\nprint([(c.get('name'),c.get('ok'),c.get('details',{}).get('deferred') if isinst", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:49:37Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "shell_guard", "reason": "Shell guard: the write target `$TMPDIR/v.py` is not a literal path (a variable, command substitution, backtick, `~`, a glob, a brace expansion or a git pathspec-magic prefix), or the working directory it would resolve against is not tracked (`cd -`, a bare `cd`, `popd`/`Pop-Location`); write the literal path, from a tracked directory, so the guard can check it.", "tool": "Bash", "verdict": "block"}
++{"action": "none", "at": "2026-10-20T13:49:47Z", "command": "python3 -c \"\nimport json;d=json.load(open('changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json'))\nprint([(c.get('name'),c.get('ok'),c.get('details',{}).get('deferred') if isinst", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:49:53Z", "command": "python -I -c \"\nimport sys; sys.path.insert(0, '/home/runner/work/sdlc-sample-python/sdlc-sample-python')\nfrom sample_pkg import add, divide, percent, mean\nimport sample_pkg; print('module:', sample_pk", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:49:54Z", "command": "python3 -c \"\nimport json;d=json.load(open('/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json'))\nprint([(c.get('name'),c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:49:55Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:49:55Z", "command": "git -C /home/runner/work/sdlc-sample-python/sdlc-sample-python diff --stat 543b434 HEAD -- tests/test_flag.py sample_pkg/__init__.py CLAUDE.md sdlc.yaml .claude REVIEW.md", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:49:59Z", "command": "grep -n \"^def test_\" /home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_calc.py /home/runner/work/sdlc-sample-python/sdlc-sample-python/tests/test_messages.py /home/runner/work/sdlc-sa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:50:27Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:50:27Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:50:47Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T13:50:47Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T13:50:47Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T13:50:48Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:50:52Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:50:54Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:50:54Z", "command": "git push -u origin sdlc/0017/c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:51:00Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:51:00Z", "command": "git diff --stat --patch --output=changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-c.patch origin/main...HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:51:00Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:51:00Z", "command": "git rev-parse HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:51:01Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" models --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --phase c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:51:53Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-c.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T13:51:53Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-c.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T13:51:53Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-c.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T13:51:53Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-c.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:52:08Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" items --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:52:11Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" check --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:52:17Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:52:21Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/pr/cli.py\" upsert --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase c --draft", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:52:26Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:52:26Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:53:27Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/preflight.py\" --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase d", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:53:30Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:53:30Z", "command": "git fetch origin", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:53:31Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:53:31Z", "command": "git pull --ff-only origin sdlc/0017/c", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:53:34Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" start-run --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase d", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:53:37Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" set-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase d", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:53:40Z", "command": "ls changes/0017-name-the-part-in-percent-s-zero-whole-er changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:53:47Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/evidence/collect.py\" --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:53:56Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:53:56Z", "command": "cd /home/runner/work/sdlc-sample-python/sdlc-sample-python; echo $SDLC_GATE_COMMANDS; cat sdlc.yaml; D=changes/0017-name-the-part-in-percent-s-zero-whole-er; ls $D $D/evidence; cat $D/spec.md $D/plan.", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:54:03Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:54:03Z", "command": "cd /home/runner/work/sdlc-sample-python/sdlc-sample-python; D=changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence; python3 -c \"\nimport json;d=json.load(open('$D/gate-c.json'));print({k:v fo", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:54:15Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:54:15Z", "command": "git diff --stat 543b434 HEAD -- . ':(exclude)changes' && echo --- && git diff --stat 6481883 HEAD && echo --- && git diff 543b434 HEAD -- sample_pkg tests && git log -1 --format='%H %cI' 6481883", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:54:21Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:54:21Z", "command": "git status --short -- sample_pkg tests && python3 -I -c '\nimport sys; sys.path.insert(0, \".\")\nfrom sample_pkg import add, divide, percent, mean\nfor args in [(5,0),(1,0),(1.5,0),(1.0,0),(-2,0),(5,0.0)]", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T13:55:01Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T13:55:01Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T13:55:01Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T13:55:01Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T13:55:04Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase d --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/lint.log b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/lint.log
+new file mode 100644
+index 0000000..0ebe3c8
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/lint.log
+@@ -0,0 +1,2 @@
++# python -m ruff check . — deferred to the runner — 2026-10-20T13:53:47Z
++The target did not run inside the model's session: build, test and lint run after the session, outside its sandbox (issue #91), and the runner replaces this file with the target's own output. A file still reading this line was never replaced: the targets did not run, and the gate does not pass on it.
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/c-items.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/c-items.json
+new file mode 100644
+index 0000000..a160443
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/c-items.json
+@@ -0,0 +1,19 @@
++{
++  "decided": 0,
++  "gate": "continue",
++  "items": [],
++  "iterations": {
++    "cap": 2,
++    "left": 1,
++    "used": 1
++  },
++  "mode": "deferred",
++  "panel_calls": {
++    "cap": 4,
++    "left": 3,
++    "used": 1
++  },
++  "parks": [],
++  "pending": [],
++  "phase": "c"
++}
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-c.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-c.json
+new file mode 100644
+index 0000000..3f74a9e
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-c.json
+@@ -0,0 +1,11 @@
++{
++  "github_run": {
++    "attempt": "1",
++    "id": "39433450425",
++    "url": "https://github.com/luissiviero/sdlc-sample-python/actions/runs/39433450425"
++  },
++  "phase": "c",
++  "run": "build",
++  "spend_usd": 1.703751,
++  "started_at": "2026-10-20T13:48:35Z"
++}
+\ No newline at end of file
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-d.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-d.json
+new file mode 100644
+index 0000000..e2f36bb
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-d.json
+@@ -0,0 +1,5 @@
++{
++  "phase": "d",
++  "spend_usd": null,
++  "started_at": "2026-10-20T13:53:34Z"
++}
+\ No newline at end of file
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/screenshots/.gitkeep b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/screenshots/.gitkeep
+new file mode 100644
+index 0000000..e69de29
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/spend.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/spend.json
+index 4e86ae5..a83ed78 100644
+--- a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/spend.json
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/spend.json
+@@ -11,7 +11,13 @@
+       "run": "fix",
+       "source": "claude-fix.json",
+       "usd": 5.762722100000003
++    },
++    {
++      "at": "2026-10-20T13:52:37Z",
++      "run": "c",
++      "source": "claude-c.json",
++      "usd": 1.703751
+     }
+   ],
+-  "total_usd": 15.252294
++  "total_usd": 16.956045
+ }
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/test.log b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/test.log
+new file mode 100644
+index 0000000..df99921
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/test.log
+@@ -0,0 +1,2 @@
++# python -m pytest — deferred to the runner — 2026-10-20T13:53:47Z
++The target did not run inside the model's session: build, test and lint run after the session, outside its sandbox (issue #91), and the runner replaces this file with the target's own output. A file still reading this line was never replaced: the targets did not run, and the gate does not pass on it.
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md
+new file mode 100644
+index 0000000..4a162f4
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/verifier.md
+@@ -0,0 +1,81 @@
++# Verifier report: change 0017, phase (d)
++
++## Commands run
++
++All three entries below were **read, not run**. This is a CI session (`SDLC_GATE_COMMANDS=runner`).
++
++I read `evidence/gate-c.json`, the runner's run on commit `64818838d7f6c3d7245b063507311912872df6e3` at `2026-10-20T13:52:11Z` (`ran_by: runner`). That is the tree this phase started from, not the final one. The final tree's result belongs to the runner: it runs the three targets once after this session and shows the result in the check run `sdlc/d`, so nothing reported here stands in for it.
++
++`git diff --stat 6481883 HEAD` lists only files under `changes/0017-.../`. The commits after the gate (c) head (`7695ee7`, `b3a8ddd`) touch no file in `sample_pkg/` or `tests/`, and `git status --short -- sample_pkg tests` printed nothing.
++
++The `commands` check reads `"ok": true`, `"reason": "build, test and lint exit 0"`:
++- **build**: `python -m compileall -q .`, exit_code 0, output `""`
++- **test**: `python -m pytest`, exit_code 0, tail:
++  ```
++  collected 12 items
++
++  tests/test_calc.py .........                                             [ 75%]
++  tests/test_flag.py .                                                     [ 83%]
++  tests/test_messages.py ..                                                [100%]
++
++  ============================== 12 passed in 0.01s ==============================
++  ```
++- **lint**: `python -m ruff check .`, exit_code 0, output `All checks passed!`
++- The `evidence` check reads `"ok": true` (`evidence present: verifier.md`). Neither the `commands` check nor the `evidence` check has `details.deferred`.
++
++First line of each log:
++- `test.log`: `# python -m pytest — deferred to the runner — 2026-10-20T13:53:47Z`
++- `build.log`: `# python -m compileall -q . — deferred to the runner — 2026-10-20T13:53:47Z`
++- `lint.log`: `# python -m ruff check . — deferred to the runner — 2026-10-20T13:53:47Z`
++
++These are not failures. This phase's session wrote these placeholders, and the runner will replace them with the real output.
++
++I did not read `gate-d.json`.
++
++One action was blocked. My first attempt to read the gate record used a shell command with a variable in it. That command needed approval, and this session has no way to grant it, so it was denied automatically. I read the same files with the Read tool instead, which gave the same information.
++
++## Behavior exercised
++
++**Source diff.** `git diff 543b434 HEAD -- sample_pkg tests` shows three files changed and nothing else:
++- `sample_pkg/calc.py:18`: `raise ZeroDivisionError("whole must not be zero") from None` became `raise ZeroDivisionError(f"cannot express {part} as a percent of zero") from None`. The `try`, the `except` and the `from None` are unchanged.
++- `tests/test_messages.py`: the import is now `from sample_pkg import divide, percent`. A new test, `test_percent_zero_whole_names_part`, asserts `"cannot express 5 as a percent of zero"` for `percent(5, 0)`. `test_divide_by_zero_names_dividend` is unchanged.
++- `tests/test_calc.py:28`: the assertion is now `"cannot express 1 as a percent of zero"`. The test name and the rest of the file are unchanged.
++
++`tests/test_flag.py` is not in the diff, so it is untouched. `sample_pkg/__init__.py` and the guardrail files are not in it either.
++
++**Direct calls.** I ran `python3 -I -c ...` from the repository root, importing from `sample_pkg`. No test runner and no `.env*` file was involved. Literal output:
++```
++(5, 0) ZeroDivisionError 'cannot express 5 as a percent of zero' cause: None suppress: True
++(1, 0) ZeroDivisionError 'cannot express 1 as a percent of zero' cause: None suppress: True
++(1.5, 0) ZeroDivisionError 'cannot express 1.5 as a percent of zero' cause: None suppress: True
++(1.0, 0) ZeroDivisionError 'cannot express 1.0 as a percent of zero' cause: None suppress: True
++(-2, 0) ZeroDivisionError 'cannot express -2 as a percent of zero' cause: None suppress: True
++(5, 0.0) ZeroDivisionError 'cannot express 5 as a percent of zero' cause: None suppress: True
++percent(1,4) 25.0 percent(7,100) 7.0 percent(5,1e-300) 5e+302
++divide(1,0) 'cannot divide 1 by zero'
++mean([]) 'mean() requires at least one value'
++mean 2.5 2.0 add 5
++```
++
++How this lines up with the spec's Acceptance section:
++- `percent(5, 0)`, `percent(1, 0)` and `percent(1.5, 0)` give exactly the required messages. `percent(1.0, 0)` gives `1.0`, as the Requirements say.
++- `from None` still holds: the cause is `None` and the context is suppressed.
++- The non-zero results are unchanged: `percent(1, 4)` is 25.0 and `percent(7, 100)` is 7.0.
++- The two nearest neighbors are unchanged: `divide(1, 0)` keeps its message, and `mean` and `add` behave as before.
++- Inputs just outside the named ones (a negative part, a float zero `whole`, a tiny non-zero `whole`) behave consistently with the f-string rule.
++
++## Not exercised
++
++- The full test suite on the final tree: I read the gate (c) record instead of running it. The runner's result in `sdlc/d` is the one that counts.
++- Build and lint on the final tree, for the same reason.
++- Windows and macOS: I ran on Linux with Python 3.12.3 only.
++- `part` values that are not plain numbers (`Decimal`, `Fraction`, numpy scalars, `nan`, `inf`): not tried.
++- `SAMPLE_FAIL=1`: not set, by design.
++
++## Mismatches with plan.md / spec.md
++
++None.
++
++## Verdict
++
++**matches the plan**
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
+index a806394..dbdcd95 100644
+--- a/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
+@@ -1,16 +1,16 @@
+ id: "0017"
+ slug: name-the-part-in-percent-s-zero-whole-er
+ title: "Name the part in percent's zero-whole error"
+-phase: b
++phase: d
+ entry_route: idea
+ change_type: feature
+ profile_override: null
+ review_override: null
+ gate:
+-  phase: b
++  phase: c
+   result: passed
+-  reason: waiting for the owner at gate (b)
+-  at: "2026-10-20T10:34:08Z"
++  reason: null
++  at: "2026-10-20T13:52:38Z"
+ parked_reason: null
+ iterations: 1
+ panel_calls: 1
+@@ -23,7 +23,7 @@ iterations_reset_at: null
+ tests_unlocked_by: null
+ runbook_authorized_by: null
+ abandoned_reason: null
+-build_pr: null
++build_pr: 88
+ released_at: null
+ released_sha: null
+ released_pr: null
+@@ -32,5 +32,5 @@ fast_lane:
+     sha: "81adec3becca71711fd496f4a67b49b4cf1bccb5"
+     pr: 85
+ created_at: "2026-10-20T06:00:31Z"
+-updated_at: "2026-10-20T10:34:08Z"
++updated_at: "2026-10-20T13:53:37Z"
+ schema_version: 1
+diff --git a/sample_pkg/calc.py b/sample_pkg/calc.py
+index 2539fc6..ab64bea 100644
+--- a/sample_pkg/calc.py
++++ b/sample_pkg/calc.py
+@@ -15,7 +15,7 @@ def percent(part: float, whole: float) -> float:
+     try:
+         return divide(part * 100, whole)
+     except ZeroDivisionError:
+-        raise ZeroDivisionError("whole must not be zero") from None
++        raise ZeroDivisionError(f"cannot express {part} as a percent of zero") from None
+ 
+ 
+ def mean(values: Collection[float]) -> float:
+diff --git a/tests/test_calc.py b/tests/test_calc.py
+index 635027c..3fe7226 100644
+--- a/tests/test_calc.py
++++ b/tests/test_calc.py
+@@ -25,7 +25,7 @@ def test_percent_zero_whole_raises():
+ def test_percent_zero_whole_error_names_whole():
+     with pytest.raises(ZeroDivisionError) as excinfo:
+         percent(1, 0)
+-    assert str(excinfo.value) == "whole must not be zero"
++    assert str(excinfo.value) == "cannot express 1 as a percent of zero"
+ 
+ 
+ def test_mean():
+diff --git a/tests/test_messages.py b/tests/test_messages.py
+index f69fe16..d5b6e2c 100644
+--- a/tests/test_messages.py
++++ b/tests/test_messages.py
+@@ -1,9 +1,15 @@
+ import pytest
+ 
+-from sample_pkg import divide
++from sample_pkg import divide, percent
+ 
+ 
+ def test_divide_by_zero_names_dividend():
+     with pytest.raises(ZeroDivisionError) as excinfo:
+         divide(1, 0)
+     assert str(excinfo.value) == "cannot divide 1 by zero"
++
++
++def test_percent_zero_whole_names_part():
++    with pytest.raises(ZeroDivisionError) as excinfo:
++        percent(5, 0)
++    assert str(excinfo.value) == "cannot express 5 as a percent of zero"
