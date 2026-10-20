@@ -10,10 +10,12 @@
   `"cannot express 5 as a percent of zero"`. The existing test is not touched.
 - `tests/test_calc.py` — in `test_percent_zero_whole_error_names_whole`, change the asserted
   message from `"whole must not be zero"` to `"cannot express 1 as a percent of zero"`
-  (the test calls `percent(1, 0)`). Nothing else in the module moves. This edit is the open
-  flagged concern in `spec.md`; if the owner or the panel decides the other way (keep the
-  old message and leave `tests/test_calc.py` alone), drop this file and step 3 and the
-  change reduces to no source edit at all, which abandons the intent's Proposed outcome.
+  (the test calls `percent(1, 0)`). Nothing else in the module moves. This edit is the
+  flagged concern in `spec.md`, decided by panel #1 on 2026-10-20: the Proposed outcome
+  wins, the one assertion changes, and the decision supersedes change 0015's outcome that
+  the message names `whole`. The owner can overturn it with a review comment; if they do
+  (keep the old message and leave `tests/test_calc.py` alone), drop this file and step 3 and
+  the change reduces to no source edit at all, which abandons the intent's Proposed outcome.
 
 ## Order of work
 1. In `sample_pkg/calc.py`, line 18, change
@@ -48,14 +50,15 @@ source to carry `plan.md` only when it departs from this list, and it does not.
   `tests/test_calc.py:28` (step 3 updates it); every other occurrence is inside the change
   folders of changes 0015, 0016 and 0017 (historical records and this plan, not edited by
   the build). No other caller exists inside this repository.
-- Step 3 edits a test file the intent's Constraints say is not changed; this is the open
-  flagged concern in `spec.md`. The change is `feature`-typed, so `sdlc.yaml: test_paths`
-  does not lock the file (the lock is for `fix`-type changes). If the decision at the gate
-  goes the other way, the build must not run steps 1 to 3 as written; see the note in Files
-  that change.
+- Step 3 edits a test file the intent's Constraints say is not changed; this is the flagged
+  concern in `spec.md`, decided by panel #1 (`evidence/decisions-b.md`). The change is
+  `feature`-typed, so `sdlc.yaml: test_paths` does not lock the file (the lock is for
+  `fix`-type changes). If the owner overturns the decision, the build must not run steps 1
+  to 3 as written; see the note in Files that change.
 - `test_percent_zero_whole_error_names_whole` keeps a name that says "names whole" while
   asserting a message that names the part. Renaming it was considered (Options not taken)
-  and rejected to keep the edit to the one assertion line the concern covers.
+  and rejected to keep the edit to the one assertion line the concern covers; panel
+  decision #1 records the stale name as a known nit, left to the owner.
 - `divide` and `mean` are not touched; `mean` never reaches a zero divisor because it rejects
   an empty collection first. `tests/test_flag.py` is not touched and `SAMPLE_FAIL` is never
   set.
@@ -75,7 +78,10 @@ source to carry `plan.md` only when it departs from this list, and it does not.
   so the panel was not started and the open concern above stays with the owner. The build
   and test runs start the same reviewer, so phase (c) hits the same error until the owner
   raises `sdlc.yaml: plugin.claude_code` to `2.1.280` or later (a guardrail file, not this
-  change's to edit). The design and the steps above do not depend on this.
+  change's to edit). The design and the steps above do not depend on this. Update from the
+  fix round of 2026-10-20: the reviewer started on the `opus` alias without error and
+  `evidence/adversarial-review-b.model.json` records `claude-opus-5-5`, so the error above
+  did not recur; `sdlc.yaml: plugin.claude_code` still reads `2.1.278`.
 
 ## Options not taken
 - Keeping the old message to leave `tests/test_calc.py` untouched: rejected as the default,
