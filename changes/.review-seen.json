@@ -48,11 +48,11 @@
     "summary": "The Commands table's healthy test output still reads \"9 passed in 0.01s\", but the new test brings the suite to 10 passing tests, so CLAUDE.md is now outdated and the diff does not update it (it cannot, as a guardrail file) or flag the discrepancy in plan.md."
   },
   "504bf2eca26e5115": {
-    "count": 1,
+    "count": 2,
     "file": "tests/test_calc.py",
     "first_change": "0017",
     "last_change": "0017",
-    "last_seen": "2026-10-20T13:57:59Z",
+    "last_seen": "2026-10-20T13:59:51Z",
     "summary": "test_percent_zero_whole_error_names_whole now asserts a message that names the part, not the whole, so its name misdescribes what it checks (kept on purpose by panel decision #1 and recorded in plan.md Risks)."
   },
   "5e7c81cfb5d139ff": {
@@ -78,6 +78,14 @@
     "last_change": "0015",
     "last_seen": "2026-10-19T17:32:35Z",
     "summary": "The Layout line \"percent(part, whole) is part * 100 / whole through divide, so it raises the same on a zero whole\" is ambiguous now that percent's message text differs from divide's, even though the exception type is still the same; not clearly false, just worth a clarifying rewrite."
+  },
+  "92077b5165bb1219": {
+    "count": 1,
+    "file": "sample_pkg/calc.py",
+    "first_change": "0017",
+    "last_change": "0017",
+    "last_seen": "2026-10-20T13:59:51Z",
+    "summary": "No test guards the 'from None' clause, so dropping it later would re-attach divide's 'cannot divide 500 by zero' as the cause without any test failing; the code keeps the clause today and plan.md Risks records the gap."
   },
   "99fbee6f3ddeb611": {
     "count": 1,
