@@ -11,7 +11,31 @@
       "run": "fix",
       "source": "claude-fix.json",
       "usd": 5.762722100000003
+    },
+    {
+      "at": "2026-10-20T13:52:37Z",
+      "run": "c",
+      "source": "claude-c.json",
+      "usd": 1.703751
+    },
+    {
+      "at": "2026-10-20T13:56:42Z",
+      "run": "d",
+      "source": "claude-d.json",
+      "usd": 1.2596334000000002
+    },
+    {
+      "at": "2026-10-20T13:57:59Z",
+      "run": "review",
+      "source": "claude-review.json",
+      "usd": 0.43523
+    },
+    {
+      "at": "2026-10-20T14:00:28Z",
+      "run": "e",
+      "source": "claude-e.json",
+      "usd": 0.8340377999999998
     }
   ],
-  "total_usd": 15.252294
+  "total_usd": 19.484946
 }

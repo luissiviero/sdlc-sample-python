@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-20T13:59:23Z",
+  "findings": [
+    {
+      "file": "sample_pkg/calc.py",
+      "line": 18,
+      "pass": "bugs",
+      "rule": "",
+      "severity": "nit",
+      "signature": "92077b5165bb1219",
+      "summary": "No test guards the 'from None' clause, so dropping it later would re-attach divide's 'cannot divide 500 by zero' as the cause without any test failing; the code keeps the clause today and plan.md Risks records the gap."
+    },
+    {
+      "file": "tests/test_calc.py",
+      "line": 25,
+      "pass": "compliance",
+      "rule": "",
+      "severity": "nit",
+      "signature": "504bf2eca26e5115",
+      "summary": "test_percent_zero_whole_error_names_whole now asserts a message that names the part, not the whole, so its name misdescribes what it checks (kept on purpose by panel decision #1 and recorded in plan.md Risks)."
+    }
+  ],
+  "head": "767ce1f57e7ce7a06c9325e304b6931c9e7b6c6d",
+  "schema_version": 1,
+  "tally": {
+    "important": 0,
+    "nit": 2,
+    "nits_omitted": 0
+  }
+}
