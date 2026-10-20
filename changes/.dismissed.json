@@ -26,6 +26,15 @@
       "reason": "Dismissed: the guardrail policy is enforced by layers this review could not see, because it read only the project's settings. The pinned sdlc plugin's `shell_guard` hook denies a Bash or PowerShell command that names a guardrail file beside a write idiom: `git checkout <ref> -- CLAUDE.md`, `git restore`, `git rm`, `git mv`, `git apply`, and redirections such as `git show <ref>:sdlc.yaml > sdlc.yaml`. A git verb without a pathspec can change the working tree, but in CI the sandbox's `denyWrite` covers the guardrail files, the runner parks a phase whose branch changed one, the gate's guardrails check refuses the diff, and only the owner can merge to main. The CI sandbox proof is tracked upstream as sdlc-framework roadmap R44. `Bash(git *)` stays: sessions need it to commit and push. Report it again only if a guardrail change can reach main without the owner's merge.",
       "summary": "The permissions.deny list only blocks the Edit tool from touching guardrail files (.claude/**, CLAUDE.md, REVIEW.md, sdlc.yaml), but permissions.allow grants unrestricted `Bash(git *)`, so any Claude session (build, test, fix, review) can overwrite those same files via git (e.g. `git checkout <ref> -- CLAUDE.md`, `git show <ref>:sdlc.yaml > sdlc.yaml`, or a direct commit+push) without ever invoking the denied Edit tool, defeating the 'owner changes guardrails only in a reviewed PR' policy stated in CLAUDE.md.",
       "until": null
+    },
+    "eda9f21137cf4079": {
+      "at": "2026-10-20T00:32:12Z",
+      "by": "luissiviero",
+      "change_id": "0011",
+      "kind": "scan",
+      "reason": "Dismissed: a deliberate setting, not a defect. `failIfUnavailable: false` in the project's `.claude/settings.json` is the framework template's documented choice (sdlc-framework NOTES \u00a75): Claude Code's sandbox does not run on native Windows, where the owner works, and `true` would stop Claude Code from starting there. Every CI phase run passes the pinned framework's `plugin/ci/settings.ci.json` with `--settings`, which outranks this file and sets `failIfUnavailable: true` and `allowUnsandboxedCommands: false`, and the job installs bubblewrap first. It is not SSRF. Report it again only if the CI settings stop requiring the sandbox.",
+      "summary": "sandbox.failIfUnavailable is false, so on any runner where the OS-level sandbox cannot be initialized the session silently runs unsandboxed instead of stopping, dropping the sandbox's network allow-list (github.com, pypi.org, files.pythonhosted.org) that is supposed to bound every outbound call a session's allowed Bash commands (e.g. `git push`, `pip install`) can make.",
+      "until": null
     }
   },
   "schema_version": 1
