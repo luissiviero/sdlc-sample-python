@@ -1,0 +1,36 @@
+id: "0017"
+slug: name-the-part-in-percent-s-zero-whole-er
+title: "Name the part in percent's zero-whole error"
+phase: b
+entry_route: idea
+change_type: feature
+profile_override: null
+review_override: null
+gate:
+  phase: b
+  result: passed
+  reason: waiting for the owner at gate (b)
+  at: "2026-10-20T10:34:08Z"
+parked_reason: null
+iterations: 1
+panel_calls: 1
+external_ref: null
+risk_accepted: []
+tests_locked: false
+risk_accepted_by: []
+iterations_reset_by: null
+iterations_reset_at: null
+tests_unlocked_by: null
+runbook_authorized_by: null
+abandoned_reason: null
+build_pr: null
+released_at: null
+released_sha: null
+released_pr: null
+fast_lane:
+  a:
+    sha: "81adec3becca71711fd496f4a67b49b4cf1bccb5"
+    pr: 85
+created_at: "2026-10-20T06:00:31Z"
+updated_at: "2026-10-20T10:34:08Z"
+schema_version: 1

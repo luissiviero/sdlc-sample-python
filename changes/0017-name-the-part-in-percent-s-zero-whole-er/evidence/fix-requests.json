@@ -1,0 +1,25 @@
+{
+  "applied_earlier": [],
+  "collected_at": "2026-10-20T10:27:21+00:00",
+  "head": "e4248e7d2810aaa481c1a8e85d65ec9bddf6a996",
+  "not_applied": [],
+  "ok": true,
+  "pr_number": 86,
+  "repo": "luissiviero/sdlc-sample-python",
+  "requests": [
+    {
+      "association": "OWNER",
+      "at": "2026-10-20T10:26:28Z",
+      "author": "luissiviero",
+      "body": "@claude ",
+      "id": 6288823233,
+      "kind": "comment",
+      "url": "https://github.com/luissiviero/sdlc-sample-python/pull/86#issuecomment-6288823233",
+      "applied": true
+    }
+  ],
+  "route": "api",
+  "schema_version": 1,
+  "trigger": "https://github.com/luissiviero/sdlc-sample-python/pull/86#issuecomment-6288823233",
+  "unavailable": null
+}

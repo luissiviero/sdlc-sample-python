@@ -1,0 +1,28 @@
+{
+  "decisions": [
+    {
+      "advocate": "No objection to letting the Proposed outcome win and updating the one assertion in `tests/test_calc.py`, on the condition that the decision record says it supersedes change 0015's outcome \"the message names `whole`\".",
+      "at": "2026-10-20T10:31:31Z",
+      "cost_usd": null,
+      "decision": "The Proposed outcome wins: the one assertion in tests/test_calc.py::test_percent_zero_whole_error_names_whole changes to \"cannot express 1 as a percent of zero\", nothing else in that file moves, and this supersedes change 0015's outcome that the message names `whole`; the stale test name stays as a known nit.",
+      "head": "e4248e7d2810aaa481c1a8e85d65ec9bddf6a996",
+      "item": "The intent's Proposed outcome and its Constraints contradict each other on",
+      "item_n": 1,
+      "key": "concern:01e8405844a2ad84",
+      "kind": "concern",
+      "n": 1,
+      "overturned": null,
+      "phase": "b",
+      "rationale": [
+        "Both verdicts reach the same decision; they differ only on whether the record names the 0015 outcome it supersedes.",
+        "That claim is checkable and true: changes/0015-.../intent.md line 17 asks for a message that names `whole`, and the 0017 intent's exact new text drops it, so the same owner knowingly let it go.",
+        "No policy picks a winner between an intent's sections, but the Constraint-wins reading also breaks the intent's own bullet 5 (pytest green) unless the change ships nothing; the Outcome-wins reading breaks one constraint's letter only.",
+        "The edit replaces one exact-equality assertion with another of equal strictness in a feature-type change (tests_locked: false), so coding-standards rule 4, CLAUDE.md \"fix the code, not the test\" and REVIEW.md's test lock are not engaged.",
+        "The test name nit and any rename are left to the owner at the gate, as the advocate asked; the panel does not widen the edit beyond one line."
+      ],
+      "reviewer": "Close the concern as decided: the Proposed outcome governs; update the one assertion at `tests/test_calc.py:28` to `\"cannot express 1 as a percent of zero\"`, and read the Constraint as \"no test weakened or deleted\", which this edit honours."
+    }
+  ],
+  "phase": "b",
+  "schema_version": 1
+}

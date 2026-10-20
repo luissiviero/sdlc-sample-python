@@ -1,0 +1,125 @@
+{
+  "api_error_status": null,
+  "duration_api_ms": 429083,
+  "duration_ms": 398434,
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "fast_mode_state": "off",
+  "first_content_frame_ms": 1041,
+  "is_error": false,
+  "modelUsage": {
+    "claude-fable-5-1": {
+      "cacheCreationInputTokens": 184869,
+      "cacheReadInputTokens": 2106406,
+      "canonicalModel": "claude-fable-5-1",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 4.778411500000001,
+      "inputTokens": 1096,
+      "maxOutputTokens": 64000,
+      "outputTokens": 25210,
+      "provider": "firstParty",
+      "thinkingTokens": 6271,
+      "webSearchRequests": 0
+    },
+    "claude-opus-5-5": {
+      "cacheCreationInputTokens": 111481,
+      "cacheReadInputTokens": 615068,
+      "canonicalModel": "claude-opus-5-5",
+      "contextWindow": 1000000,
+      "costBasis": "list",
+      "costUSD": 0.9843106,
+      "inputTokens": 48,
+      "maxOutputTokens": 128000,
+      "outputTokens": 15185,
+      "provider": "firstParty",
+      "thinkingTokens": 2617,
+      "webSearchRequests": 0
+    }
+  },
+  "num_turns": 54,
+  "permission_denials": [
+    {
+      "tool_input": {
+        "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --message \"fix(0017): round 1 evidence: panel decision 1, reviewer on opus, gate (b) wait\" --paths changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/fix-requests.json changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/fix-response.md changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml --push",
+        "description": "Commit the round's gate evidence and push"
+      },
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01NSpdoQT1aaVFzemPQ2DTiW"
+    }
+  ],
+  "queued_turn_count": 0,
+  "result": "PR https://github.com/luissiviero/sdlc-sample-python/pull/86: gate (b) `wait` with label `sdlc:b-ready` (every check passes; build, test and lint deferred to the runner), iteration 1 of 2 used and panel call 1 of 4, no requests left open.\n\nWhat this round did:\n- **Trigger**: the owner's comment was `@claude` with no words after it, so the round applied the gate's two park reasons.\n- **Open concern**: the panel settled it. The intent's Proposed outcome wins, the one assertion in `tests/test_calc.py` changes, and the decision supersedes change 0015's \"names whole\" outcome. The stale test name is recorded as a known nit for the owner.\n- **Reviewer model**: the adversarial reviewer started on the `opus` alias without the version error the first design run hit, and the model record shows `claude-opus-5-5` with verdict `continue`, non-routine.\n- **Commits** on `sdlc/0017/b`: the panel's spec closing, the plan.md sync, and the round's evidence with `fix-response.md` and the applied mark in `fix-requests.json`.",
+  "result_index": 0,
+  "safety_stops": 0,
+  "session_id": "423a84c9-b546-4c27-a303-804fe043140e",
+  "stop_reason": "end_turn",
+  "subagent_stats": {
+    "by_type": {
+      "general-purpose": 2,
+      "sdlc:adversarial-reviewer": 3
+    },
+    "completed": 5,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "system": 0,
+      "user": 0
+    },
+    "max_depth": 1,
+    "refused": {
+      "budget": 0,
+      "concurrency_limit": 0,
+      "depth_limit": 0
+    },
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 5
+    },
+    "spawned": 5,
+    "spawned_by_subagents": 0,
+    "started_in_background": 0
+  },
+  "subtype": "success",
+  "terminal_reason": "completed",
+  "time_to_request_ms": 121,
+  "total_cost_usd": 5.762722100000003,
+  "ttft_ms": 1782,
+  "ttft_stream_ms": 1040,
+  "type": "result",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 89265,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 89265,
+    "cache_read_input_tokens": 1724877,
+    "fallback_credit": null,
+    "inference_geo": "global",
+    "input_tokens": 772,
+    "iterations": [
+      {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 663,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 663,
+        "cache_read_input_tokens": 88602,
+        "input_tokens": 32,
+        "output_tokens": 443,
+        "type": "message"
+      }
+    ],
+    "output_tokens": 17889,
+    "output_tokens_details": {
+      "thinking_tokens": 4016
+    },
+    "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+    },
+    "service_tier": "standard",
+    "speed": "standard"
+  },
+  "uuid": "c37966fb-9e19-47d7-89bb-5bcac9906b48"
+}

@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "change_id": "0017",
+  "slug": "name-the-part-in-percent-s-zero-whole-er",
+  "phase": "b",
+  "profile": "standard",
+  "human_gate": true,
+  "result": "wait",
+  "label": "sdlc:b-ready",
+  "head": "66f5edfe233e1dee8702970ff6445037fc3ad1c5",
+  "at": "2026-10-20T10:33:20Z",
+  "dry_run": false,
+  "reason": "",
+  "config_note": "",
+  "checks": [
+    {
+      "name": "limits",
+      "ok": true,
+      "reason": "within the run limits",
+      "need": "",
+      "details": {
+        "iterations": 1,
+        "cap": 2,
+        "classification": "non-routine",
+        "panel_calls": 1,
+        "panel_cap": 4,
+        "elapsed_minutes": 5.3,
+        "spend_usd": null,
+        "spend_usd_total": 9.489572,
+        "spend_entries": 1,
+        "max_budget_usd": null
+      }
+    },
+    {
+      "name": "artifacts",
+      "ok": true,
+      "reason": "every required artifact exists and has its template sections",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "design_scope",
+      "ok": true,
+      "reason": "the committed diff stays inside changes/0017-name-the-part-in-percent-s-zero-whole-er/",
+      "need": "",
+      "details": {
+        "dirty": [
+          ".env",
+          "changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json",
+          "changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json",
+          "changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch",
+          "changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl",
+          "changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json"
+        ]
+      }
+    },
+    {
+      "name": "open_concerns",
+      "ok": true,
+      "reason": "no open flagged concern",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "panel",
+      "ok": true,
+      "reason": "1 panel decision(s) recorded",
+      "need": "",
+      "details": {
+        "decisions": [
+          {
+            "n": 1,
+            "kind": "concern",
+            "decision": "The Proposed outcome wins: the one assertion in tests/test_calc.py::test_percent_zero_whole_error_names_whole changes to \"cannot express 1 as a percent of zero\", nothing else in that file moves, and this supersedes change 0015's outcome that the message names `whole`; the stale test name stays as a known nit."
+          }
+        ],
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "reason": "build, test and lint exit 0",
+      "need": "",
+      "details": {
+        "runs": {
+          "build": {
+            "command": "python -m compileall -q .",
+            "exit_code": 0,
+            "output": ""
+          },
+          "test": {
+            "command": "python -m pytest",
+            "exit_code": 0,
+            "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0\nrootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\nplugins: platformdirs-4.13.0\ncollected 11 items\n\ntests/test_calc.py .........                                             [ 81%]\ntests/test_flag.py .                                                     [ 90%]\ntests/test_messages.py .                                                 [100%]\n\n============================== 11 passed in 0.02s ==============================\n"
+          },
+          "lint": {
+            "command": "python -m ruff check .",
+            "exit_code": 0,
+            "output": "All checks passed!\n"
+          }
+        },
+        "ran_by": "runner"
+      }
+    },
+    {
+      "name": "guardrails",
+      "ok": true,
+      "reason": "the diff does not touch a guardrail file",
+      "need": "",
+      "details": {}
+    },
+    {
+      "name": "risk_list",
+      "ok": true,
+      "reason": "no risk-list item touched",
+      "need": "",
+      "details": {
+        "accepted": []
+      }
+    },
+    {
+      "name": "owner_actions",
+      "ok": true,
+      "reason": "risk acceptances, iteration and panel-call resets and test-lock lifts, if any, were committed by the owner or applied by the owner's label",
+      "need": "",
+      "details": {
+        "risk_accepted": [],
+        "label_actors": {}
+      }
+    },
+    {
+      "name": "adversarial_review",
+      "ok": true,
+      "reason": "adversarial reviewer says continue",
+      "need": "",
+      "details": {
+        "classification": "non-routine",
+        "reasons": []
+      }
+    },
+    {
+      "name": "reviewer_model",
+      "ok": true,
+      "reason": "the adversarial reviewer ran on claude-opus-5-5",
+      "need": "",
+      "details": {
+        "wanted": "claude-opus-5-5"
+      }
+    }
+  ],
+  "what_i_need": ""
+}

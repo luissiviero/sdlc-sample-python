@@ -1,0 +1,14 @@
+{
+  "agent_id": "a861725a573353ee1",
+  "agent_type": "sdlc:adversarial-reviewer",
+  "at": "2026-10-20T10:30:27Z",
+  "member": "advocate",
+  "models": [
+    "claude-opus-5-5"
+  ],
+  "n": 1,
+  "phase": "b",
+  "reason": null,
+  "schema_version": 1,
+  "transcript": "/home/runner/.claude/projects/-home-runner-work-sdlc-sample-python-sdlc-sample-python/423a84c9-b546-4c27-a303-804fe043140e/subagents/agent-a861725a573353ee1.jsonl"
+}
