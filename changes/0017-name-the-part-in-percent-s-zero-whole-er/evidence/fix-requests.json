@@ -14,7 +14,8 @@
       "body": "@claude ",
       "id": 6288823233,
       "kind": "comment",
-      "url": "https://github.com/luissiviero/sdlc-sample-python/pull/86#issuecomment-6288823233"
+      "url": "https://github.com/luissiviero/sdlc-sample-python/pull/86#issuecomment-6288823233",
+      "applied": true
     }
   ],
   "route": "api",

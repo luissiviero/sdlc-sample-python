@@ -1,72 +1,81 @@
  .../evidence/.gitkeep                              |    0
- .../evidence/adversarial-review-b.json             |   24 +
+ .../evidence/adversarial-review-b.json             |   26 +
  .../evidence/adversarial-review-b.model.json       |   14 +
- .../evidence/claude-b.json                         |   99 ++
+ .../evidence/claude-b.json                         |   99 +
  .../evidence/claude-b.stderr.txt                   |    2 +
- .../evidence/diff-b.patch                          | 1382 ++++++++++++++++++++
- .../evidence/gate-b.json                           |  148 +++
- .../evidence/hook-log.jsonl                        |   67 +
- .../evidence/panel/b-items.json                    |   34 +
- .../evidence/run-b.json                            |   10 +
+ .../evidence/decisions-b.json                      |   28 +
+ .../evidence/decisions-b.md                        |    7 +
+ .../evidence/diff-b.patch                          | 2247 ++++++++++++++++++++
+ .../evidence/fix-requests.json                     |   24 +
+ .../evidence/gate-b.json                           |  148 ++
+ .../evidence/hook-log.jsonl                        |  123 ++
+ .../evidence/panel/b-1-advocate.md                 |   14 +
+ .../evidence/panel/b-1-advocate.model.json         |   14 +
+ .../evidence/panel/b-1-conciliator.json            |   12 +
+ .../evidence/panel/b-1-reviewer.md                 |    9 +
+ .../evidence/panel/b-items.json                    |   38 +
+ .../evidence/run-b.json                            |    6 +
  .../evidence/spend.json                            |   11 +
  .../intent.md                                      |   51 +
- .../plan.md                                        |  125 ++
+ .../plan.md                                        |  131 ++
  .../spec.md                                        |  138 ++
  .../status.yaml                                    |   36 +
- 15 files changed, 2141 insertions(+)
+ 22 files changed, 3178 insertions(+)
 
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep
 new file mode 100644
 index 0000000..e69de29
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json
 new file mode 100644
-index 0000000..6ed0776
+index 0000000..1484284
 --- /dev/null
 +++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json
-@@ -0,0 +1,24 @@
+@@ -0,0 +1,26 @@
 +{
 +  "schema_version": 1,
 +  "phase": "b",
-+  "head": "85ad366a27c48e88d16381cc542e8074b5d5d461",
++  "head": "e4248e7d2810aaa481c1a8e85d65ec9bddf6a996",
 +  "verdict": "continue",
 +  "reasons": [],
 +  "classification": "non-routine",
 +  "classification_reasons": [
-+    "Spec is not tight by the article's test: one flagged concern is left open on purpose (intent Constraints say tests/test_calc.py is not changed, intent Proposed outcome changes the message tests/test_calc.py::test_percent_zero_whole_error_names_whole asserts; the design picks the Proposed outcome and leaves the choice to the owner or the panel).",
-+    "Blast radius is small: one string literal in sample_pkg/calc.py, one added test in tests/test_messages.py, one assertion updated in tests/test_calc.py; no risk-list item, no schema, no contract, no guardrail file.",
-+    "Existing tests already cover the changed path (test_percent_zero_whole_raises, test_percent_zero_whole_error_names_whole, test_percent); the acceptance targets are measurable exact-string assertions."
++    "Spec not tight: one flagged concern stays open by design (intent Constraints say tests/test_calc.py is unchanged; intent Proposed outcome changes the message tests/test_calc.py::test_percent_zero_whole_error_names_whole asserts). The design picks the Proposed outcome and leaves the choice to the owner or the panel.",
++    "Small blast radius: one string literal in sample_pkg/calc.py, one added test in tests/test_messages.py, one updated assertion in tests/test_calc.py. No risk-list item, schema, contract or guardrail file.",
++    "Existing tests already cover the changed path (test_percent_zero_whole_raises, test_percent_zero_whole_error_names_whole, test_percent), and acceptance is exact-string assertions."
 +  ],
 +  "attempted": [
-+    "Intent: the spec's first requirement is the intent's Proposed outcome verbatim (percent(5, 0) -> \"cannot express 5 as a percent of zero\"); exception type, return value on a non-zero whole, divide/add/mean unchanged, new test in tests/test_messages.py, green targets: all carried. Both intent open questions are answered with the intent's own defaults and a code-based justification (str() rendering as divide does at calc.py:10; own message because divide would say \"cannot divide 500 by zero\" for percent(5, 0)). Nothing nearby was solved instead of the stated problem.",
-+    "Spec and plan: every Proposed outcome and Constraint maps to a requirement; the one contradiction inside the intent (test_calc.py untouched vs. message changed) is stated honestly as the single flagged concern, with the choice, the reason, the alternative and who decides. plan.md lists three files with exact lines and exact strings, in an order that matches the spec's design; an engineer with plan.md alone can implement it. Diff at HEAD touches only changes/0017-*/ (intent, spec, plan, status, evidence), nothing outside the change folder, no guardrail file.",
-+    "Proof: phase (b) is read-only, so no toolchain logs are expected and none are claimed; the plan's Proof section names the new test (tests/test_messages.py::test_percent_zero_whole_names_part), the updated assertion, every existing test by name and the expected count (12 passed = today's 11 + 1). I counted today's suite: 9 in test_calc.py, 1 in test_messages.py, 1 in test_flag.py = 11; the count is right (the earlier design commit said 11 and was corrected at HEAD).",
-+    "Blast radius: Grep for \"whole must not be zero\" over the repository finds it outside change folders only in sample_pkg/calc.py:18 and tests/test_calc.py:28, exactly as plan.md Risks claims; sample_pkg/__init__.py re-exports the four names and does not move; CLAUDE.md Layout's sentence on percent (\"raises the same on a zero whole\") already describes the type, not the text, since percent already raises its own message today, so CLAUDE.md is not made outdated; no risk-list item (auth, data migrations, money movement, production config), no guardrail file in the diff.",
-+    "Policies: coding-standards rule 4 is met (a new exact-message test that fails on today's code); the test_calc.py assertion update is a feature-type change updating a pinned old message, not a weakened or deleted failing test, and the design says so rather than hiding it; security-baseline, data-conventions and ux-conventions non-applicability is argued per rule and matches the code (library, numeric args, no storage, no logs); the message echoes a value the caller passed, no new exposure.",
-+    "Tests: the new test asserts the exact string for percent(5, 0), so formatting part*100, whole or dropping the part would fail it; the updated test_calc.py assertion covers percent(1, 0); from None being dropped by accident is not caught by any test, and the plan records this as a risk with an option not taken (asserting __cause__ is None) rather than silently; the retained test name test_percent_zero_whole_error_names_whole no longer describes what it asserts, a nit the plan acknowledges, not a reason.",
-+    "Skip markers: not applicable at phase (b); no test is skipped, narrowed or deleted in the design.",
-+    "Claims against today's code, each read in the working tree (today's code at (b)): calc.py:10 is f\"cannot divide {a} by zero\" (true); calc.py:16 is return divide(part * 100, whole) (true); calc.py:18 is raise ZeroDivisionError(\"whole must not be zero\") from None (true); test_calc.py:25-28 is test_percent_zero_whole_error_names_whole calling percent(1, 0) and asserting the old message on line 28 (true); test_messages.py imports only divide and holds one test test_divide_by_zero_names_dividend (true); test_percent asserts percent(1, 4) == 25.0 and percent(7, 100) == 7.0 (true); mean rejects an empty collection before dividing by len(values) and raises ValueError(\"mean() requires at least one value\") (true); status.yaml change_type: feature, tests_locked: false (true); sdlc.yaml test_paths covers tests/** and the lock is fix-only (true: framework/plugin/hooks/test_file_lock.py line 122 requires change_type == \"fix\" and tests_locked); plan_sync requires plan.md in the commit only for source files not listed under \"Files that change\" (true: framework/plugin/hooks/plan_sync.py lines 143-168); change 0016's spec settled str()/f-string rendering for divide in its Open questions (true); CLAUDE.md names tests/test_messages.py as the module that checks the error messages (true). docs/decisions/index.md does not exist in this project and the spec cites no decision file. No claim contradicted the code.",
-+    "Deferred review: the panel's files and the concern's closing are not expected in this diff and their absence is not a reason; the open concern is the gate's and the panel's or owner's item (evidence/panel/b-items.json lists it as pending), not a design defect. The runner's records (run-b.json, adversarial-review-b.model.json from the earlier round at 310c22a) were not used for or against the change."
++    "Fix round scope: commits after the last reviewed HEAD (85ad366) are 28c2d2b (gate evidence) and e4248e7 (spend recorded). spec.md and plan.md in the diff match the working tree and the version reviewed at 85ad366. The owner's fix request (evidence/fix-requests.json) is an empty '@claude ' comment with no change request, so the design was re-judged in full from scratch.",
++    "Intent: the spec's first requirement is the intent's Proposed outcome verbatim. Exception type, the non-zero return value, the unchanged divide/add/mean and the new test in tests/test_messages.py are all carried over. Both open questions are answered with the intent's defaults and reasons taken from the code. The spec solves the stated problem, not a nearby one.",
++    "Spec and plan: every Proposed outcome and Constraint maps to a requirement. The one internal contradiction in the intent is raised as the single flagged concern, with the choice, the alternative and who decides. plan.md lists the three files with exact lines and strings, in an order consistent with the design.",
++    "Proof: phase (b) writes no code, so no toolchain logs are claimed. gate-b.json's runner-run commands show today's suite at 11 passed (9 test_calc, 1 test_flag, 1 test_messages), which matches the plan's 'today's 11, 12 after step 2'. The Proof section names the new test, the updated assertion and every existing test.",
++    "Blast radius: outside changes/, Grep finds 'whole must not be zero' only in sample_pkg/calc.py:18 and tests/test_calc.py:28, as plan.md Risks claims. No other caller. sample_pkg/__init__.py does not move. CLAUDE.md Layout ('raises the same on a zero whole') describes the exception type and stays correct; no public function is added. The diff stays inside the change folder: no guardrail file, no risk-list item.",
++    "Policies: coding-standards rule 4 is met by a new exact-message test that fails on today's code. The test_calc.py update is in a feature-type change (status.yaml change_type: feature, tests_locked: false), so REVIEW.md's fix-type test lock does not apply. It updates an assertion that pins behaviour the owner asked to change, is not a weakening, and is disclosed as the open concern. Security-baseline, data-conventions and ux-conventions do not apply (library, numeric argument echoed back to its own caller, no storage or logs).",
++    "Tests: the new test asserts the exact string for percent(5, 0), so rendering part*100 (500) or whole (0) would fail it. The updated test_calc.py assertion covers percent(1, 0). No test catches an accidental removal of 'from None'; the plan records this as a risk and as an option not taken. The retained test name '..._names_whole' is a nit the plan acknowledges.",
++    "Skip markers: not applicable at phase (b); the design skips, narrows or deletes no test.",
++    "Claims against today's code (working tree = merge base for these files): calc.py:10 f\"cannot divide {a} by zero\" (true); calc.py:16 divide(part * 100, whole) (true); calc.py:18 raise ZeroDivisionError(\"whole must not be zero\") from None (true); test_calc.py:25-28 test_percent_zero_whole_error_names_whole calls percent(1, 0) and asserts the old message on line 28 (true); test_messages.py imports only divide, has one test test_divide_by_zero_names_dividend (true); test_percent asserts 25.0 and 7.0 (true); mean rejects empty before dividing (true); change 0016 spec settled str()/f-string rendering for divide (true, 0016 spec.md lines 6-7 and 69-73). docs/decisions/index.md is not cited and is not part of this project. No claim was contradicted.",
++    "Stale-statement check: plan.md Risks 'Run infrastructure' records that the earlier reviewer could not start on claude-opus-5-5 and predicts phase (c) will hit the same error. That is a historical note about the run, not a design claim; it does not affect the steps and is not a reason. It may need refreshing if the reviewer now starts on the pinned model.",
++    "Deferred review: the open concern's closing and the panel files are not expected in this diff, and their absence is not a reason. Runner records (claude-b.json, run-b.json, adversarial-review-b.model.json, gate-b.json) were not used for or against the design."
 +  ]
 +}
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json
 new file mode 100644
-index 0000000..d84b734
+index 0000000..44d2421
 --- /dev/null
 +++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json
 @@ -0,0 +1,14 @@
 +{
-+  "agent_id": "af3f5379b7b832ad1",
++  "agent_id": "abdc247ad827c53fc",
 +  "agent_type": "sdlc:adversarial-reviewer",
-+  "at": "2026-10-20T06:28:33Z",
-+  "head": "85ad366a27c48e88d16381cc542e8074b5d5d461",
++  "at": "2026-10-20T10:29:19Z",
++  "head": "e4248e7d2810aaa481c1a8e85d65ec9bddf6a996",
 +  "member": "reviewer",
 +  "models": [
-+    "claude-fable-5-1"
++    "claude-opus-5-5"
 +  ],
 +  "phase": "b",
 +  "reason": null,
 +  "schema_version": 1,
-+  "transcript": "/home/runner/.claude/projects/-home-runner-work-sdlc-sample-python-sdlc-sample-python/80bac103-2023-4bdd-9fac-12c13d363b1d/subagents/agent-af3f5379b7b832ad1.jsonl"
++  "transcript": "/home/runner/.claude/projects/-home-runner-work-sdlc-sample-python-sdlc-sample-python/423a84c9-b546-4c27-a303-804fe043140e/subagents/agent-abdc247ad827c53fc.jsonl"
 +}
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-b.json
 new file mode 100644
@@ -181,38 +190,120 @@ index 0000000..9836b67
 @@ -0,0 +1,2 @@
 +Ignoring 4 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects["/home/runner/work/sdlc-sample-python/sdlc-sample-python"].hasTrustDialogAccepted: true in /home/runner/.claude.json.
 +[claude-code:unrecognized_model] {"model":"claude-opus-5-5","query_source":"agent:custom:sdlc:adversarial-reviewer"}
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/decisions-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/decisions-b.json
+new file mode 100644
+index 0000000..7484bdc
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/decisions-b.json
+@@ -0,0 +1,28 @@
++{
++  "decisions": [
++    {
++      "advocate": "No objection to letting the Proposed outcome win and updating the one assertion in `tests/test_calc.py`, on the condition that the decision record says it supersedes change 0015's outcome \"the message names `whole`\".",
++      "at": "2026-10-20T10:31:31Z",
++      "cost_usd": null,
++      "decision": "The Proposed outcome wins: the one assertion in tests/test_calc.py::test_percent_zero_whole_error_names_whole changes to \"cannot express 1 as a percent of zero\", nothing else in that file moves, and this supersedes change 0015's outcome that the message names `whole`; the stale test name stays as a known nit.",
++      "head": "e4248e7d2810aaa481c1a8e85d65ec9bddf6a996",
++      "item": "The intent's Proposed outcome and its Constraints contradict each other on",
++      "item_n": 1,
++      "key": "concern:01e8405844a2ad84",
++      "kind": "concern",
++      "n": 1,
++      "overturned": null,
++      "phase": "b",
++      "rationale": [
++        "Both verdicts reach the same decision; they differ only on whether the record names the 0015 outcome it supersedes.",
++        "That claim is checkable and true: changes/0015-.../intent.md line 17 asks for a message that names `whole`, and the 0017 intent's exact new text drops it, so the same owner knowingly let it go.",
++        "No policy picks a winner between an intent's sections, but the Constraint-wins reading also breaks the intent's own bullet 5 (pytest green) unless the change ships nothing; the Outcome-wins reading breaks one constraint's letter only.",
++        "The edit replaces one exact-equality assertion with another of equal strictness in a feature-type change (tests_locked: false), so coding-standards rule 4, CLAUDE.md \"fix the code, not the test\" and REVIEW.md's test lock are not engaged.",
++        "The test name nit and any rename are left to the owner at the gate, as the advocate asked; the panel does not widen the edit beyond one line."
++      ],
++      "reviewer": "Close the concern as decided: the Proposed outcome governs; update the one assertion at `tests/test_calc.py:28` to `\"cannot express 1 as a percent of zero\"`, and read the Constraint as \"no test weakened or deleted\", which this edit honours."
++    }
++  ],
++  "phase": "b",
++  "schema_version": 1
++}
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/decisions-b.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/decisions-b.md
+new file mode 100644
+index 0000000..b518f38
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/decisions-b.md
+@@ -0,0 +1,7 @@
++# Decisions taken for you — phase (b)
++
++One line per panel decision (decision 21): the item, the reviewer's and the devil's advocate's verdicts, the conciliator's decision and rationale, the cost. A review comment on any of them overturns it (/sdlc-fix); an overturned line says so.
++
++- 1. [concern] The intent's Proposed outcome and its Constraints contradict each other on — reviewer: Close the concern as decided: the Proposed outcome governs; update the one assertion at `tests/test_calc.py:28` to `"cannot express 1 as a percent of zero"`, and read the Constraint as "no test weakened or deleted", which this edit honours.; devil's advocate: No objection to letting the Proposed outcome win and updating the one assertion in `tests/test_calc.py`, on the condition that the decision record says it supersedes change 0015's outcome "the message names `whole`".; decision: The Proposed outcome wins: the one assertion in tests/test_calc.py::test_percent_zero_whole_error_names_whole changes to "cannot express 1 as a percent of zero", nothing else in that file moves, and this supersedes change 0015's outcome that the message names `whole`; the stale test name stays as a known nit.; rationale: Both verdicts reach the same decision; they differ only on whether the record names the 0015 outcome it supersedes. That claim is checkable and true: changes/0015-.../intent.md line 17 asks for a message that names `whole`, and the 0017 intent's exact new text drops it, so the same owner knowingly let it go. No policy picks a winner between an intent's sections, but the Constraint-wins reading also breaks the intent's own bullet 5 (pytest green) unless the change ships nothing; the Outcome-wins reading breaks one constraint's letter only. The edit replaces one exact-equality assertion with another of equal strictness in a feature-type change (tests_locked: false), so coding-standards rule 4, CLAUDE.md "fix the code, not the test" and REVIEW.md's test lock are not engaged. The test name nit and any rename are left to the owner at the gate, as the advocate asked; the panel does not widen the edit beyond one line.; cost: n/a
++
++Total panel cost: $0.00
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch
 new file mode 100644
-index 0000000..6283e7c
+index 0000000..be87b44
 --- /dev/null
 +++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch
-@@ -0,0 +1,1382 @@
-+ .../evidence/.gitkeep                              |   0
-+ .../evidence/adversarial-review-b.model.json       |  14 +
-+ .../evidence/diff-b.patch                          | 852 +++++++++++++++++++++
-+ .../evidence/hook-log.jsonl                        |  57 ++
-+ .../evidence/panel/b-items.json                    |  34 +
-+ .../evidence/run-b.json                            |   5 +
-+ .../intent.md                                      |  51 ++
-+ .../plan.md                                        | 125 +++
-+ .../spec.md                                        | 138 ++++
-+ .../status.yaml                                    |  36 +
-+ 10 files changed, 1312 insertions(+)
+@@ -0,0 +1,2247 @@
++ .../evidence/.gitkeep                              |    0
++ .../evidence/adversarial-review-b.json             |   24 +
++ .../evidence/adversarial-review-b.model.json       |   14 +
++ .../evidence/claude-b.json                         |   99 ++
++ .../evidence/claude-b.stderr.txt                   |    2 +
++ .../evidence/diff-b.patch                          | 1382 ++++++++++++++++++++
++ .../evidence/gate-b.json                           |  148 +++
++ .../evidence/hook-log.jsonl                        |   67 +
++ .../evidence/panel/b-items.json                    |   34 +
++ .../evidence/run-b.json                            |   10 +
++ .../evidence/spend.json                            |   11 +
++ .../intent.md                                      |   51 +
++ .../plan.md                                        |  125 ++
++ .../spec.md                                        |  138 ++
++ .../status.yaml                                    |   36 +
++ 15 files changed, 2141 insertions(+)
 +
 +diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep
 +new file mode 100644
 +index 0000000..e69de29
++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json
++new file mode 100644
++index 0000000..6ed0776
++--- /dev/null
+++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json
++@@ -0,0 +1,24 @@
+++{
+++  "schema_version": 1,
+++  "phase": "b",
+++  "head": "85ad366a27c48e88d16381cc542e8074b5d5d461",
+++  "verdict": "continue",
+++  "reasons": [],
+++  "classification": "non-routine",
+++  "classification_reasons": [
+++    "Spec is not tight by the article's test: one flagged concern is left open on purpose (intent Constraints say tests/test_calc.py is not changed, intent Proposed outcome changes the message tests/test_calc.py::test_percent_zero_whole_error_names_whole asserts; the design picks the Proposed outcome and leaves the choice to the owner or the panel).",
+++    "Blast radius is small: one string literal in sample_pkg/calc.py, one added test in tests/test_messages.py, one assertion updated in tests/test_calc.py; no risk-list item, no schema, no contract, no guardrail file.",
+++    "Existing tests already cover the changed path (test_percent_zero_whole_raises, test_percent_zero_whole_error_names_whole, test_percent); the acceptance targets are measurable exact-string assertions."
+++  ],
+++  "attempted": [
+++    "Intent: the spec's first requirement is the intent's Proposed outcome verbatim (percent(5, 0) -> \"cannot express 5 as a percent of zero\"); exception type, return value on a non-zero whole, divide/add/mean unchanged, new test in tests/test_messages.py, green targets: all carried. Both intent open questions are answered with the intent's own defaults and a code-based justification (str() rendering as divide does at calc.py:10; own message because divide would say \"cannot divide 500 by zero\" for percent(5, 0)). Nothing nearby was solved instead of the stated problem.",
+++    "Spec and plan: every Proposed outcome and Constraint maps to a requirement; the one contradiction inside the intent (test_calc.py untouched vs. message changed) is stated honestly as the single flagged concern, with the choice, the reason, the alternative and who decides. plan.md lists three files with exact lines and exact strings, in an order that matches the spec's design; an engineer with plan.md alone can implement it. Diff at HEAD touches only changes/0017-*/ (intent, spec, plan, status, evidence), nothing outside the change folder, no guardrail file.",
+++    "Proof: phase (b) is read-only, so no toolchain logs are expected and none are claimed; the plan's Proof section names the new test (tests/test_messages.py::test_percent_zero_whole_names_part), the updated assertion, every existing test by name and the expected count (12 passed = today's 11 + 1). I counted today's suite: 9 in test_calc.py, 1 in test_messages.py, 1 in test_flag.py = 11; the count is right (the earlier design commit said 11 and was corrected at HEAD).",
+++    "Blast radius: Grep for \"whole must not be zero\" over the repository finds it outside change folders only in sample_pkg/calc.py:18 and tests/test_calc.py:28, exactly as plan.md Risks claims; sample_pkg/__init__.py re-exports the four names and does not move; CLAUDE.md Layout's sentence on percent (\"raises the same on a zero whole\") already describes the type, not the text, since percent already raises its own message today, so CLAUDE.md is not made outdated; no risk-list item (auth, data migrations, money movement, production config), no guardrail file in the diff.",
+++    "Policies: coding-standards rule 4 is met (a new exact-message test that fails on today's code); the test_calc.py assertion update is a feature-type change updating a pinned old message, not a weakened or deleted failing test, and the design says so rather than hiding it; security-baseline, data-conventions and ux-conventions non-applicability is argued per rule and matches the code (library, numeric args, no storage, no logs); the message echoes a value the caller passed, no new exposure.",
+++    "Tests: the new test asserts the exact string for percent(5, 0), so formatting part*100, whole or dropping the part would fail it; the updated test_calc.py assertion covers percent(1, 0); from None being dropped by accident is not caught by any test, and the plan records this as a risk with an option not taken (asserting __cause__ is None) rather than silently; the retained test name test_percent_zero_whole_error_names_whole no longer describes what it asserts, a nit the plan acknowledges, not a reason.",
+++    "Skip markers: not applicable at phase (b); no test is skipped, narrowed or deleted in the design.",
+++    "Claims against today's code, each read in the working tree (today's code at (b)): calc.py:10 is f\"cannot divide {a} by zero\" (true); calc.py:16 is return divide(part * 100, whole) (true); calc.py:18 is raise ZeroDivisionError(\"whole must not be zero\") from None (true); test_calc.py:25-28 is test_percent_zero_whole_error_names_whole calling percent(1, 0) and asserting the old message on line 28 (true); test_messages.py imports only divide and holds one test test_divide_by_zero_names_dividend (true); test_percent asserts percent(1, 4) == 25.0 and percent(7, 100) == 7.0 (true); mean rejects an empty collection before dividing by len(values) and raises ValueError(\"mean() requires at least one value\") (true); status.yaml change_type: feature, tests_locked: false (true); sdlc.yaml test_paths covers tests/** and the lock is fix-only (true: framework/plugin/hooks/test_file_lock.py line 122 requires change_type == \"fix\" and tests_locked); plan_sync requires plan.md in the commit only for source files not listed under \"Files that change\" (true: framework/plugin/hooks/plan_sync.py lines 143-168); change 0016's spec settled str()/f-string rendering for divide in its Open questions (true); CLAUDE.md names tests/test_messages.py as the module that checks the error messages (true). docs/decisions/index.md does not exist in this project and the spec cites no decision file. No claim contradicted the code.",
+++    "Deferred review: the panel's files and the concern's closing are not expected in this diff and their absence is not a reason; the open concern is the gate's and the panel's or owner's item (evidence/panel/b-items.json lists it as pending), not a design defect. The runner's records (run-b.json, adversarial-review-b.model.json from the earlier round at 310c22a) were not used for or against the change."
+++  ]
+++}
 +diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json
 +new file mode 100644
-+index 0000000..5afbdb6
++index 0000000..d84b734
 +--- /dev/null
 ++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json
 +@@ -0,0 +1,14 @@
 ++{
-++  "agent_id": "a9680aa7ac77b9a40",
+++  "agent_id": "af3f5379b7b832ad1",
 ++  "agent_type": "sdlc:adversarial-reviewer",
-++  "at": "2026-10-20T06:23:25Z",
-++  "head": "310c22a64063a6a3b5a4f71d81f282559b3291b8",
+++  "at": "2026-10-20T06:28:33Z",
+++  "head": "85ad366a27c48e88d16381cc542e8074b5d5d461",
 ++  "member": "reviewer",
 ++  "models": [
 ++    "claude-fable-5-1"
@@ -220,51 +311,603 @@ index 0000000..6283e7c
 ++  "phase": "b",
 ++  "reason": null,
 ++  "schema_version": 1,
-++  "transcript": "/home/runner/.claude/projects/-home-runner-work-sdlc-sample-python-sdlc-sample-python/80bac103-2023-4bdd-9fac-12c13d363b1d/subagents/agent-a9680aa7ac77b9a40.jsonl"
+++  "transcript": "/home/runner/.claude/projects/-home-runner-work-sdlc-sample-python-sdlc-sample-python/80bac103-2023-4bdd-9fac-12c13d363b1d/subagents/agent-af3f5379b7b832ad1.jsonl"
 ++}
++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-b.json
++new file mode 100644
++index 0000000..7a52f17
++--- /dev/null
+++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-b.json
++@@ -0,0 +1,99 @@
+++{
+++  "api_error_status": null,
+++  "duration_api_ms": 864055,
+++  "duration_ms": 880299,
+++  "fast_mode_disabled_reason": "sdk_opt_in_required",
+++  "fast_mode_state": "off",
+++  "first_content_frame_ms": 1066,
+++  "is_error": false,
+++  "modelUsage": {
+++    "claude-fable-5-1": {
+++      "cacheCreationInputTokens": 316534,
+++      "cacheReadInputTokens": 3504257,
+++      "canonicalModel": "claude-fable-5-1",
+++      "contextWindow": 1000000,
+++      "costBasis": "list",
+++      "costUSD": 9.489571750000001,
+++      "inputTokens": 1448,
+++      "maxOutputTokens": 64000,
+++      "outputTokens": 73211,
+++      "provider": "firstParty",
+++      "thinkingTokens": 26375,
+++      "webSearchRequests": 0
+++    }
+++  },
+++  "num_turns": 79,
+++  "permission_denials": [],
+++  "queued_turn_count": 0,
+++  "result": "https://github.com/luissiviero/sdlc-sample-python/pull/86 \u2014 gate (b) **park** (`sdlc:needs-human`), 1 open concern, 0 panel decisions.\n\n**What the owner needs to know**\n\n- **Design is complete.** spec.md and plan.md are on `sdlc/0017/b`. Both intent questions are answered from the code: the part renders with the f-string default as in change 0016, and `percent` keeps its own message so the reader sees the part, not the part times 100.\n- **One open concern, left to the owner on purpose.** The intent's Constraints say `tests/test_calc.py` is not changed, but its existing test asserts the old message and fails once the message changes. The design updates that one assertion and records the alternative. No policy settles which intent statement wins.\n- **The R7 reading the intent asked for.** The reviewer could not start on the pinned model. The Agent tool returned this with the `opus` alias and again with no alias:\n\n```\nAPI Error: 400 Claude Code 2.1.278 does not support this model; version 2.1.280 or newer is required. (model sent to the API: claude-opus-5-5)\n```\n\n  The runner had set `ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-5-5`, so the pin is honoured and the CLI version is the blocker. I ran the reviewer once on the session's model so a real verdict exists. The gate rejected it by design, naming the mismatch. The fix is the owner's: raise `plugin.claude_code` in `sdlc.yaml` to 2.1.280 or later. Phase (c) will hit the same error until then. The panel's advocate uses the same agent and alias, so the panel was not started and the concern stays open. All of this is recorded in plan.md Risks.\n- **The reviewer found and I fixed one error.** My first draft said 11 tests would pass after adding one; the suite already has 11, so it is 12. Corrected in spec.md and plan.md, then re-reviewed once for the new HEAD: continue, non-routine.\n\nNothing else was started. Gate (b) waits for the owner's review on PR 86.",
+++  "result_index": 0,
+++  "session_id": "80bac103-2023-4bdd-9fac-12c13d363b1d",
+++  "stop_reason": "end_turn",
+++  "subagent_stats": {
+++    "by_type": {
+++      "sdlc:adversarial-reviewer": 4
+++    },
+++    "completed": 2,
+++    "failed": 2,
+++    "killed": {
+++      "parent": 0,
+++      "system": 0,
+++      "user": 0
+++    },
+++    "max_depth": 1,
+++    "refused": {
+++      "budget": 0,
+++      "concurrency_limit": 0,
+++      "depth_limit": 0
+++    },
+++    "requested": {
+++      "background": 0,
+++      "foreground": 0,
+++      "unset": 4
+++    },
+++    "spawned": 4,
+++    "spawned_by_subagents": 0,
+++    "started_in_background": 0
+++  },
+++  "subtype": "success",
+++  "terminal_reason": "completed",
+++  "time_to_request_ms": 83,
+++  "total_cost_usd": 9.489571750000001,
+++  "ttft_ms": 1270,
+++  "ttft_stream_ms": 1066,
+++  "type": "result",
+++  "usage": {
+++    "cache_creation": {
+++      "ephemeral_1h_input_tokens": 130907,
+++      "ephemeral_5m_input_tokens": 0
+++    },
+++    "cache_creation_input_tokens": 130907,
+++    "cache_read_input_tokens": 2842781,
+++    "inference_geo": "global",
+++    "input_tokens": 1060,
+++    "iterations": [
+++      {
+++        "cache_creation": {
+++          "ephemeral_1h_input_tokens": 465,
+++          "ephemeral_5m_input_tokens": 0
+++        },
+++        "cache_creation_input_tokens": 465,
+++        "cache_read_input_tokens": 130442,
+++        "input_tokens": 32,
+++        "output_tokens": 741,
+++        "type": "message"
+++      }
+++    ],
+++    "output_tokens": 49476,
+++    "output_tokens_details": {
+++      "thinking_tokens": 15816
+++    },
+++    "server_tool_use": {
+++      "web_fetch_requests": 0,
+++      "web_search_requests": 0
+++    },
+++    "service_tier": "standard",
+++    "speed": "standard"
+++  },
+++  "uuid": "9300cedf-5e78-4429-864a-e0aeeb3a280d"
+++}
++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-b.stderr.txt b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-b.stderr.txt
++new file mode 100644
++index 0000000..9836b67
++--- /dev/null
+++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/claude-b.stderr.txt
++@@ -0,0 +1,2 @@
+++Ignoring 4 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects["/home/runner/work/sdlc-sample-python/sdlc-sample-python"].hasTrustDialogAccepted: true in /home/runner/.claude.json.
+++[claude-code:unrecognized_model] {"model":"claude-opus-5-5","query_source":"agent:custom:sdlc:adversarial-reviewer"}
 +diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch
 +new file mode 100644
-+index 0000000..5964e01
++index 0000000..6283e7c
 +--- /dev/null
 ++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch
-+@@ -0,0 +1,852 @@
++@@ -0,0 +1,1382 @@
 ++ .../evidence/.gitkeep                              |   0
-++ .../evidence/diff-b.patch                          | 410 +++++++++++++++++++++
-++ .../evidence/hook-log.jsonl                        |  38 ++
+++ .../evidence/adversarial-review-b.model.json       |  14 +
+++ .../evidence/diff-b.patch                          | 852 +++++++++++++++++++++
+++ .../evidence/hook-log.jsonl                        |  57 ++
+++ .../evidence/panel/b-items.json                    |  34 +
 ++ .../evidence/run-b.json                            |   5 +
-++ .../intent.md                                      |  51 +++
-++ .../plan.md                                        | 120 ++++++
-++ .../spec.md                                        | 136 +++++++
-++ .../status.yaml                                    |  36 ++
-++ 8 files changed, 796 insertions(+)
+++ .../intent.md                                      |  51 ++
+++ .../plan.md                                        | 125 +++
+++ .../spec.md                                        | 138 ++++
+++ .../status.yaml                                    |  36 +
+++ 10 files changed, 1312 insertions(+)
 ++
 ++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep
 ++new file mode 100644
 ++index 0000000..e69de29
+++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json
+++new file mode 100644
+++index 0000000..5afbdb6
+++--- /dev/null
++++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json
+++@@ -0,0 +1,14 @@
++++{
++++  "agent_id": "a9680aa7ac77b9a40",
++++  "agent_type": "sdlc:adversarial-reviewer",
++++  "at": "2026-10-20T06:23:25Z",
++++  "head": "310c22a64063a6a3b5a4f71d81f282559b3291b8",
++++  "member": "reviewer",
++++  "models": [
++++    "claude-fable-5-1"
++++  ],
++++  "phase": "b",
++++  "reason": null,
++++  "schema_version": 1,
++++  "transcript": "/home/runner/.claude/projects/-home-runner-work-sdlc-sample-python-sdlc-sample-python/80bac103-2023-4bdd-9fac-12c13d363b1d/subagents/agent-a9680aa7ac77b9a40.jsonl"
++++}
 ++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch
 ++new file mode 100644
-++index 0000000..63e1bf3
+++index 0000000..5964e01
 ++--- /dev/null
 +++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch
-++@@ -0,0 +1,410 @@
+++@@ -0,0 +1,852 @@
 +++ .../evidence/.gitkeep                              |   0
-+++ .../evidence/hook-log.jsonl                        |  25 ++++
++++ .../evidence/diff-b.patch                          | 410 +++++++++++++++++++++
++++ .../evidence/hook-log.jsonl                        |  38 ++
 +++ .../evidence/run-b.json                            |   5 +
-+++ .../intent.md                                      |  51 ++++++++
-+++ .../plan.md                                        | 108 ++++++++++++++++
-+++ .../spec.md                                        | 136 +++++++++++++++++++++
-+++ .../status.yaml                                    |  36 ++++++
-+++ 7 files changed, 361 insertions(+)
++++ .../intent.md                                      |  51 +++
++++ .../plan.md                                        | 120 ++++++
++++ .../spec.md                                        | 136 +++++++
++++ .../status.yaml                                    |  36 ++
++++ 8 files changed, 796 insertions(+)
 +++
 +++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep
 +++new file mode 100644
 +++index 0000000..e69de29
++++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch
++++new file mode 100644
++++index 0000000..63e1bf3
++++--- /dev/null
+++++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch
++++@@ -0,0 +1,410 @@
+++++ .../evidence/.gitkeep                              |   0
+++++ .../evidence/hook-log.jsonl                        |  25 ++++
+++++ .../evidence/run-b.json                            |   5 +
+++++ .../intent.md                                      |  51 ++++++++
+++++ .../plan.md                                        | 108 ++++++++++++++++
+++++ .../spec.md                                        | 136 +++++++++++++++++++++
+++++ .../status.yaml                                    |  36 ++++++
+++++ 7 files changed, 361 insertions(+)
+++++
+++++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/.gitkeep
+++++new file mode 100644
+++++index 0000000..e69de29
+++++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
+++++new file mode 100644
+++++index 0000000..5a298e5
+++++--- /dev/null
++++++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
+++++@@ -0,0 +1,25 @@
++++++{"action": "none", "at": "2026-10-20T06:14:42Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" show --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++++{"at": "2026-10-20T06:14:44Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++++++{"action": "none", "at": "2026-10-20T06:14:44Z", "command": "git fetch origin", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++++{"at": "2026-10-20T06:14:46Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++++++{"action": "none", "at": "2026-10-20T06:14:46Z", "command": "git status --short --branch", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++++{"action": "none", "at": "2026-10-20T06:14:51Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" start-run --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++++{"action": "none", "at": "2026-10-20T06:14:57Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" spec-header --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++++{"action": "none", "at": "2026-10-20T06:14:58Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" models --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++++{"at": "2026-10-20T06:16:09Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:16:09Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:16:09Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:16:09Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:16:42Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:16:42Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:16:42Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:16:42Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:17:14Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:17:14Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:17:14Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:17:14Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++++{"at": "2026-10-20T06:17:14Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++++++{"action": "none", "at": "2026-10-20T06:17:14Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++++{"at": "2026-10-20T06:17:28Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++++++{"action": "none", "at": "2026-10-20T06:17:28Z", "command": "git diff --stat -- .env", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++++{"action": "none", "at": "2026-10-20T06:17:32Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json
+++++new file mode 100644
+++++index 0000000..ad4880e
+++++--- /dev/null
++++++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json
+++++@@ -0,0 +1,5 @@
++++++{
++++++  "phase": "b",
++++++  "spend_usd": null,
++++++  "started_at": "2026-10-20T06:14:51Z"
++++++}
+++++\ No newline at end of file
+++++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/intent.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/intent.md
+++++new file mode 100644
+++++index 0000000..cd7309c
+++++--- /dev/null
++++++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/intent.md
+++++@@ -0,0 +1,51 @@
++++++# Intent: name the part in percent's zero-whole error
++++++Author: Luis Siviero (owner). Status: proposed. Change id: 0017. Entry route: idea.
++++++
++++++## Problem
++++++`percent(5, 0)` raises `ZeroDivisionError("whole must not be zero")`. Since change 0016,
++++++`divide(1, 0)` says which number was being divided (`"cannot divide 1 by zero"`), but
++++++`percent` still names only its parameter: whoever reads the traceback learns that some whole
++++++was zero, not which part was being expressed as a percent of it, and has to go back to the
++++++calling code to find out. The two messages now follow different rules.
++++++
++++++This is also the sample's first change on plugin 1.0.14. Its runs are the first live reading
++++++of R7 (framework NOTES §51): whether CI reaches `claude-opus-5-5` and `claude-fable-5-1` as
++++++the sample's `sdlc.yaml` model rows ask, whether CLI 2.1.278 honours the Fable pin, and
++++++where the in-run reviewer and the panel advocate run. It is also the sample change that
++++++framework R56 waits for. The code change is kept small on purpose.
++++++
++++++## Proposed outcome
++++++- `percent(5, 0)` raises `ZeroDivisionError` with the message
++++++  `"cannot express 5 as a percent of zero"`: the message names the part.
++++++- The exception type stays `ZeroDivisionError`, so callers that catch it are not affected.
++++++- `percent`'s result for a non-zero `whole` does not change, and neither do `divide`'s
++++++  message (`"cannot divide 1 by zero"`), `mean`'s or `add`'s behaviour.
++++++- `tests/test_messages.py` gains a test that checks the message of `percent(5, 0)`.
++++++- Build, test and lint stay green: `python -m compileall -q .`, `python -m pytest`,
++++++  `python -m ruff check .`.
++++++
++++++## Affected users and systems
++++++- The owner and anyone importing `sample_pkg` who reads the error of a zero `whole`.
++++++- Files: `sample_pkg/calc.py` (the message in `percent`) and `tests/test_messages.py`
++++++  (one added test).
++++++- No public function is added or removed, so the Layout section of `CLAUDE.md` stays
++++++  correct; its sentence on `percent` ("it raises the same on a zero `whole`") describes the
++++++  exception type, which does not change.
++++++- No services, data stores or external parties.
++++++
++++++## Constraints
++++++- No new dependencies; plain Python 3.10+ with type hints, line length 100 (ruff).
++++++- `add`, `divide`, `percent` and `mean` keep their signatures and return values; only the
++++++  message of `percent`'s zero-whole error changes.
++++++- The existing test in `tests/test_messages.py`, `tests/test_calc.py` and
++++++  `tests/test_flag.py` are not changed.
++++++- The guardrail files (`.claude/**`, `CLAUDE.md`, `REVIEW.md`, `sdlc.yaml`, `bands.yaml`)
++++++  are not edited.
++++++
++++++## Open questions
++++++- How is a non-integer part written in the message, for example `percent(1.5, 0)`? The
++++++  default is Python's own text for the value (`"cannot express 1.5 as a percent of zero"`),
++++++  as change 0016 settled for `divide`; to be confirmed in design.
++++++- Does `percent` keep raising its own message (today it re-raises with `from None`), or let
++++++  `divide`'s message through? The default is its own message, so the reader sees the part,
++++++  not `part * 100`.
+++++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md
+++++new file mode 100644
+++++index 0000000..530868e
+++++--- /dev/null
++++++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md
+++++@@ -0,0 +1,108 @@
++++++# Plan: name the part in percent's zero-whole error (from intent.md 2026-10-20, spec.md 2026-10-20)
++++++
++++++## Files that change
++++++- `sample_pkg/calc.py` — in `percent`, change the re-raised message from the fixed string
++++++  `"whole must not be zero"` to `f"cannot express {part} as a percent of zero"`; the `try`,
++++++  the `except ZeroDivisionError`, the `from None` and every other line in the file stay as
++++++  they are.
++++++- `tests/test_messages.py` — import `percent` beside `divide` from `sample_pkg`; add one test
++++++  asserting `percent(5, 0)` raises `ZeroDivisionError` whose `str(...)` is exactly
++++++  `"cannot express 5 as a percent of zero"`. The existing test is not touched.
++++++- `tests/test_calc.py` — in `test_percent_zero_whole_error_names_whole`, change the asserted
++++++  message from `"whole must not be zero"` to `"cannot express 1 as a percent of zero"`
++++++  (the test calls `percent(1, 0)`). Nothing else in the module moves. This edit is the open
++++++  flagged concern in `spec.md`; if the owner or the panel decides the other way (keep the
++++++  old message and leave `tests/test_calc.py` alone), drop this file and step 3 and the
++++++  change reduces to no source edit at all, which abandons the intent's Proposed outcome.
++++++
++++++## Order of work
++++++1. In `sample_pkg/calc.py`, line 18, change
++++++   `raise ZeroDivisionError("whole must not be zero") from None` to
++++++   `raise ZeroDivisionError(f"cannot express {part} as a percent of zero") from None`.
++++++   One line.
++++++2. In `tests/test_messages.py`, change the import to `from sample_pkg import divide, percent`
++++++   and append a test `test_percent_zero_whole_names_part` that calls `percent(5, 0)` inside
++++++   `with pytest.raises(ZeroDivisionError) as excinfo:` and asserts
++++++   `str(excinfo.value) == "cannot express 5 as a percent of zero"`, in the same shape as the
++++++   existing `test_divide_by_zero_names_dividend`.
++++++3. In `tests/test_calc.py`, line 28, change the assertion to
++++++   `assert str(excinfo.value) == "cannot express 1 as a percent of zero"`. Keep the test's
++++++   name and the rest of the module unchanged.
++++++4. Run `python -m compileall -q .`, `python -m pytest` and `python -m ruff check .` from the
++++++   repository root; all three must exit 0 with the healthy output `CLAUDE.md`'s Commands
++++++   table describes (no output; `11 passed`; `All checks passed!`). Paste the output.
++++++Steps 1 to 3 can land in one commit: the plan-sync hook requires the commit that touches
++++++source to carry `plan.md` only when it departs from this list, and it does not.
++++++
++++++## Risks
++++++- A single string literal inside one `raise` changes; the function's signature, condition,
++++++  exception type and return value are untouched. The riskiest step is step 1, only because it
++++++  is the one line that changes behaviour: formatting `part * 100` or `whole` instead of
++++++  `part` would name the wrong value and would show up only in the new test's assertion
++++++  (`5`, not `500` or `0`). Dropping `from None` by accident would re-attach `divide`'s
++++++  exception as the cause and show `"cannot divide 500 by zero"` in the traceback, which no
++++++  test catches; the implementer must keep the clause as it is.
++++++- Callers matching the exact old message break by design. Checked with Grep: the string
++++++  `"whole must not be zero"` occurs in source only in `sample_pkg/calc.py:18` and in
++++++  `tests/test_calc.py:28` (step 3 updates it); every other occurrence is inside the change
++++++  folders of changes 0015, 0016 and 0017 (historical records and this plan, not edited by
++++++  the build). No other caller exists inside this repository.
++++++- Step 3 edits a test file the intent's Constraints say is not changed; this is the open
++++++  flagged concern in `spec.md`. The change is `feature`-typed, so `sdlc.yaml: test_paths`
++++++  does not lock the file (the lock is for `fix`-type changes). If the decision at the gate
++++++  goes the other way, the build must not run steps 1 to 3 as written; see the note in Files
++++++  that change.
++++++- `test_percent_zero_whole_error_names_whole` keeps a name that says "names whole" while
++++++  asserting a message that names the part. Renaming it was considered (Options not taken)
++++++  and rejected to keep the edit to the one assertion line the concern covers.
++++++- `divide` and `mean` are not touched; `mean` never reaches a zero divisor because it rejects
++++++  an empty collection first. `tests/test_flag.py` is not touched and `SAMPLE_FAIL` is never
++++++  set.
++++++- No new dependency, no schema, no migration, no risk-list item (auth, data migrations,
++++++  money movement, production config) and no guardrail file is touched. `CLAUDE.md`'s Layout
++++++  section stays correct: no public function is added or removed, and its sentence on
++++++  `percent` describes the exception type, not the message text.
++++++
++++++## Options not taken
++++++- Keeping the old message to leave `tests/test_calc.py` untouched: rejected as the default,
++++++  because the intent's Problem and Proposed outcome are the new message and the test is the
++++++  old behaviour written down. Recorded as the alternative under the flagged concern, for the
++++++  owner or the panel.
++++++- Letting `divide`'s message through (dropping the `except` clause in `percent`): rejected,
++++++  because `percent` calls `divide(part * 100, whole)` and the message would read
++++++  `"cannot divide 500 by zero"` for `percent(5, 0)`, a value the caller never passed. The
++++++  intent's open question 2 prefers the own message for this reason.
++++++- Checking `whole == 0` in `percent` before calling `divide`, instead of catching
++++++  `ZeroDivisionError`: rejected; it would change the function's shape for no gain and the
++++++  intent asks for a message change only.
++++++- Formatting `part` with `repr()` or a fixed number format: rejected; the intent's example
++++++  `"cannot express 1.5 as a percent of zero"` is `str()`'s output, and `divide` already uses
++++++  the f-string default (change 0016).
++++++- Renaming `test_percent_zero_whole_error_names_whole` to say "names part": rejected to keep
++++++  the edit to the one assertion line; a rename is a second departure from the intent's
++++++  constraint for a cosmetic gain. The new test in `tests/test_messages.py` carries the
++++++  descriptive name.
++++++- Deleting `test_percent_zero_whole_error_names_whole` instead of updating it (the new test
++++++  in `tests/test_messages.py` covers the message): rejected; coding-standards rule 4 forbids
++++++  deleting a failing test, and updating the assertion keeps the coverage of `percent(1, 0)`.
++++++- Adding tests for `percent(1.5, 0)` and `percent(1.0, 0)`: not added; the intent's
++++++  acceptance target is `percent(5, 0)` and the formatting rule is the same f-string default
++++++  `divide` uses, which change 0016 settled without a dedicated test.
++++++
++++++## Proof
++++++- `tests/test_messages.py::test_percent_zero_whole_names_part` — still to be written in step
++++++  2; asserts `str(excinfo.value) == "cannot express 5 as a percent of zero"` for
++++++  `percent(5, 0)`. It fails on the current code and passes after step 1.
++++++- `tests/test_calc.py::test_percent_zero_whole_error_names_whole` — existing test, updated in
++++++  step 3 to assert `"cannot express 1 as a percent of zero"` for `percent(1, 0)`.
++++++- `tests/test_messages.py::test_divide_by_zero_names_dividend` — existing test, unchanged,
++++++  must keep passing (`"cannot divide 1 by zero"`).
++++++- `tests/test_calc.py::test_add`, `test_divide_by_zero_raises`, `test_percent`,
++++++  `test_percent_zero_whole_raises`, `test_mean`, `test_mean_single_element`,
++++++  `test_mean_empty`, `test_mean_accepts_non_sequence_collection` — existing tests, unchanged,
++++++  must keep passing.
++++++- `tests/test_flag.py::test_intentional_failure_behind_flag` — existing test, untouched,
++++++  passes because `SAMPLE_FAIL` is never set.
++++++- `python -m compileall -q .` (no output, exit 0), `python -m pytest` (`11 passed`, exit 0),
++++++  `python -m ruff check .` (`All checks passed!`, exit 0), as `CLAUDE.md`'s Commands table
++++++  describes.
+++++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md
+++++new file mode 100644
+++++index 0000000..e412725
+++++--- /dev/null
++++++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md
+++++@@ -0,0 +1,136 @@
++++++# Spec: name the part in percent's zero-whole error
++++++Change id: 0017. Status: proposed. Produced by: sdlc plugin 1.0.14, /sdlc-design prompt v1 (article p.14). Skills: coding-standards, security-baseline, ux-conventions, data-conventions, definition-of-done (plugin 1.0.14); overrides: none
++++++
++++++## Requirements
++++++- `percent(5, 0)` raises `ZeroDivisionError` with the message exactly
++++++  `"cannot express 5 as a percent of zero"` (intent Proposed outcome).
++++++- The message names the `part` argument as the caller passed it, rendered with Python's own
++++++  text for the value (`str`, the f-string default), so `percent(1.5, 0)` raises
++++++  `"cannot express 1.5 as a percent of zero"` and `percent(1.0, 0)` raises
++++++  `"cannot express 1.0 as a percent of zero"` (intent open question 1, answered below; the
++++++  same rule change 0016 settled for `divide`).
++++++- The message names `part`, never `part * 100`: `percent` keeps raising its own message in
++++++  its `except ZeroDivisionError` clause with `from None`, as today, and does not let
++++++  `divide`'s `"cannot divide 500 by zero"` through (intent open question 2, answered below).
++++++- The exception type stays `ZeroDivisionError`; a caller that catches it is not affected
++++++  (intent Proposed outcome).
++++++- `percent`'s return value for a non-zero `whole` does not change (`percent(1, 4) == 25.0`,
++++++  `percent(7, 100) == 7.0`, per `tests/test_calc.py::test_percent`).
++++++- `divide`'s message stays exactly `"cannot divide 1 by zero"` for `divide(1, 0)`; `add` and
++++++  `mean` do not change at all (intent Proposed outcome). `mean` divides by `len(values)` only
++++++  after rejecting an empty collection, so it never reaches a zero divisor.
++++++- `add`, `divide`, `percent` and `mean` keep their signatures and return values; the only
++++++  behaviour change is the message text of `percent`'s zero-whole error (intent Constraints).
++++++- `tests/test_messages.py` gains one test asserting the exact message of `percent(5, 0)`; its
++++++  existing test `test_divide_by_zero_names_dividend` is not changed (intent Proposed outcome
++++++  and Constraints; coding-standards rule 4: every behaviour change ships with a test that
++++++  fails without it).
++++++- `tests/test_flag.py` is not changed (intent Constraints; CLAUDE.md Layout).
++++++- `tests/test_calc.py`: see the flagged concern. Its test
++++++  `test_percent_zero_whole_error_names_whole` (lines 25–28) asserts the old message
++++++  `"whole must not be zero"` and cannot pass once the first requirement is met. The design
++++++  below updates that one assertion to the new message; the concern records that this departs
++++++  from the intent's constraint that `tests/test_calc.py` is not changed.
++++++- No new dependency; Python 3.10+, type hints on public functions, ruff line length 100
++++++  (CLAUDE.md Conventions; coding-standards rules 5 and 8).
++++++- The guardrail files (`.claude/**`, `CLAUDE.md`, `REVIEW.md`, `sdlc.yaml`, `bands.yaml`) are
++++++  not edited (intent Constraints; definition-of-done "Always").
++++++- No public function is added or removed, so the Layout section of `CLAUDE.md` stays correct
++++++  as it is: its sentence on `percent` ("it raises the same on a zero `whole`") describes the
++++++  exception type, which does not change, and it already names `tests/test_messages.py` as
++++++  the module that "checks the error messages" (intent Affected users and systems; CLAUDE.md
++++++  "Things Claude gets wrong" is about a new public function, which this change does not add).
++++++- None of `sdlc.yaml`'s risk-list items (auth, data migrations, money movement, production
++++++  config) apply: the change touches no authentication, no stored data, no money value and no
++++++  deployment configuration. Security-baseline rule 8 and data-conventions rule 3 therefore
++++++  do not apply.
++++++- security-baseline does not otherwise apply: no endpoint, no new external input (the numeric
++++++  parameters already exist), no secret, no new dependency, no shell or SQL construction, no
++++++  outbound call. The `.env` fixture is not read or touched.
++++++- ux-conventions does not apply: `sample_pkg` is a library with no user interface, and the
++++++  skill exempts such projects. The exception message is the only text a person reads; the
++++++  new wording follows the spirit of rule 4 (it says what happened in terms of the caller's
++++++  own value and drops the internal parameter name `whole`), exactly as change 0016 did for
++++++  `divide`.
++++++- data-conventions does not apply: no schema, storage, migration, log statement or classified
++++++  field is touched. The message echoes only the value of `part`, which the caller supplied to
++++++  the same call, so it creates no new exposure of data the caller does not already hold.
++++++- definition-of-done for phase (b): this spec, `plan.md`, the adversarial verdict and the
++++++  gate (b) evidence are the deliverables; build, test and lint stay green in phase (c)
++++++  (intent Proposed outcome; CLAUDE.md "Verifying your work").
++++++
++++++## Design
++++++- `sample_pkg/calc.py`, function `percent`: keep the `try: return divide(part * 100, whole)`
++++++  shape and the `except ZeroDivisionError: raise ZeroDivisionError(...) from None` clause.
++++++  Replace the fixed string `"whole must not be zero"` with an f-string built from `part`,
++++++  `f"cannot express {part} as a percent of zero"`. The condition that raises (a zero `whole`
++++++  detected inside `divide`), the exception type, the suppressed chaining (`from None`) and the
++++++  return value on the non-zero path are unchanged. `part` is rendered as the caller passed it
++++++  (an `int` prints as `5`, a `float` as `1.5` or `1.0`), matching `divide`'s rule.
++++++- `divide`, `add`, `mean` and `sample_pkg/__init__.py`: unchanged. `divide` keeps
++++++  `f"cannot divide {a} by zero"`; `percent` still never surfaces that text.
++++++- `tests/test_messages.py`: gains a second test, beside `test_divide_by_zero_names_dividend`,
++++++  that calls `percent(5, 0)` under `pytest.raises(ZeroDivisionError)` and asserts
++++++  `str(excinfo.value) == "cannot express 5 as a percent of zero"`. The import line widens to
++++++  bring in `percent` from `sample_pkg`, matching the module's existing import style.
++++++- `tests/test_calc.py`, test `test_percent_zero_whole_error_names_whole`: the one assertion
++++++  on the message text changes from `"whole must not be zero"` to
++++++  `"cannot express 1 as a percent of zero"` (that test calls `percent(1, 0)`). Nothing else in
++++++  the module moves. This is the departure recorded under Flagged concerns; if the owner or
++++++  the panel decides otherwise, the alternative is recorded there.
++++++- Error behaviour summary after the change: `percent(x, 0)` raises
++++++  `ZeroDivisionError("cannot express <x> as a percent of zero")` with no chained cause;
++++++  `divide(x, 0)` raises `ZeroDivisionError("cannot divide <x> by zero")`; `mean([])` raises
++++++  `ValueError("mean() requires at least one value")`.
++++++
++++++## Open questions from intent
++++++- "How is a non-integer part written in the message, for example `percent(1.5, 0)`? The
++++++  default is Python's own text for the value (`"cannot express 1.5 as a percent of zero"`),
++++++  as change 0016 settled for `divide`; to be confirmed in design." — Answered: confirmed.
++++++  The message is an f-string, `f"cannot express {part} as a percent of zero"`, which renders
++++++  `part` the way `str()` does: `1.5` for `percent(1.5, 0)`, `1.0` for `percent(1.0, 0)`,
++++++  `5` for `percent(5, 0)`. This is the rule `divide` already follows
++++++  (`sample_pkg/calc.py:10`, decided in `changes/0016-.../spec.md` Open questions), so the two
++++++  messages follow one rule, which is the intent's stated problem.
++++++- "Does `percent` keep raising its own message (today it re-raises with `from None`), or let
++++++  `divide`'s message through? The default is its own message, so the reader sees the part,
++++++  not `part * 100`." — Answered: its own message, as the intent prefers. The codebase shows
++++++  why: `percent` calls `divide(part * 100, whole)` (`sample_pkg/calc.py:16`), so letting
++++++  `divide`'s text through would print `"cannot divide 500 by zero"` for `percent(5, 0)`, a
++++++  value the caller never passed. The `except ... raise ... from None` shape stays, so the
++++++  traceback shows one exception with the part the caller passed.
++++++
++++++## Flagged concerns
++++++- The intent's Proposed outcome and its Constraints contradict each other on
++++++  `tests/test_calc.py`. The Constraints say `tests/test_calc.py` is not changed, but its
++++++  existing test `test_percent_zero_whole_error_names_whole` (`tests/test_calc.py:25-28`)
++++++  asserts `str(excinfo.value) == "whole must not be zero"` for `percent(1, 0)`, which fails
++++++  as soon as the message becomes `"cannot express 1 as a percent of zero"`. Both cannot hold.
++++++  The design chooses the Proposed outcome (the message changes) and updates that one
++++++  assertion in `tests/test_calc.py` to the new text, because the intent's Problem statement
++++++  is the message, the test is the old behaviour written down, and the change is a `feature`
++++++  (`status.yaml: change_type`), so the test lock of fix-type changes does not apply. This is
++++++  not closed by a policy: coding-standards rule 4 and CLAUDE.md ("fix the code, not the
++++++  test") address a test that regresses, not a test that pins a behaviour the owner asked to
++++++  change, and neither says which of the intent's two statements wins. The alternative, if the
++++++  owner wants `tests/test_calc.py` untouched, is to keep the old message, which abandons the
++++++  intent's Proposed outcome. The owner (or the panel under deferred review) decides which
++++++  statement of the intent gives way.
++++++
++++++## Acceptance
++++++- `percent(5, 0)` raises `ZeroDivisionError` and
++++++  `str(exception) == "cannot express 5 as a percent of zero"`, asserted by the new test in
++++++  `tests/test_messages.py`.
++++++- `percent(1, 0)` raises with `str(exception) == "cannot express 1 as a percent of zero"`,
++++++  asserted by the updated `tests/test_calc.py::test_percent_zero_whole_error_names_whole`.
++++++- `percent(1.5, 0)` raises with `str(exception) == "cannot express 1.5 as a percent of zero"`
++++++  (message formatting; consistent with the requirement, not required by a test).
++++++- Existing tests keep passing unchanged: `tests/test_messages.py::test_divide_by_zero_names_dividend`
++++++  (`"cannot divide 1 by zero"`), and in `tests/test_calc.py`: `test_add`,
++++++  `test_divide_by_zero_raises`, `test_percent`, `test_percent_zero_whole_raises`,
++++++  `test_mean`, `test_mean_single_element`, `test_mean_empty`,
++++++  `test_mean_accepts_non_sequence_collection`.
++++++- `tests/test_flag.py` is untouched and `SAMPLE_FAIL` is never set.
++++++- `python -m compileall -q .` exits 0 with no output.
++++++- `python -m pytest` exits 0 with every test passing (11 tests once the new one is added).
++++++- `python -m ruff check .` exits 0 with `All checks passed!`.
+++++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
+++++new file mode 100644
+++++index 0000000..52940d2
+++++--- /dev/null
++++++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
+++++@@ -0,0 +1,36 @@
++++++id: "0017"
++++++slug: name-the-part-in-percent-s-zero-whole-er
++++++title: "Name the part in percent's zero-whole error"
++++++phase: b
++++++entry_route: idea
++++++change_type: feature
++++++profile_override: null
++++++review_override: null
++++++gate:
++++++  phase: null
++++++  result: null
++++++  reason: null
++++++  at: null
++++++parked_reason: null
++++++iterations: 0
++++++panel_calls: 0
++++++external_ref: null
++++++risk_accepted: []
++++++tests_locked: false
++++++risk_accepted_by: []
++++++iterations_reset_by: null
++++++iterations_reset_at: null
++++++tests_unlocked_by: null
++++++runbook_authorized_by: null
++++++abandoned_reason: null
++++++build_pr: null
++++++released_at: null
++++++released_sha: null
++++++released_pr: null
++++++fast_lane:
++++++  a:
++++++    sha: "81adec3becca71711fd496f4a67b49b4cf1bccb5"
++++++    pr: 85
++++++created_at: "2026-10-20T06:00:31Z"
++++++updated_at: "2026-10-20T06:17:33Z"
++++++schema_version: 1
 +++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
 +++new file mode 100644
-+++index 0000000..5a298e5
++++index 0000000..2d323c3
 +++--- /dev/null
 ++++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
-+++@@ -0,0 +1,25 @@
++++@@ -0,0 +1,38 @@
 ++++{"action": "none", "at": "2026-10-20T06:14:42Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" show --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
 ++++{"at": "2026-10-20T06:14:44Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
 ++++{"action": "none", "at": "2026-10-20T06:14:44Z", "command": "git fetch origin", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
@@ -290,6 +933,19 @@ index 0000000..6283e7c
 ++++{"at": "2026-10-20T06:17:28Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
 ++++{"action": "none", "at": "2026-10-20T06:17:28Z", "command": "git diff --stat -- .env", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
 ++++{"action": "none", "at": "2026-10-20T06:17:32Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++++{"at": "2026-10-20T06:17:36Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++++{"action": "none", "at": "2026-10-20T06:17:36Z", "command": "git show --stat --format=%H HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++++{"at": "2026-10-20T06:17:37Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++++{"action": "none", "at": "2026-10-20T06:17:37Z", "command": "git diff --stat --patch --output=changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch origin/main...HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++++{"action": "none", "at": "2026-10-20T06:18:09Z", "command": "claude --version", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++++{"action": "none", "at": "2026-10-20T06:18:39Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/pr/cli.py\" upsert --help", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++++{"action": "none", "at": "2026-10-20T06:18:40Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" check --help", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++++{"action": "none", "at": "2026-10-20T06:18:41Z", "command": "env | grep -E '^ANTHROPIC_DEFAULT_|^ANTHROPIC_MODEL|^SDLC_' | sed 's/=.*KEY.*/=<redacted>/'", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++++{"at": "2026-10-20T06:20:32Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
+++++{"at": "2026-10-20T06:20:32Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
+++++{"at": "2026-10-20T06:20:32Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
+++++{"at": "2026-10-20T06:20:32Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
+++++{"action": "none", "at": "2026-10-20T06:20:35Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
 +++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json
 +++new file mode 100644
 +++index 0000000..ad4880e
@@ -361,10 +1017,10 @@ index 0000000..6283e7c
 ++++  not `part * 100`.
 +++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md
 +++new file mode 100644
-+++index 0000000..530868e
++++index 0000000..088830d
 +++--- /dev/null
 ++++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md
-+++@@ -0,0 +1,108 @@
++++@@ -0,0 +1,120 @@
 ++++# Plan: name the part in percent's zero-whole error (from intent.md 2026-10-20, spec.md 2026-10-20)
 ++++
 ++++## Files that change
@@ -429,6 +1085,18 @@ index 0000000..6283e7c
 ++++  money movement, production config) and no guardrail file is touched. `CLAUDE.md`'s Layout
 ++++  section stays correct: no public function is added or removed, and its sentence on
 ++++  `percent` describes the exception type, not the message text.
+++++- Run infrastructure, read in this phase (b) run on 2026-10-20 (the R7 reading the intent
+++++  asks for): the adversarial reviewer could not start on `sdlc.yaml: adversarial_model`
+++++  (`claude-opus-5-5`, pinned through `ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-5-5`, which
+++++  the runner did set). The Agent tool with the `opus` alias returned
+++++  `API Error: 400 Claude Code 2.1.278 does not support this model; version 2.1.280 or newer
+++++  is required`. The phase (b) reviewer was therefore run on the session's own model
+++++  (`claude-fable-5-1`), which the gate's `reviewer_model` check rejects by design; the
+++++  panel's devil's advocate uses the same `opus` alias and cannot start either, so the open
+++++  concern above stays with the owner. The build and test runs start the same reviewer, so
+++++  phase (c) hits the same error until the owner raises `sdlc.yaml: plugin.claude_code` to
+++++  `2.1.280` or later (a guardrail file, not this change's to edit). The design and the steps
+++++  above do not depend on this.
 ++++
 ++++## Options not taken
 ++++- Keeping the old message to leave `tests/test_calc.py` untouched: rejected as the default,
@@ -659,10 +1327,10 @@ index 0000000..6283e7c
 ++++schema_version: 1
 ++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
 ++new file mode 100644
-++index 0000000..2d323c3
+++index 0000000..8e365d5
 ++--- /dev/null
 +++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
-++@@ -0,0 +1,38 @@
+++@@ -0,0 +1,57 @@
 +++{"action": "none", "at": "2026-10-20T06:14:42Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" show --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
 +++{"at": "2026-10-20T06:14:44Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
 +++{"action": "none", "at": "2026-10-20T06:14:44Z", "command": "git fetch origin", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
@@ -701,6 +1369,65 @@ index 0000000..6283e7c
 +++{"at": "2026-10-20T06:20:32Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
 +++{"at": "2026-10-20T06:20:32Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
 +++{"action": "none", "at": "2026-10-20T06:20:35Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++{"at": "2026-10-20T06:20:39Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++++{"action": "none", "at": "2026-10-20T06:20:39Z", "command": "git diff --stat --patch --output=changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch origin/main...HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++{"action": "none", "at": "2026-10-20T06:20:51Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" items --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++{"at": "2026-10-20T06:23:25Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:23:25Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:23:25Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:23:25Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:24:36Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:24:36Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:24:36Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:24:36Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:25:07Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:25:07Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:25:07Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:25:07Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++++{"at": "2026-10-20T06:25:22Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++++{"action": "none", "at": "2026-10-20T06:25:22Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++{"action": "none", "at": "2026-10-20T06:26:04Z", "command": "python -c \"import os; os.remove('changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json')\"", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++++{"action": "none", "at": "2026-10-20T06:26:07Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json
+++new file mode 100644
+++index 0000000..16cb1a8
+++--- /dev/null
++++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json
+++@@ -0,0 +1,34 @@
++++{
++++  "decided": 0,
++++  "gate": "park",
++++  "items": [
++++    {
++++      "decided": false,
++++      "item": "The intent's Proposed outcome and its Constraints contradict each other on",
++++      "key": "concern:01e8405844a2ad84",
++++      "kind": "concern",
++++      "n": 1
++++    }
++++  ],
++++  "iterations": {
++++    "cap": 3,
++++    "left": 3,
++++    "used": 0
++++  },
++++  "mode": "deferred",
++++  "panel_calls": {
++++    "cap": 4,
++++    "left": 4,
++++    "used": 0
++++  },
++++  "parks": [
++++    {
++++      "check": "adversarial_review",
++++      "reason": "evidence/adversarial-review-b.json missing"
++++    }
++++  ],
++++  "pending": [
++++    1
++++  ],
++++  "phase": "b"
++++}
 ++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json
 ++new file mode 100644
 ++index 0000000..ad4880e
@@ -772,10 +1499,10 @@ index 0000000..6283e7c
 +++  not `part * 100`.
 ++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md
 ++new file mode 100644
-++index 0000000..088830d
+++index 0000000..9c04a50
 ++--- /dev/null
 +++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md
-++@@ -0,0 +1,120 @@
+++@@ -0,0 +1,125 @@
 +++# Plan: name the part in percent's zero-whole error (from intent.md 2026-10-20, spec.md 2026-10-20)
 +++
 +++## Files that change
@@ -808,7 +1535,8 @@ index 0000000..6283e7c
 +++   name and the rest of the module unchanged.
 +++4. Run `python -m compileall -q .`, `python -m pytest` and `python -m ruff check .` from the
 +++   repository root; all three must exit 0 with the healthy output `CLAUDE.md`'s Commands
-+++   table describes (no output; `11 passed`; `All checks passed!`). Paste the output.
++++   table describes (no output; `12 passed`, today's 11 plus the test of step 2;
++++   `All checks passed!`). Paste the output.
 +++Steps 1 to 3 can land in one commit: the plan-sync hook requires the commit that touches
 +++source to carry `plan.md` only when it departs from this list, and it does not.
 +++
@@ -843,15 +1571,16 @@ index 0000000..6283e7c
 +++- Run infrastructure, read in this phase (b) run on 2026-10-20 (the R7 reading the intent
 +++  asks for): the adversarial reviewer could not start on `sdlc.yaml: adversarial_model`
 +++  (`claude-opus-5-5`, pinned through `ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-5-5`, which
-+++  the runner did set). The Agent tool with the `opus` alias returned
++++  the runner did set). The Agent tool returned, with the `opus` alias and again with no
++++  alias (the agent's own frontmatter resolves to the same pin),
 +++  `API Error: 400 Claude Code 2.1.278 does not support this model; version 2.1.280 or newer
 +++  is required`. The phase (b) reviewer was therefore run on the session's own model
-+++  (`claude-fable-5-1`), which the gate's `reviewer_model` check rejects by design; the
-+++  panel's devil's advocate uses the same `opus` alias and cannot start either, so the open
-+++  concern above stays with the owner. The build and test runs start the same reviewer, so
-+++  phase (c) hits the same error until the owner raises `sdlc.yaml: plugin.claude_code` to
-+++  `2.1.280` or later (a guardrail file, not this change's to edit). The design and the steps
-+++  above do not depend on this.
++++  (`claude-fable-5-1`, passed explicitly), which the gate's `reviewer_model` check rejects
++++  by design; the panel's devil's advocate is the same agent type on the same `opus` alias,
++++  so the panel was not started and the open concern above stays with the owner. The build
++++  and test runs start the same reviewer, so phase (c) hits the same error until the owner
++++  raises `sdlc.yaml: plugin.claude_code` to `2.1.280` or later (a guardrail file, not this
++++  change's to edit). The design and the steps above do not depend on this.
 +++
 +++## Options not taken
 +++- Keeping the old message to leave `tests/test_calc.py` untouched: rejected as the default,
@@ -878,6 +1607,9 @@ index 0000000..6283e7c
 +++- Adding tests for `percent(1.5, 0)` and `percent(1.0, 0)`: not added; the intent's
 +++  acceptance target is `percent(5, 0)` and the formatting rule is the same f-string default
 +++  `divide` uses, which change 0016 settled without a dedicated test.
++++- Asserting `excinfo.value.__cause__ is None` in the new test, to guard the `from None`
++++  clause: not added; the intent asks for a test of the message, and the clause is unchanged
++++  today. The risk is recorded above for the implementer instead.
 +++
 +++## Proof
 +++- `tests/test_messages.py::test_percent_zero_whole_names_part` — still to be written in step
@@ -893,15 +1625,15 @@ index 0000000..6283e7c
 +++  must keep passing.
 +++- `tests/test_flag.py::test_intentional_failure_behind_flag` — existing test, untouched,
 +++  passes because `SAMPLE_FAIL` is never set.
-+++- `python -m compileall -q .` (no output, exit 0), `python -m pytest` (`11 passed`, exit 0),
-+++  `python -m ruff check .` (`All checks passed!`, exit 0), as `CLAUDE.md`'s Commands table
-+++  describes.
++++- `python -m compileall -q .` (no output, exit 0), `python -m pytest` (`12 passed`, exit 0:
++++  today's 11 tests plus the one of step 2), `python -m ruff check .` (`All checks passed!`,
++++  exit 0), as `CLAUDE.md`'s Commands table describes.
 ++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md
 ++new file mode 100644
-++index 0000000..e412725
+++index 0000000..768cbf8
 ++--- /dev/null
 +++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md
-++@@ -0,0 +1,136 @@
+++@@ -0,0 +1,138 @@
 +++# Spec: name the part in percent's zero-whole error
 +++Change id: 0017. Status: proposed. Produced by: sdlc plugin 1.0.14, /sdlc-design prompt v1 (article p.14). Skills: coding-standards, security-baseline, ux-conventions, data-conventions, definition-of-done (plugin 1.0.14); overrides: none
 +++
@@ -1036,7 +1768,9 @@ index 0000000..6283e7c
 +++  `test_mean_accepts_non_sequence_collection`.
 +++- `tests/test_flag.py` is untouched and `SAMPLE_FAIL` is never set.
 +++- `python -m compileall -q .` exits 0 with no output.
-+++- `python -m pytest` exits 0 with every test passing (11 tests once the new one is added).
++++- `python -m pytest` exits 0 with every test passing: 12 tests once the new one is added
++++  (today's suite is 11: nine in `tests/test_calc.py`, one in `tests/test_messages.py`, one
++++  in `tests/test_flag.py`).
 +++- `python -m ruff check .` exits 0 with `All checks passed!`.
 ++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
 ++new file mode 100644
@@ -1080,12 +1814,167 @@ index 0000000..6283e7c
 +++created_at: "2026-10-20T06:00:31Z"
 +++updated_at: "2026-10-20T06:17:33Z"
 +++schema_version: 1
++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json
++new file mode 100644
++index 0000000..486e7f0
++--- /dev/null
+++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json
++@@ -0,0 +1,148 @@
+++{
+++  "schema_version": 1,
+++  "change_id": "0017",
+++  "slug": "name-the-part-in-percent-s-zero-whole-er",
+++  "phase": "b",
+++  "profile": "standard",
+++  "human_gate": true,
+++  "result": "park",
+++  "label": "sdlc:needs-human",
+++  "head": "85ad366a27c48e88d16381cc542e8074b5d5d461",
+++  "at": "2026-10-20T06:28:56Z",
+++  "dry_run": false,
+++  "reason": "open_concerns: 1 flagged concern(s) still open in spec.md; reviewer_model: evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)",
+++  "config_note": "",
+++  "checks": [
+++    {
+++      "name": "limits",
+++      "ok": true,
+++      "reason": "within the run limits",
+++      "need": "",
+++      "details": {
+++        "iterations": 0,
+++        "cap": 2,
+++        "classification": "non-routine",
+++        "panel_calls": 0,
+++        "panel_cap": 4,
+++        "elapsed_minutes": 14.1,
+++        "spend_usd": null,
+++        "spend_usd_total": null,
+++        "spend_entries": 0,
+++        "max_budget_usd": null
+++      }
+++    },
+++    {
+++      "name": "artifacts",
+++      "ok": true,
+++      "reason": "every required artifact exists and has its template sections",
+++      "need": "",
+++      "details": {}
+++    },
+++    {
+++      "name": "design_scope",
+++      "ok": true,
+++      "reason": "the committed diff stays inside changes/0017-name-the-part-in-percent-s-zero-whole-er/",
+++      "need": "",
+++      "details": {
+++        "dirty": [
+++          ".env",
+++          "changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json",
+++          "changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.model.json",
+++          "changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch",
+++          "changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl",
+++          "changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json"
+++        ]
+++      }
+++    },
+++    {
+++      "name": "open_concerns",
+++      "ok": false,
+++      "reason": "1 flagged concern(s) still open in spec.md",
+++      "need": "Close each open item under '## Flagged concerns' with a decision (article p.14 step 4), or leave a review comment for /sdlc-fix.",
+++      "details": {
+++        "open": [
+++          "- The intent's Proposed outcome and its Constraints contradict each other on"
+++        ]
+++      }
+++    },
+++    {
+++      "name": "panel",
+++      "ok": true,
+++      "reason": "no panel decision at this gate",
+++      "need": "",
+++      "details": {}
+++    },
+++    {
+++      "name": "commands",
+++      "ok": true,
+++      "reason": "build, test and lint exit 0",
+++      "need": "",
+++      "details": {
+++        "runs": {
+++          "build": {
+++            "command": "python -m compileall -q .",
+++            "exit_code": 0,
+++            "output": ""
+++          },
+++          "test": {
+++            "command": "python -m pytest",
+++            "exit_code": 0,
+++            "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0\nrootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\nplugins: platformdirs-4.13.0\ncollected 11 items\n\ntests/test_calc.py .........                                             [ 81%]\ntests/test_flag.py .                                                     [ 90%]\ntests/test_messages.py .                                                 [100%]\n\n============================== 11 passed in 0.02s ==============================\n"
+++          },
+++          "lint": {
+++            "command": "python -m ruff check .",
+++            "exit_code": 0,
+++            "output": "All checks passed!\n"
+++          }
+++        },
+++        "ran_by": "runner"
+++      }
+++    },
+++    {
+++      "name": "guardrails",
+++      "ok": true,
+++      "reason": "the diff does not touch a guardrail file",
+++      "need": "",
+++      "details": {}
+++    },
+++    {
+++      "name": "risk_list",
+++      "ok": true,
+++      "reason": "no risk-list item touched",
+++      "need": "",
+++      "details": {
+++        "accepted": []
+++      }
+++    },
+++    {
+++      "name": "owner_actions",
+++      "ok": true,
+++      "reason": "risk acceptances, iteration and panel-call resets and test-lock lifts, if any, were committed by the owner or applied by the owner's label",
+++      "need": "",
+++      "details": {
+++        "risk_accepted": [],
+++        "label_actors": {}
+++      }
+++    },
+++    {
+++      "name": "adversarial_review",
+++      "ok": true,
+++      "reason": "adversarial reviewer says continue",
+++      "need": "",
+++      "details": {
+++        "classification": "non-routine",
+++        "reasons": []
+++      }
+++    },
+++    {
+++      "name": "reviewer_model",
+++      "ok": false,
+++      "reason": "evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)",
+++      "need": "The adversarial reviewer must run on the model sdlc.yaml's adversarial_model names (ROADMAP R7), and nothing shows that this verdict did. `panel/cli.py models` prints the alias the phase command passes, the pins that make it resolve to that model (the runner sets them; a run by hand exports them before the session starts) and any conflict in the configuration; fix that, then re-run the reviewer on the current HEAD.",
+++      "details": {
+++        "wanted": "claude-opus-5-5"
+++      }
+++    }
+++  ],
+++  "what_i_need": "## What I need from you\nGate (b) parked change 0017 (name-the-part-in-percent-s-zero-whole-er) on 2026-10-20T06:28:56Z.\n- **open_concerns**: 1 flagged concern(s) still open in spec.md\n  - what I need: Close each open item under '## Flagged concerns' with a decision (article p.14 step 4), or leave a review comment for /sdlc-fix.\n- **reviewer_model**: evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)\n  - what I need: The adversarial reviewer must run on the model sdlc.yaml's adversarial_model names (ROADMAP R7), and nothing shows that this verdict did. `panel/cli.py models` prints the alias the phase command passes, the pins that make it resolve to that model (the runner sets them; a run by hand exports them before the session starts) and any conflict in the configuration; fix that, then re-run the reviewer on the current HEAD.\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0017 --phase b` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
+++}
++\ No newline at end of file
 +diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
 +new file mode 100644
-+index 0000000..8e365d5
++index 0000000..8c45545
 +--- /dev/null
 ++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
-+@@ -0,0 +1,57 @@
++@@ -0,0 +1,67 @@
 ++{"action": "none", "at": "2026-10-20T06:14:42Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" show --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
 ++{"at": "2026-10-20T06:14:44Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
 ++{"action": "none", "at": "2026-10-20T06:14:44Z", "command": "git fetch origin", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
@@ -1143,9 +2032,19 @@ index 0000000..6283e7c
 ++{"action": "none", "at": "2026-10-20T06:25:22Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
 ++{"action": "none", "at": "2026-10-20T06:26:04Z", "command": "python -c \"import os; os.remove('changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json')\"", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
 ++{"action": "none", "at": "2026-10-20T06:26:07Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T06:26:12Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T06:26:12Z", "command": "git diff --stat --patch --output=changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch origin/main...HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"at": "2026-10-20T06:28:33Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
+++{"at": "2026-10-20T06:28:33Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
+++{"at": "2026-10-20T06:28:33Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
+++{"at": "2026-10-20T06:28:33Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T06:28:55Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" items --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T06:28:56Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" check --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T06:29:01Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+++{"action": "none", "at": "2026-10-20T06:29:05Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/pr/cli.py\" upsert --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
 +diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json
 +new file mode 100644
-+index 0000000..16cb1a8
++index 0000000..c883c7d
 +--- /dev/null
 ++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json
 +@@ -0,0 +1,34 @@
@@ -1162,8 +2061,8 @@ index 0000000..6283e7c
 ++    }
 ++  ],
 ++  "iterations": {
-++    "cap": 3,
-++    "left": 3,
+++    "cap": 2,
+++    "left": 2,
 ++    "used": 0
 ++  },
 ++  "mode": "deferred",
@@ -1174,8 +2073,8 @@ index 0000000..6283e7c
 ++  },
 ++  "parks": [
 ++    {
-++      "check": "adversarial_review",
-++      "reason": "evidence/adversarial-review-b.json missing"
+++      "check": "reviewer_model",
+++      "reason": "evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)"
 ++    }
 ++  ],
 ++  "pending": [
@@ -1185,16 +2084,38 @@ index 0000000..6283e7c
 ++}
 +diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json
 +new file mode 100644
-+index 0000000..ad4880e
++index 0000000..39134f0
 +--- /dev/null
 ++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json
-+@@ -0,0 +1,5 @@
++@@ -0,0 +1,10 @@
 ++{
+++  "github_run": {
+++    "attempt": "1",
+++    "id": "39379201252",
+++    "url": "https://github.com/luissiviero/sdlc-sample-python/actions/runs/39379201252"
+++  },
 ++  "phase": "b",
-++  "spend_usd": null,
+++  "spend_usd": 9.489571750000001,
 ++  "started_at": "2026-10-20T06:14:51Z"
 ++}
 +\ No newline at end of file
++diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/spend.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/spend.json
++new file mode 100644
++index 0000000..201322f
++--- /dev/null
+++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/spend.json
++@@ -0,0 +1,11 @@
+++{
+++  "entries": [
+++    {
+++      "at": "2026-10-20T06:29:19Z",
+++      "run": "b",
+++      "source": "claude-b.json",
+++      "usd": 9.489571750000001
+++    }
+++  ],
+++  "total_usd": 9.489572
+++}
 +diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/intent.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/intent.md
 +new file mode 100644
 +index 0000000..cd7309c
@@ -1529,7 +2450,7 @@ index 0000000..6283e7c
 ++- `python -m ruff check .` exits 0 with `All checks passed!`.
 +diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
 +new file mode 100644
-+index 0000000..52940d2
++index 0000000..adce192
 +--- /dev/null
 ++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
 +@@ -0,0 +1,36 @@
@@ -1542,11 +2463,11 @@ index 0000000..6283e7c
 ++profile_override: null
 ++review_override: null
 ++gate:
-++  phase: null
-++  result: null
-++  reason: null
-++  at: null
-++parked_reason: null
+++  phase: b
+++  result: parked
+++  reason: "open_concerns: 1 flagged concern(s) still open in spec.md; reviewer_model: evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)"
+++  at: "2026-10-20T06:29:21Z"
+++parked_reason: "open_concerns: 1 flagged concern(s) still open in spec.md; reviewer_model: evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)"
 ++iterations: 0
 ++panel_calls: 0
 ++external_ref: null
@@ -1567,8 +2488,38 @@ index 0000000..6283e7c
 ++    sha: "81adec3becca71711fd496f4a67b49b4cf1bccb5"
 ++    pr: 85
 ++created_at: "2026-10-20T06:00:31Z"
-++updated_at: "2026-10-20T06:17:33Z"
+++updated_at: "2026-10-20T06:29:21Z"
 ++schema_version: 1
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/fix-requests.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/fix-requests.json
+new file mode 100644
+index 0000000..08a62f4
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/fix-requests.json
+@@ -0,0 +1,24 @@
++{
++  "applied_earlier": [],
++  "collected_at": "2026-10-20T10:27:21+00:00",
++  "head": "e4248e7d2810aaa481c1a8e85d65ec9bddf6a996",
++  "not_applied": [],
++  "ok": true,
++  "pr_number": 86,
++  "repo": "luissiviero/sdlc-sample-python",
++  "requests": [
++    {
++      "association": "OWNER",
++      "at": "2026-10-20T10:26:28Z",
++      "author": "luissiviero",
++      "body": "@claude ",
++      "id": 6288823233,
++      "kind": "comment",
++      "url": "https://github.com/luissiviero/sdlc-sample-python/pull/86#issuecomment-6288823233"
++    }
++  ],
++  "route": "api",
++  "schema_version": 1,
++  "trigger": "https://github.com/luissiviero/sdlc-sample-python/pull/86#issuecomment-6288823233",
++  "unavailable": null
++}
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/gate-b.json
 new file mode 100644
 index 0000000..486e7f0
@@ -1726,10 +2677,10 @@ index 0000000..486e7f0
 \ No newline at end of file
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
 new file mode 100644
-index 0000000..8c45545
+index 0000000..d623dd7
 --- /dev/null
 +++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/hook-log.jsonl
-@@ -0,0 +1,67 @@
+@@ -0,0 +1,123 @@
 +{"action": "none", "at": "2026-10-20T06:14:42Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" show --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
 +{"at": "2026-10-20T06:14:44Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
 +{"action": "none", "at": "2026-10-20T06:14:44Z", "command": "git fetch origin", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
@@ -1797,12 +2748,141 @@ index 0000000..8c45545
 +{"action": "none", "at": "2026-10-20T06:28:56Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" check --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
 +{"action": "none", "at": "2026-10-20T06:29:01Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
 +{"action": "none", "at": "2026-10-20T06:29:05Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/pr/cli.py\" upsert --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:27:31Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" show --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:27:34Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:27:34Z", "command": "git rev-parse HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:27:43Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" models --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:27:45Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" items --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:28:02Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" start-run --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --run fix", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:28:03Z", "command": "python -c \"import os; print({k: (v if k.endswith('_MODEL') else '<set>') for k, v in os.environ.items() if 'ANTHROPIC' in k or k.startswith('CLAUDE')})\"", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:28:07Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/gate/cli.py\" bump-iteration --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:28:10Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" items --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:28:11Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:28:11Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:28:11Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:28:11Z", "command": "git fetch origin", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:28:24Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:28:24Z", "command": "git diff --stat --patch --output=changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/diff-b.patch origin/main...HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:28:28Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:28:28Z", "command": "git rev-parse HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:28:29Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:28:29Z", "command": "git diff --stat origin/main...HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:29:19Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:29:19Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:29:19Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:29:19Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/adversarial-review-b.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:29:32Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" prompt --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --item 1 --me", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:29:33Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" prompt --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --item 1 --me", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:30:27Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-advocate.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:30:27Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-advocate.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:30:27Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-advocate.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:30:27Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-advocate.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:30:47Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-reviewer.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:30:47Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-reviewer.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:30:47Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-reviewer.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:30:47Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-reviewer.md"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:30:51Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" prompt --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --item 1 --me", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:31:26Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-conciliator.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:31:26Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-conciliator.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:31:26Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-conciliator.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"at": "2026-10-20T10:31:26Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-conciliator.json"], "reason": "", "tool": "Write", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:31:31Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/panel/cli.py\" record --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --item 1", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:31:41Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:31:41Z", "command": "git status --short", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:31:43Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "plan_sync", "paths": [], "reason": "", "tool": "Bash", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:31:43Z", "command": "git show --stat HEAD", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
++{"at": "2026-10-20T10:31:54Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T10:31:54Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T10:31:54Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T10:31:54Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T10:32:00Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T10:32:00Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T10:32:00Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T10:32:00Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T10:32:03Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "test_file_lock", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T10:32:03Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "secrets_check", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T10:32:03Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "protected_paths", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"at": "2026-10-20T10:32:03Z", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PostToolUse", "hook": "format_on_edit", "paths": ["/home/runner/work/sdlc-sample-python/sdlc-sample-python/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md"], "reason": "", "tool": "Edit", "verdict": "allow"}
++{"action": "none", "at": "2026-10-20T10:32:06Z", "command": "python \"/home/runner/work/sdlc-sample-python/sdlc-sample-python/framework/plugin/state/cli.py\" commit-phase --root \"/home/runner/work/sdlc-sample-python/sdlc-sample-python\" --id 0017 --phase b --messa", "cwd": "/home/runner/work/sdlc-sample-python/sdlc-sample-python", "event": "PreToolUse", "hook": "production_gate", "reason": "not a guarded command", "tool": "Bash", "verdict": "allow"}
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-advocate.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-advocate.md
+new file mode 100644
+index 0000000..7633988
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-advocate.md
+@@ -0,0 +1,14 @@
++## Verdict
++No objection to letting the Proposed outcome win and updating the one assertion in `tests/test_calc.py`, on the condition that the decision record says it supersedes change 0015's outcome "the message names `whole`".
++
++## The case against
++1. The easy answer treats the Constraint as a slip. Part of it is not. `test_percent_zero_whole_error_names_whole` is the proof test of change 0015 (a fix whose test was written first). That change's owner-stated outcome was "`percent(1, 0)` raises `ZeroDivisionError` whose message names `whole`". The new text, "cannot express 1 as a percent of zero", drops the word `whole`. The spec counts that as a gain (ux "drops the internal parameter name"). In effect, the edit reverses a settled owner outcome by editing that outcome's own proof test.
++2. After the edit, the test's name still says "names_whole" while its assertion names the part. The plan rejects a rename "to keep the edit to one line". The result is a test whose name misstates what it checks, inside the very file the owner asked to leave alone.
++3. The point of a "tests are not changed" constraint is to stop a run from changing an assertion until the suite goes green. This resolution does exactly that kind of edit. The only thing that sets it apart is that the panel, not the owner, approves it.
++Why this is still not a park reason:
++- The 0017 intent was written later by the same owner. It gives the exact new message, which carries no `whole`. So the owner knowingly let go of 0015's wording.
++- The intent's "Affected users and systems" list leaves out `tests/test_calc.py`. That shows the owner did not know the file pinned the message, so the Constraint conflicts by accident.
++- The updated assertion is just as strict (exact equality), so nothing gets weaker. The other choice, keeping the old message, cancels the whole change.
++- No message can satisfy both statements, because the existing test asserts exact equality.
++What I would decide: the Proposed outcome wins and the assertion is updated. The decision text should say "supersedes 0015's 'names `whole`' outcome". The test's stale name should be either renamed or listed as a known nit.
++What would make me accept the plan exactly as written: the owner confirming that a misleading test name is acceptable in the sample.
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-advocate.model.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-advocate.model.json
+new file mode 100644
+index 0000000..544d732
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-advocate.model.json
+@@ -0,0 +1,14 @@
++{
++  "agent_id": "a861725a573353ee1",
++  "agent_type": "sdlc:adversarial-reviewer",
++  "at": "2026-10-20T10:30:27Z",
++  "member": "advocate",
++  "models": [
++    "claude-opus-5-5"
++  ],
++  "n": 1,
++  "phase": "b",
++  "reason": null,
++  "schema_version": 1,
++  "transcript": "/home/runner/.claude/projects/-home-runner-work-sdlc-sample-python-sdlc-sample-python/423a84c9-b546-4c27-a303-804fe043140e/subagents/agent-a861725a573353ee1.jsonl"
++}
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-conciliator.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-conciliator.json
+new file mode 100644
+index 0000000..9034b6c
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-conciliator.json
+@@ -0,0 +1,12 @@
++{
++  "reviewer": "The Proposed outcome governs: update the one assertion at tests/test_calc.py:28 to the new message, reading the Constraint as \"no test weakened or deleted\".",
++  "advocate": "No objection to the Proposed outcome winning and the one assertion being updated, provided the record says it supersedes change 0015's outcome that the message names `whole`.",
++  "decision": "The Proposed outcome wins: the one assertion in tests/test_calc.py::test_percent_zero_whole_error_names_whole changes to \"cannot express 1 as a percent of zero\", nothing else in that file moves, and this supersedes change 0015's outcome that the message names `whole`; the stale test name stays as a known nit.",
++  "rationale": [
++    "Both verdicts reach the same decision; they differ only on whether the record names the 0015 outcome it supersedes.",
++    "That claim is checkable and true: changes/0015-.../intent.md line 17 asks for a message that names `whole`, and the 0017 intent's exact new text drops it, so the same owner knowingly let it go.",
++    "No policy picks a winner between an intent's sections, but the Constraint-wins reading also breaks the intent's own bullet 5 (pytest green) unless the change ships nothing; the Outcome-wins reading breaks one constraint's letter only.",
++    "The edit replaces one exact-equality assertion with another of equal strictness in a feature-type change (tests_locked: false), so coding-standards rule 4, CLAUDE.md \"fix the code, not the test\" and REVIEW.md's test lock are not engaged.",
++    "The test name nit and any rename are left to the owner at the gate, as the advocate asked; the panel does not widen the edit beyond one line."
++  ]
++}
+diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-reviewer.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-reviewer.md
+new file mode 100644
+index 0000000..b9611c0
+--- /dev/null
++++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-1-reviewer.md
+@@ -0,0 +1,9 @@
++## Verdict
++Close the concern as decided: the Proposed outcome governs; update the one assertion at `tests/test_calc.py:28` to `"cannot express 1 as a percent of zero"`, and read the Constraint as "no test weakened or deleted", which this edit honours.
++
++## Why
++- No rule names a winner between an intent's two sections, so the settling fact is that the Constraints-wins reading breaks the intent itself twice: Proposed outcome bullet 1 (the new message) and bullet 5 ("Build, test and lint stay green: `python -m pytest`"). With `tests/test_calc.py:25-28` untouched and the message changed, `test_percent_zero_whole_error_names_whole` fails and `python -m pytest` exits non-zero (CLAUDE.md Commands). The only way to keep both the Constraint and a green suite is to keep the old message, which abandons the change's Problem and Proposed outcome entirely. The Outcome-wins reading breaks one Constraint bullet, and only its letter.
++- The Constraint's purpose is not engaged. REVIEW.md's test-file rule and the `test_file_lock` hook apply to `change_type: fix` with `tests_locked: true`; `status.yaml` says `feature` and `false`. coding-standards rule 4 and CLAUDE.md "fix the code, not the test" forbid skipping, weakening or deleting a failing test; replacing one exact-string assertion with the new exact string (same test, same call `percent(1, 0)`, same exception type) is none of those. definition-of-done "Always" says the same and is met.
++- The codebase shows the sentence is inherited, not deliberate: change 0016's intent carries the identical line ("`tests/test_calc.py` and `tests/test_flag.py` are not touched") and its spec line 11 and plan line 67-68 keep that test passing unchanged because `percent`'s message stayed `"whole must not be zero"`. Change 0017 copies the constraint but reverses that premise; the new content of the intent (Problem, Proposed outcome bullet 1, Affected files naming `sample_pkg/calc.py`) is where the owner's decision lives.
++- intent.md cannot be edited in phase (b) (spec-template rule), so the contradiction is resolved in spec.md: the design already records the choice, the reason and the alternative, as the template asks. Nothing in security-baseline, data-conventions or ux-conventions touches the item.
++- Safest reading if the panel still hesitates: the alternative (no source edit) is a nothing change that would still ship a green PR, so the risk of choosing the outcome is one test line reviewed in the open; the risk of choosing the constraint is delivering nothing the intent asked for. Nit only, not a reason: the retained test name `..._names_whole` no longer describes its assertion; plan.md Options not taken records why it stays.
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json
 new file mode 100644
-index 0000000..c883c7d
+index 0000000..4b80a74
 --- /dev/null
 +++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/panel/b-items.json
-@@ -0,0 +1,34 @@
+@@ -0,0 +1,38 @@
 +{
 +  "decided": 0,
 +  "gate": "park",
@@ -1817,8 +2897,8 @@ index 0000000..c883c7d
 +  ],
 +  "iterations": {
 +    "cap": 2,
-+    "left": 2,
-+    "used": 0
++    "left": 1,
++    "used": 1
 +  },
 +  "mode": "deferred",
 +  "panel_calls": {
@@ -1827,6 +2907,10 @@ index 0000000..c883c7d
 +    "used": 0
 +  },
 +  "parks": [
++    {
++      "check": "adversarial_review",
++      "reason": "verdict is for commit 85ad366a27, HEAD is e4248e7d28"
++    },
 +    {
 +      "check": "reviewer_model",
 +      "reason": "evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)"
@@ -1839,19 +2923,15 @@ index 0000000..c883c7d
 +}
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json
 new file mode 100644
-index 0000000..39134f0
+index 0000000..8a19ae5
 --- /dev/null
 +++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/run-b.json
-@@ -0,0 +1,10 @@
+@@ -0,0 +1,6 @@
 +{
-+  "github_run": {
-+    "attempt": "1",
-+    "id": "39379201252",
-+    "url": "https://github.com/luissiviero/sdlc-sample-python/actions/runs/39379201252"
-+  },
 +  "phase": "b",
-+  "spend_usd": 9.489571750000001,
-+  "started_at": "2026-10-20T06:14:51Z"
++  "run": "build",
++  "spend_usd": null,
++  "started_at": "2026-10-20T10:28:02Z"
 +}
 \ No newline at end of file
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/spend.json b/changes/0017-name-the-part-in-percent-s-zero-whole-er/evidence/spend.json
@@ -1930,10 +3010,10 @@ index 0000000..cd7309c
 +  not `part * 100`.
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md
 new file mode 100644
-index 0000000..9c04a50
+index 0000000..9bab6f8
 --- /dev/null
 +++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/plan.md
-@@ -0,0 +1,125 @@
+@@ -0,0 +1,131 @@
 +# Plan: name the part in percent's zero-whole error (from intent.md 2026-10-20, spec.md 2026-10-20)
 +
 +## Files that change
@@ -1946,10 +3026,12 @@ index 0000000..9c04a50
 +  `"cannot express 5 as a percent of zero"`. The existing test is not touched.
 +- `tests/test_calc.py` — in `test_percent_zero_whole_error_names_whole`, change the asserted
 +  message from `"whole must not be zero"` to `"cannot express 1 as a percent of zero"`
-+  (the test calls `percent(1, 0)`). Nothing else in the module moves. This edit is the open
-+  flagged concern in `spec.md`; if the owner or the panel decides the other way (keep the
-+  old message and leave `tests/test_calc.py` alone), drop this file and step 3 and the
-+  change reduces to no source edit at all, which abandons the intent's Proposed outcome.
++  (the test calls `percent(1, 0)`). Nothing else in the module moves. This edit is the
++  flagged concern in `spec.md`, decided by panel #1 on 2026-10-20: the Proposed outcome
++  wins, the one assertion changes, and the decision supersedes change 0015's outcome that
++  the message names `whole`. The owner can overturn it with a review comment; if they do
++  (keep the old message and leave `tests/test_calc.py` alone), drop this file and step 3 and
++  the change reduces to no source edit at all, which abandons the intent's Proposed outcome.
 +
 +## Order of work
 +1. In `sample_pkg/calc.py`, line 18, change
@@ -1984,14 +3066,15 @@ index 0000000..9c04a50
 +  `tests/test_calc.py:28` (step 3 updates it); every other occurrence is inside the change
 +  folders of changes 0015, 0016 and 0017 (historical records and this plan, not edited by
 +  the build). No other caller exists inside this repository.
-+- Step 3 edits a test file the intent's Constraints say is not changed; this is the open
-+  flagged concern in `spec.md`. The change is `feature`-typed, so `sdlc.yaml: test_paths`
-+  does not lock the file (the lock is for `fix`-type changes). If the decision at the gate
-+  goes the other way, the build must not run steps 1 to 3 as written; see the note in Files
-+  that change.
++- Step 3 edits a test file the intent's Constraints say is not changed; this is the flagged
++  concern in `spec.md`, decided by panel #1 (`evidence/decisions-b.md`). The change is
++  `feature`-typed, so `sdlc.yaml: test_paths` does not lock the file (the lock is for
++  `fix`-type changes). If the owner overturns the decision, the build must not run steps 1
++  to 3 as written; see the note in Files that change.
 +- `test_percent_zero_whole_error_names_whole` keeps a name that says "names whole" while
 +  asserting a message that names the part. Renaming it was considered (Options not taken)
-+  and rejected to keep the edit to the one assertion line the concern covers.
++  and rejected to keep the edit to the one assertion line the concern covers; panel
++  decision #1 records the stale name as a known nit, left to the owner.
 +- `divide` and `mean` are not touched; `mean` never reaches a zero divisor because it rejects
 +  an empty collection first. `tests/test_flag.py` is not touched and `SAMPLE_FAIL` is never
 +  set.
@@ -2011,7 +3094,10 @@ index 0000000..9c04a50
 +  so the panel was not started and the open concern above stays with the owner. The build
 +  and test runs start the same reviewer, so phase (c) hits the same error until the owner
 +  raises `sdlc.yaml: plugin.claude_code` to `2.1.280` or later (a guardrail file, not this
-+  change's to edit). The design and the steps above do not depend on this.
++  change's to edit). The design and the steps above do not depend on this. Update from the
++  fix round of 2026-10-20: the reviewer started on the `opus` alias without error and
++  `evidence/adversarial-review-b.model.json` records `claude-opus-5-5`, so the error above
++  did not recur; `sdlc.yaml: plugin.claude_code` still reads `2.1.278`.
 +
 +## Options not taken
 +- Keeping the old message to leave `tests/test_calc.py` untouched: rejected as the default,
@@ -2061,7 +3147,7 @@ index 0000000..9c04a50
 +  exit 0), as `CLAUDE.md`'s Commands table describes.
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md b/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md
 new file mode 100644
-index 0000000..768cbf8
+index 0000000..4734128
 --- /dev/null
 +++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/spec.md
 @@ -0,0 +1,138 @@
@@ -2168,7 +3254,7 @@ index 0000000..768cbf8
 +  traceback shows one exception with the part the caller passed.
 +
 +## Flagged concerns
-+- The intent's Proposed outcome and its Constraints contradict each other on
++- decided (by panel #1): The Proposed outcome wins: the one assertion in tests/test_calc.py::test_percent_zero_whole_error_names_whole changes to "cannot express 1 as a percent of zero", nothing else in that file moves, and this supersedes change 0015's outcome that the message names `whole`; the stale test name stays as a known nit. — The intent's Proposed outcome and its Constraints contradict each other on
 +  `tests/test_calc.py`. The Constraints say `tests/test_calc.py` is not changed, but its
 +  existing test `test_percent_zero_whole_error_names_whole` (`tests/test_calc.py:25-28`)
 +  asserts `str(excinfo.value) == "whole must not be zero"` for `percent(1, 0)`, which fails
@@ -2205,7 +3291,7 @@ index 0000000..768cbf8
 +- `python -m ruff check .` exits 0 with `All checks passed!`.
 diff --git a/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
 new file mode 100644
-index 0000000..adce192
+index 0000000..fc51cb8
 --- /dev/null
 +++ b/changes/0017-name-the-part-in-percent-s-zero-whole-er/status.yaml
 @@ -0,0 +1,36 @@
@@ -2223,8 +3309,8 @@ index 0000000..adce192
 +  reason: "open_concerns: 1 flagged concern(s) still open in spec.md; reviewer_model: evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)"
 +  at: "2026-10-20T06:29:21Z"
 +parked_reason: "open_concerns: 1 flagged concern(s) still open in spec.md; reviewer_model: evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)"
-+iterations: 0
-+panel_calls: 0
++iterations: 1
++panel_calls: 1
 +external_ref: null
 +risk_accepted: []
 +tests_locked: false
@@ -2243,5 +3329,5 @@ index 0000000..adce192
 +    sha: "81adec3becca71711fd496f4a67b49b4cf1bccb5"
 +    pr: 85
 +created_at: "2026-10-20T06:00:31Z"
-+updated_at: "2026-10-20T06:29:21Z"
++updated_at: "2026-10-20T10:31:31Z"
 +schema_version: 1

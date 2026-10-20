@@ -5,12 +5,12 @@
   "phase": "b",
   "profile": "standard",
   "human_gate": true,
-  "result": "park",
-  "label": "sdlc:needs-human",
-  "head": "85ad366a27c48e88d16381cc542e8074b5d5d461",
-  "at": "2026-10-20T06:28:56Z",
+  "result": "wait",
+  "label": "sdlc:b-ready",
+  "head": "66f5edfe233e1dee8702970ff6445037fc3ad1c5",
+  "at": "2026-10-20T10:33:20Z",
   "dry_run": false,
-  "reason": "open_concerns: 1 flagged concern(s) still open in spec.md; reviewer_model: evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)",
+  "reason": "",
   "config_note": "",
   "checks": [
     {
@@ -19,15 +19,15 @@
       "reason": "within the run limits",
       "need": "",
       "details": {
-        "iterations": 0,
+        "iterations": 1,
         "cap": 2,
         "classification": "non-routine",
-        "panel_calls": 0,
+        "panel_calls": 1,
         "panel_cap": 4,
-        "elapsed_minutes": 14.1,
+        "elapsed_minutes": 5.3,
         "spend_usd": null,
-        "spend_usd_total": null,
-        "spend_entries": 0,
+        "spend_usd_total": 9.489572,
+        "spend_entries": 1,
         "max_budget_usd": null
       }
     },
@@ -56,46 +56,34 @@
     },
     {
       "name": "open_concerns",
-      "ok": false,
-      "reason": "1 flagged concern(s) still open in spec.md",
-      "need": "Close each open item under '## Flagged concerns' with a decision (article p.14 step 4), or leave a review comment for /sdlc-fix.",
-      "details": {
-        "open": [
-          "- The intent's Proposed outcome and its Constraints contradict each other on"
-        ]
-      }
-    },
-    {
-      "name": "panel",
       "ok": true,
-      "reason": "no panel decision at this gate",
+      "reason": "no open flagged concern",
       "need": "",
       "details": {}
     },
     {
-      "name": "commands",
+      "name": "panel",
       "ok": true,
-      "reason": "build, test and lint exit 0",
+      "reason": "1 panel decision(s) recorded",
       "need": "",
       "details": {
-        "runs": {
-          "build": {
-            "command": "python -m compileall -q .",
-            "exit_code": 0,
-            "output": ""
-          },
-          "test": {
-            "command": "python -m pytest",
-            "exit_code": 0,
-            "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0\nrootdir: /home/runner/work/sdlc-sample-python/sdlc-sample-python\nconfigfile: pyproject.toml\ntestpaths: tests\nplugins: platformdirs-4.13.0\ncollected 11 items\n\ntests/test_calc.py .........                                             [ 81%]\ntests/test_flag.py .                                                     [ 90%]\ntests/test_messages.py .                                                 [100%]\n\n============================== 11 passed in 0.02s ==============================\n"
-          },
-          "lint": {
-            "command": "python -m ruff check .",
-            "exit_code": 0,
-            "output": "All checks passed!\n"
+        "decisions": [
+          {
+            "n": 1,
+            "kind": "concern",
+            "decision": "The Proposed outcome wins: the one assertion in tests/test_calc.py::test_percent_zero_whole_error_names_whole changes to \"cannot express 1 as a percent of zero\", nothing else in that file moves, and this supersedes change 0015's outcome that the message names `whole`; the stale test name stays as a known nit."
           }
-        },
-        "ran_by": "runner"
+        ],
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "reason": "deferred to the runner: build, test and lint run after the model's session, outside its sandbox (issue #91); not yet run",
+      "need": "",
+      "details": {
+        "deferred": true
       }
     },
     {
@@ -136,13 +124,13 @@
     },
     {
       "name": "reviewer_model",
-      "ok": false,
-      "reason": "evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)",
-      "need": "The adversarial reviewer must run on the model sdlc.yaml's adversarial_model names (ROADMAP R7), and nothing shows that this verdict did. `panel/cli.py models` prints the alias the phase command passes, the pins that make it resolve to that model (the runner sets them; a run by hand exports them before the session starts) and any conflict in the configuration; fix that, then re-run the reviewer on the current HEAD.",
+      "ok": true,
+      "reason": "the adversarial reviewer ran on claude-opus-5-5",
+      "need": "",
       "details": {
         "wanted": "claude-opus-5-5"
       }
     }
   ],
-  "what_i_need": "## What I need from you\nGate (b) parked change 0017 (name-the-part-in-percent-s-zero-whole-er) on 2026-10-20T06:28:56Z.\n- **open_concerns**: 1 flagged concern(s) still open in spec.md\n  - what I need: Close each open item under '## Flagged concerns' with a decision (article p.14 step 4), or leave a review comment for /sdlc-fix.\n- **reviewer_model**: evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)\n  - what I need: The adversarial reviewer must run on the model sdlc.yaml's adversarial_model names (ROADMAP R7), and nothing shows that this verdict did. `panel/cli.py models` prints the alias the phase command passes, the pins that make it resolve to that model (the runner sets them; a run by hand exports them before the session starts) and any conflict in the configuration; fix that, then re-run the reviewer on the current HEAD.\nWhen the item is settled, re-run the gate: `python \"${CLAUDE_PLUGIN_ROOT}/plugin/gate/cli.py\" check --root . --id 0017 --phase b` (review comments are the change request; /sdlc-fix from B3 re-runs the phase with them).\n"
+  "what_i_need": ""
 }
