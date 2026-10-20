@@ -1,6 +1,11 @@
 {
+  "github_run": {
+    "attempt": "1",
+    "id": "39433450425",
+    "url": "https://github.com/luissiviero/sdlc-sample-python/actions/runs/39433450425"
+  },
   "phase": "c",
   "run": "build",
-  "spend_usd": null,
+  "spend_usd": 1.703751,
   "started_at": "2026-10-20T13:48:35Z"
 }
