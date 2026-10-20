@@ -1,7 +1,7 @@
 id: "0011"
 slug: security-ssrf-sandbox-failifunavailable
 title: "security: ssrf: sandbox.failIfUnavailable is false, so on any runner where"
-phase: f
+phase: abandoned
 entry_route: incident
 change_type: fix
 profile_override: null
@@ -22,8 +22,11 @@ iterations_reset_by: null
 iterations_reset_at: null
 tests_unlocked_by: null
 runbook_authorized_by: null
-abandoned_reason: null
+abandoned_reason: pull request 56 closed without a merge
 build_pr: null
+released_at: null
+released_sha: null
+released_pr: null
 created_at: "2026-10-12T15:49:05Z"
-updated_at: "2026-10-12T15:49:07Z"
+updated_at: "2026-10-20T00:32:09Z"
 schema_version: 1
