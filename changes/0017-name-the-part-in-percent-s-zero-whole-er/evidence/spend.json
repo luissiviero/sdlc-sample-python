@@ -5,7 +5,13 @@
       "run": "b",
       "source": "claude-b.json",
       "usd": 9.489571750000001
+    },
+    {
+      "at": "2026-10-20T10:34:06Z",
+      "run": "fix",
+      "source": "claude-fix.json",
+      "usd": 5.762722100000003
     }
   ],
-  "total_usd": 9.489572
+  "total_usd": 15.252294
 }
