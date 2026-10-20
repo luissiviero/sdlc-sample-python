@@ -1,0 +1,2 @@
+Ignoring 4 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects["/home/runner/work/sdlc-sample-python/sdlc-sample-python"].hasTrustDialogAccepted: true in /home/runner/.claude.json.
+[claude-code:unrecognized_model] {"model":"claude-opus-5-5","query_source":"agent:custom:sdlc:adversarial-reviewer"}
