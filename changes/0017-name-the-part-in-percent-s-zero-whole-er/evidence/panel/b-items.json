@@ -11,8 +11,8 @@
     }
   ],
   "iterations": {
-    "cap": 3,
-    "left": 3,
+    "cap": 2,
+    "left": 2,
     "used": 0
   },
   "mode": "deferred",
@@ -23,8 +23,8 @@
   },
   "parks": [
     {
-      "check": "adversarial_review",
-      "reason": "evidence/adversarial-review-b.json missing"
+      "check": "reviewer_model",
+      "reason": "evidence/adversarial-review-b.model.json: the adversarial reviewer ran on claude-fable-5-1, not on claude-opus-5-5 (sdlc.yaml: adversarial_model)"
     }
   ],
   "pending": [
