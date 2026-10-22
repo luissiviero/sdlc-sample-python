@@ -1,0 +1,15 @@
+--- a/.github/workflows/sdlc-evals.yml
++++ b/.github/workflows/sdlc-evals.yml
+@@ -46,6 +46,11 @@
+ jobs:
+   evals:
+     runs-on: ubuntu-latest
+     timeout-minutes: 120
++    # A pull_request run executes the workflow file (and sdlc.yaml commands.setup) from the
++    # PR's own branch, not the default branch's copy; for a fork PR that would hand this
++    # job's secrets, and arbitrary code execution, to content this repository does not
++    # control. Only run with secrets for same-repository branches, schedule or dispatch.
++    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+     steps:
+       - name: Check out the project
+         uses: actions/checkout@v5
