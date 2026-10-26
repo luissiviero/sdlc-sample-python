@@ -1,13 +1,11 @@
 id: "0016"
 slug: name-the-dividend-in-divide-s-error
 title: "Name the dividend in divide's error"
-phase: e
+phase: deploy
 entry_route: idea
 change_type: feature
-profile_override: null
-review_override: null
 gate:
-  phase: e
+  phase: deploy
   result: passed
   reason: waiting for the owner at gate (e)
   at: "2026-10-19T19:49:28Z"
@@ -28,10 +26,10 @@ released_at: null
 released_sha: null
 released_pr: null
 fast_lane:
-  a:
+  intent:
     sha: "614594e11b1e14a02400756aff5e572d223c5033"
     pr: 77
-  b:
+  design:
     sha: "9433cc6f3e21cffdb218b11b9da26ce70aa7889f"
     classification: routine
     pr: 78
