@@ -10,7 +10,7 @@ regression-test the code (p.30 step 3).
 
 **This suite starts empty on purpose** (decision 17): the article builds it from "20 to 50
 real tasks from recent work" (p.30 step 1), which do not exist on day one. It fills from:
-- every incident handled in phase (f): "Each production incident gets an eval ... and stays
+- every incident handled in the maintain phase: "Each production incident gets an eval ... and stays
   in the suite as a regression test" (p.30 step 5, p.44 step 7);
   `python framework/plugin/evals/case.py new --root . --id <id>` writes the skeleton from the
   change's `intent.md` and `evidence/detection.json`;
@@ -57,11 +57,20 @@ checks:
       not_contains: "cannot"
       regex: "\\d+ passed"
   - denied: "Edit"                     # a tool the permission rules or a hook refused
+  - skill: "sdlc:security-baseline"    # the run loaded this skill (its Skill tool call)
 ```
 A file check without `exists` requires the file when it asserts `contains` or `equals` (or
 nothing else); a check that only asserts `not_contains` or `unchanged` passes when the file
 is absent. A check with an unknown key, a case without `prompt.md` or `checks.yaml`, and a
 `checks.yaml` that cannot be read fail the case with the reason: nothing is skipped.
+
+A `skill` check (R27; article p.22 step 4, "test that the skill triggers") passes when the
+run's tool calls show the skill loading under exactly that name, `sdlc:<name>` for the
+plugin's skill and the bare name for the project's own, and its result is not an error; a
+case with one runs with `--verbose` so the calls are in the output. The framework runs three such cases per policy
+skill on every plugin change; a project that replaces a policy skill under `.claude/skills/`
+adds the framework's three cases for that skill here, naming the override's bare name, in
+the PR that adds the override.
 
 ## Running it
 ```
@@ -80,7 +89,7 @@ passes the wall clock fails its case.
 
 The runner writes `evals-report.json` in the current directory (every case, its checks, turns
 and cost, the pass rate) and prints a table; it exits 0 when the pass rate reaches
-`--min-pass-rate` (default 1.0), 1 below. In CI (`sdlc-evals.yml`) the pass rate is the merge
+`--min-pass-rate` (default 1.0), 1 below. In CI (`sdlc-agent-evals.yml`) the pass rate is the merge
 check on a pull request that changes `CLAUDE.md`, `.claude/**` or `evals/**`: "A skill change
 that drops the pass rate gets reviewed before it merges" (p.30 step 4; p.31 governance: "The
 pass-rate threshold is enforced as a merge check").

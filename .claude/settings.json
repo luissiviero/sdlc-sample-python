@@ -26,7 +26,13 @@
       "Edit(/.claude/**)",
       "Edit(/CLAUDE.md)",
       "Edit(/REVIEW.md)",
-      "Edit(/sdlc.yaml)"
+      "Edit(/sdlc.yaml)",
+      "Edit(/.github/workflows/**)",
+      "Edit(/CLAUDE.local.md)",
+      "Edit(/.mcp.json)",
+      "Edit(/.git/config)",
+      "Edit(/.git/hooks/**)",
+      "Edit(/policies/**)"
     ],
     "allow": [
       "Bash(git *)",
